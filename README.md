@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# GenErlangFit <a href="https://vivekmurals.github.io/GenErlangFit"><img src="man/figures/logo.svg" align="right" height="139" alt="GenErlangFit Logo"></a>
+# GenErlangFit <a href="https://vivekmurals.github.io/GenErlangFit"><img src="man/figures/logo.png" align="right" height="139" alt="GenErlangFit Logo"></a>
 
 <!-- badges: start -->
 
