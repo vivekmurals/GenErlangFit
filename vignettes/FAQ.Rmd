@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 # Fitting Algorithms and Assumptions 
 
-This package computes the maximum likelihood estimates (MLE) of an Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential distribution (K, λErlang, λExponential) from observed data.  
+This package computes the maximum likelihood estimates (MLE) of an Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential distribution (K, λ~Erlang~, λ~Exponential~) from observed data.  
 
 ### What is an Erlang-Exponential Distribution?
 The Erlang–Exponential distribution describes the sum of 2 independent random variables: an erlang random variable with shape parameter K and rate parameter, λErlang and an exponential random variable with rate parameter λExponential. Essentially, this distribution generalizes the Erlang distribution by adding an extra exponential stage, which can be either faster or slower than the Erlang stages. This allows for better approximation of empirical distributions with varying skewness and tail behavior.

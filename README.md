@@ -17,7 +17,7 @@ You can install the development version of GenErlangFit from
 
 ``` r
 install.packages("devtools") # If not already installed.
-devtools::install_github("vivekmurals/GenErlangFit",build_vignettes = TRUE)
+devtools::install_github("vivekmurals/GenErlangFit", build_vignettes = TRUE)
 ```
 
 ## Documentation
