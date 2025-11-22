@@ -114,26 +114,26 @@ explained below.</p>
 ‘InitialguessK’. The cost function is specified in
 Erlang_Fit_CostFunction.m. Here the function to be minimized with
 respect to K is the negative log likelihood of the observed data given a
-Gamma distribution.</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mfrac><mrow><msup><mi>λ</mi><mi>K</mi></msup><msup><msub><mi>x</mi><mi>i</mi></msub><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><msub><mi>x</mi><mi>i</mi></msub></mrow></msup></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>K</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>!</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+Gamma distribution. {% raw %}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mfrac><mrow><msup><mi>λ</mi><mi>K</mi></msup><msup><msub><mi>x</mi><mi>i</mi></msub><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><msub><mi>x</mi><mi>i</mi></msub></mrow></msup></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>K</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>!</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 - \log \left( {\prod\limits_{i = 1}^N {\frac{{{\lambda ^K}{x_i}^{K - 1}{e^{ - \lambda {x_i}}}}}{{\left( {K - 1} \right)!}}} } \right)
-</annotation></semantics></math></p>
+</annotation></semantics></math> {% endraw %}</p>
 <p>In the function above, xi refers to the observed data, N refers to
 the size of the observed data while K and λ are the shape and scale
 parameters of the Gamma distribution. The corresponding scale parameter,
 λ used in the evaluation of the negative log likelihood is calculated
 from the initial guess K via the following relationship, where μ is the
-mean of the observed data:
+mean of the observed data: {% raw %}
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>K</mi><mi>λ</mi></mfrac><mo>=</mo><mi>μ</mi><mspace width="0.222em"></mspace></mrow><annotation encoding="application/x-tex">
 \frac{K}{\lambda } = \mu \
-</annotation></semantics></math> This relationship exists at the MLE of
-a Gamma distribution (and by extension an Erlang). Specifically, this
-relationship arises from the Gamma MLE conditions: differentiating the
-log-likelihood with respect to λ and setting that to 0 yields λ = K / μ.
-We leverage this relationship having to only search over one variable K.
-Side note: In implementation, since MATLAB’s gampdf and related Gamma
-functions parameterize the scale parameter as 1/λ, its reciprocal is
-used internally.</p>
+</annotation></semantics></math> {% endraw %} This relationship exists
+at the MLE of a Gamma distribution (and by extension an Erlang).
+Specifically, this relationship arises from the Gamma MLE conditions:
+differentiating the log-likelihood with respect to λ and setting that to
+0 yields λ = K / μ. We leverage this relationship having to only search
+over one variable K. Side note: In implementation, since MATLAB’s gampdf
+and related Gamma functions parameterize the scale parameter as 1/λ, its
+reciprocal is used internally.</p>
 <p>After finding the optimal continuous K, the floor ⌊K⌋ and ceiling ⌈K⌉
 of this value are evaluated as candidate integer K values for finding
 the MLE of the Erlang Distribution. For each candidate K, the respective
@@ -184,17 +184,19 @@ both the pointwise PDF of the Erlang–Exponential distribution and the
 log-likelihood of the observed dataset under the model.</p>
 <p>Note: This custom function performs direct numerical integration of
 the convolution of an Erlang distribution with an Exponential
-distribution. The expression for this convolution is as follows:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msup><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi></mrow></msub><mi>k</mi></msup><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>!</mi></mrow></mfrac><msup><mi>e</mi><mrow><mi>−</mi><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub><mi>z</mi></mrow></msup><munderover><mo>∫</mo><mn>0</mn><mi>z</mi></munderover><msup><mi>x</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>x</mi></mrow></msup><mi>d</mi><mi>x</mi><mspace width="0.222em"></mspace></mrow><annotation encoding="application/x-tex">
+distribution. The expression for this convolution is as follows: {% raw
+%}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msup><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi></mrow></msub><mi>k</mi></msup><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>!</mi></mrow></mfrac><msup><mi>e</mi><mrow><mi>−</mi><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub><mi>z</mi></mrow></msup><munderover><mo>∫</mo><mn>0</mn><mi>z</mi></munderover><msup><mi>x</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>e</mi><mrow><mi>−</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>x</mi></mrow></msup><mi>d</mi><mi>x</mi><mspace width="0.222em"></mspace></mrow><annotation encoding="application/x-tex">
 \frac{{{\lambda _{Er}}^k{\lambda _{Exp}}}}{{\left( {k - 1} \right)!}}{e^{ - {\lambda _{Exp}}z}}\int\limits_0^z {{x^{k - 1}}} {e^{ - \left( {{\lambda _{Er}} - {\lambda _{Exp}}} \right)x}}dx\ 
-</annotation></semantics></math> In computing the negative log
-likelihood, the corresponding λExponential is calculated via the
-following relationship, which exists at the MLE of this function:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>K</mi><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi><mi>l</mi><mi>a</mi><mi>n</mi><mi>g</mi></mrow></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mfrac><mo>=</mo><mi>μ</mi><mspace width="0.222em"></mspace></mrow><annotation encoding="application/x-tex">
+</annotation></semantics></math> {% endraw %} In computing the negative
+log likelihood, the corresponding λExponential is calculated via the
+following relationship, which exists at the MLE of this function: {% raw
+%}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>K</mi><msub><mi>λ</mi><mrow><mi>E</mi><mi>r</mi><mi>l</mi><mi>a</mi><mi>n</mi><mi>g</mi></mrow></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>λ</mi><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>o</mi><mi>n</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>a</mi><mi>l</mi></mrow></msub></mfrac><mo>=</mo><mi>μ</mi><mspace width="0.222em"></mspace></mrow><annotation encoding="application/x-tex">
 \frac{K}{{{\lambda _{Erlang}}}} + \frac{1}{{{\lambda _{Exponential}}}} = \mu \
-</annotation></semantics></math> The pair of λErlang &amp; λExponential
-that maximizes the log-likelihood is selected as the MLE for the
-Erlang-Exponential Distribution from the observed data.</p>
+</annotation></semantics></math> {% endraw %} The pair of λErlang &amp;
+λExponential that maximizes the log-likelihood is selected as the MLE
+for the Erlang-Exponential Distribution from the observed data.</p>
 <p>Additional notes on optimization: Default parameter bounds are
 specified within the optimization to ensure stability. In particular,
 the lower bound on λErlang is derived from its analytical relationship
