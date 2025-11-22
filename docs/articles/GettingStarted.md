@@ -1,0 +1,214 @@
+# Introduction to GenErlang Fit
+
+## Overview
+
+The GenErlangFit package aims to identify the optimal generalized Erlang
+or Erlang–Exponential model consistent with observed time-to-event data.
+
+## Package Installation from Github
+
+To install and load the package from GitHub, run these commands in your
+R console:
+
+``` r
+devtools::install_github("insertuser/generlangfit")
+library(generlangfit)
+library(ggplot2)
+```
+
+## Context and Summary of the Method
+
+Standard compartmental models of infectious diseases often assume
+constant transition rates between states, which implies an exponential
+distribution of “waiting times” in each state. (e.g., the latent period,
+the infectious period). However, this assumption does not align with
+empirical data for many diseases. The Linear Chain Trick (LCT) offers a
+computationally tractable alternative by modeling each state as a series
+of multiple identical substates, producing Erlang-distributed waiting
+times (Gamma distribution with an integer shape parameter).
+
+Our approach combines maximum likelihood parameter estimation with
+non-parametric significance testing to prioritize the simplest model
+structures that produce waiting times consistent with observed data. To
+improve flexibility, we incorporate the Erlang-Exponential model—an
+extension of the standard Erlang distribution that adds a final
+exponential stage— allowing better approximation of empirical
+distributions with varying skewness and tail behavior.
+
+This user-friendly package enables modelers to fit empirical data and
+build parsimonious, data-driven compartmental models across diverse
+domains.
+
+A thorough walk through of the fitting algorithms and assumptions can be
+found in the [FAQ vignette linked
+here](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md). This
+vignette serves as simple tutorial on how users can get started with
+this package.
+
+------------------------------------------------------------------------
+
+## Using the Package
+
+### General Fitting under Default Settings
+
+In general, the user only needs to be familiar using one single function
+`GenErlang_Fit.R`. By default, if the user runs the following line of
+code with just the empiricaldata as the only argument:
+
+``` r
+GenErlang_Fit(empiricaldata)
+```
+
+The function will run both the Erlang and Erlang-Exp fit, run goodness
+of fit evaluations for both and in addition, search for the smallest
+statistically acceptable K for both models. More on what the smallest K
+model means can be found in [**FAQ: Smallest K
+Model**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#smallest-k).
+
+Users also have the ability to choose the specific model they would like
+to fit the data to via specifying the following input arguments:
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata)
+GenErlang_Fit('ErlangExp', empiricaldata, K)
+```
+
+Note that for running specific models, these arguments need to be
+specified as the first argument of the function. For the
+Erlang-Exponential model, an additional input argument K must always be
+provided because the search for the optimal K is handled differently
+from that of the Erlang. See [**FAQ: Erlang-Exp
+Fit**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html%7B#erlangexp-k%7D).
+
+These defaults offer an efficient first pass for most analyses, giving
+users a clear initial sense of which model structures best capture their
+data.
+
+#### Outputs from GenErlang_Fit
+
+------------------------------------------------------------------------
+
+### Model Specific Fitting Options
+
+Once users are familiar with the default behavior of `GenErlang_Fit.R`,
+it is helpful to clarify how users can customize different aspects the
+fitting workflow. The following sections outline the main categories of
+options available when departing from the default settings: Fit Options
+(e.g., changing initial guesses or controlling the Erlang-exp search
+over K), Goodness-of-Fit Options (e.g., bootstrap-based confidence
+intervals and p-value estimation), and the Smallest-K Search tools used
+for model parsimony or computational efficiency. Each subsection
+explains the purpose of these options, how to call them, and in what
+situations users may want to override the defaults.
+
+#### Overriding initial guesses
+
+GenErlang_Fit provides default initialization values for all
+optimization routines. Users may optionally supply their own initial
+guesses to customize the fitting process or to assess the robustness of
+results to different starting values.
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata, 'InitialguessK = VALUE')
+GenErlang_Fit('ErlangExp', empiricaldata, K, 'InitialguessErlam = VALUE')
+```
+
+- Erlang model: the initial guess refers to the number of substates, K
+  used during optimization.
+
+- Erlang–Exponential model: the initial guess refers to the Erlang rate
+  parameter𝜆because K is provided explicitly by the user.
+
+#### Additional Erlang-Exp Fitting Option
+
+The Erlang–Exponential model requires manually specifying an additional
+input parameter K. Depending on the analysis, users may either:
+
+1.  Fix K and compute the MLE for that model structure, or
+2.  Search over a window of nearby K values to automatically detect a
+    better-fitting structure.
+
+``` r
+GenErlang_Fit('ErlangExp', empiricaldata, K, FixedK = TRUE)
+GenErlang_Fit('ErlangExp', empiricaldata, K, FixedK = FALSE, KwindowSize = VALUE)
+```
+
+When FixedK = TRUE, the function performs a pure MLE fit for the given
+K, using any supplied initial conditions. When FixedK = FALSE, the
+function expands the search to include K ± a user-defined window
+(KwindowSize), rendering initial guess overrides less relevant because
+the optimization is repeated across multiple candidate structures.THis
+is the default option when FixedK argument is not provided.
+
+### Goodness of Fit Options
+
+GenErlang_Fit provides built-in tools for assessing how well each fitted
+model matches the empirical distribution. These options apply to both
+Erlang and Erlang–Exp models and include:
+
+- Choice of test statistic (via `pvaloption`)
+- Significance level (`Alpha`)
+- Number of bootstrap samples (`NumBootStraps`)
+
+A detailed description of this section can be found here: [**FAQ:
+Goodness of Fit
+Evaluation**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html%7B#gof%7D).
+
+#### Overriding choice of P Value Computation
+
+Users can select which distance measure to use in evaluating the model’s
+goodness-of-fit:
+
+- “KS” — Kolmogorov–Smirnov Statistic
+- “CVM” — Cramér–von Mises Statistic
+- “AD” — Anderson–Darling Statistic
+- “NIL” — skip p-value computation entirely
+
+Choosing the test statistic modifies both the bootstrap distribution and
+the measure of fit.
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata, pvaloption = 'KS', 'CVM', 'AD' or 'NIL')
+GenErlang_Fit('ErlangExp', empiricaldata, K, pvaloption = 'KS', 'CVM', 'AD' or 'NIL')
+```
+
+#### Overriding choice of Alpha
+
+The argument alpha determines the rejection threshold used when
+comparing bootstrap test statistics. Smaller values imply more
+conservative goodness-of-fit assessment.
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata, alpha = VALUE)
+GenErlang_Fit('ErlangExp', empiricaldata, K, alpha = VALUE)
+```
+
+#### Overriding choice of Number of Bootstraps
+
+Increasing the number of bootstrap samples improves the stability and
+precision of p-value estimates—but increases runtime.
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata, NumBootStraps = VALUE)
+GenErlang_Fit('ErlangExp', empiricaldata, K, NumBootStraps = VALUE)
+```
+
+### Smallest K Option
+
+The “Smallest-K” routines automatically search for the simplest model
+that remains statistically consistent with the observed data. This
+process tests increasing values of K and identifies the smallest
+structure that passes the selected goodness-of-fit criteria.A detailed
+description of this section can be found here: [**FAQ: Smallest K
+Model**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#smallest-k).
+
+- For Erlang models, this is a straightforward increasing-K search.
+- For Erlang–Exp models, users may optionally set SmallestKvalue to
+  limit the search range for computational speed.
+
+``` r
+GenErlang_Fit('Erlang', empiricaldata, SmallestK = TRUE)
+
+GenErlang_Fit('ErlangExp', empiricaldata, K, SmallestK = TRUE)
+GenErlang_Fit('ErlangExp', empiricaldata, K, SmallestK = TRUE, SmallestKvalue = VALUE)
+```
