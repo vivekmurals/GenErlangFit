@@ -34,31 +34,30 @@ This search starts from an initial guess for K specified by
 ‘InitialguessK’. The cost function is specified in
 Erlang_Fit_CostFunction.m. Here the function to be minimized with
 respect to K is the negative log likelihood of the observed data given a
-Gamma distribution. {% raw %}
+Gamma distribution.
+
 ``` math
 
-- \log \left( {\prod\limits_{i = 1}^N {\frac{{{\lambda ^K}{x_i}^{K - 1}{e^{ - \lambda {x_i}}}}}{{\left( {K - 1} \right)!}}} } \right)
+- \log \left( \prod_{i=1}^N \frac{\lambda^K x_i^{K - 1} e^{-\lambda x_i}}{(K - 1)!} \right)
 ```
-{% endraw %}
 
 In the function above, xi refers to the observed data, N refers to the
 size of the observed data while K and λ are the shape and scale
 parameters of the Gamma distribution. The corresponding scale parameter,
 λ used in the evaluation of the negative log likelihood is calculated
 from the initial guess K via the following relationship, where μ is the
-mean of the observed data: {% raw %}
+mean of the observed data:
 ``` math
 
-\frac{K}{\lambda } = \mu \
+\frac{K}{\lambda} = \mu
 ```
-{% endraw %} This relationship exists at the MLE of a Gamma distribution
-(and by extension an Erlang). Specifically, this relationship arises
-from the Gamma MLE conditions: differentiating the log-likelihood with
-respect to λ and setting that to 0 yields λ = K / μ. We leverage this
-relationship having to only search over one variable K. Side note: In
-implementation, since MATLAB’s gampdf and related Gamma functions
-parameterize the scale parameter as 1/λ, its reciprocal is used
-internally.
+This relationship exists at the MLE of a Gamma distribution (and by
+extension an Erlang). Specifically, this relationship arises from the
+Gamma MLE conditions: differentiating the log-likelihood with respect to
+λ and setting that to 0 yields λ = K / μ. We leverage this relationship
+having to only search over one variable K. Side note: In implementation,
+since MATLAB’s gampdf and related Gamma functions parameterize the scale
+parameter as 1/λ, its reciprocal is used internally.
 
 After finding the optimal continuous K, the floor ⌊K⌋ and ceiling ⌈K⌉ of
 this value are evaluated as candidate integer K values for finding the
@@ -115,21 +114,23 @@ log-likelihood of the observed dataset under the model.
 
 Note: This custom function performs direct numerical integration of the
 convolution of an Erlang distribution with an Exponential distribution.
-The expression for this convolution is as follows: {% raw %}
+The expression for this convolution is as follows:
+
 ``` math
 
-\frac{{{\lambda _{Er}}^k{\lambda _{Exp}}}}{{\left( {k - 1} \right)!}}{e^{ - {\lambda _{Exp}}z}}\int\limits_0^z {{x^{k - 1}}} {e^{ - \left( {{\lambda _{Er}} - {\lambda _{Exp}}} \right)x}}dx\ 
+\frac{\lambda_{Er}^k \lambda_{Exp}}{(k - 1)!} e^{-\lambda_{Exp} z} \int_0^z x^{k - 1} e^{-(\lambda_{Er} - \lambda_{Exp}) x} \, dx
 ```
-{% endraw %} In computing the negative log likelihood, the corresponding
-λExponential is calculated via the following relationship, which exists
-at the MLE of this function: {% raw %}
+In computing the negative log likelihood, the corresponding λExponential
+is calculated via the following relationship, which exists at the MLE of
+this function:
+
 ``` math
 
-\frac{K}{{{\lambda _{Erlang}}}} + \frac{1}{{{\lambda _{Exponential}}}} = \mu \
+\frac{K}{\lambda_{Erlang}} + \frac{1}{\lambda_{Exponential}} = \mu
 ```
-{% endraw %} The pair of λErlang & λExponential that maximizes the
-log-likelihood is selected as the MLE for the Erlang-Exponential
-Distribution from the observed data.
+The pair of λErlang & λExponential that maximizes the log-likelihood is
+selected as the MLE for the Erlang-Exponential Distribution from the
+observed data.
 
 Additional notes on optimization: Default parameter bounds are specified
 within the optimization to ensure stability. In particular, the lower
