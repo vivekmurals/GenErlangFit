@@ -12,10 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-<!-- Logo just for now - will remove when hosted by a website -->
-<div style="position: absolute; top: 150px; right: 680px;">
-  <img src="../man/figures/logo.png" style="height: 150px; border:none; box-shadow:none;">
-</div>
+
 
 ```{css, echo=FALSE}
 body {
@@ -29,8 +26,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
----
 
 # Overview
 

@@ -1,3 +1,3 @@
 # GenErlangFit (development version)
 
-* Initial CRAN submission.
+* Initial development version.

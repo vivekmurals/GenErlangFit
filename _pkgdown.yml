@@ -1,0 +1,15 @@
+url: https://vivekmurals.github.io/GenErlangFit
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:
+      - getting_started
+      - reference
+      - articles
+      - news
+  components:
+    getting_started:
+      text: "Getting Started"
+      href: articles/GettingStarted.html
