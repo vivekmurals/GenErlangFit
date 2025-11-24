@@ -80,25 +80,11 @@ body {
 
 </style>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="context-and-package-overview">Context and Package Overview<a class="anchor" aria-label="anchor" href="#context-and-package-overview"></a>
 </h2>
 <p>The GenErlangFit package aims to identify the optimal generalized
 Erlang or Erlang–Exponential model consistent with observed
 time-to-event data.</p>
-</div>
-<div class="section level2">
-<h2 id="package-installation-from-github">Package Installation from Github<a class="anchor" aria-label="anchor" href="#package-installation-from-github"></a>
-</h2>
-<p>To install and load the package from GitHub, run these commands in
-your R console:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insertuser/generlangfit"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">generlangfit</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="context-and-summary-of-the-method">Context and Summary of the Method<a class="anchor" aria-label="anchor" href="#context-and-summary-of-the-method"></a>
-</h2>
 <p>Standard compartmental models of infectious diseases often assume
 constant transition rates between states, which implies an exponential
 distribution of “waiting times” in each state. (e.g., the latent period,
@@ -116,12 +102,21 @@ exponential stage— allowing better approximation of empirical
 distributions with varying skewness and tail behavior.</p>
 <p>This user-friendly package enables modelers to fit empirical data and
 build parsimonious, data-driven compartmental models across diverse
-domains.</p>
-<p>A thorough walk through of the fitting algorithms and assumptions can
-be found in the <a href="FAQ.html">FAQ vignette linked here</a>. This
-vignette serves as simple tutorial on how users can get started with
-this package.</p>
+domains. A thorough walk through of the fitting algorithms and
+assumptions can be found in the <a href="FAQ.html">FAQ vignette linked
+here</a>. This vignette serves as simple tutorial on how users can get
+started with this package.</p>
 <hr>
+</div>
+<div class="section level2">
+<h2 id="package-installation-from-github">Package Installation from Github<a class="anchor" aria-label="anchor" href="#package-installation-from-github"></a>
+</h2>
+<p>To install and load the package from GitHub, run these commands in
+the R console and load the following libraries:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"vivekmurals/GenErlangFit"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">GenErlangFit</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-the-package">Using the Package<a class="anchor" aria-label="anchor" href="#using-the-package"></a>
@@ -130,12 +125,11 @@ this package.</p>
 <h3 id="general-fitting-under-default-settings">General Fitting under Default Settings<a class="anchor" aria-label="anchor" href="#general-fitting-under-default-settings"></a>
 </h3>
 <p>In general, the user only needs to be familiar using one single
-function <code>GenErlang_Fit.R</code>. By default, if the user runs the
-following line of code with just the empiricaldata as the only
-argument:</p>
+function <code>GenErlang_Fit</code>. By default, if the user runs the
+following line of code with empiricaldata as the only argument,</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="va">empiricaldata</span><span class="op">)</span></span></code></pre></div>
-<p>The function will run both the Erlang and Erlang-Exp fit, run
+<p>the function will run both the Erlang and Erlang-Exp fit, run
 goodness of fit evaluations for both and in addition, search for the
 smallest statistically acceptable K for both models. More on what the
 smallest K model means can be found in <a href="FAQ.html#smallest-k"><strong>FAQ: Smallest K
@@ -146,18 +140,29 @@ arguments:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span><span class="op">)</span></span></code></pre></div>
-<p>Note that for running specific models, these arguments need to be
-specified as the first argument of the function. For the
+<p><strong>Quick Note:</strong> When running specific models, the model
+name must always be provided as the first argument. For the
 Erlang-Exponential model, an additional input argument K must always be
-provided because the search for the optimal K is handled differently
-from that of the Erlang. See <a href="FAQ.html%7B#erlangexp-k%7D"><strong>FAQ: Erlang-Exp
+provided since the search for the optimal K is handled differently from
+that of the Erlang. See <a href="FAQ.html%7B#erlangexp-k%7D"><strong>FAQ: Erlang-Exp
 Fit</strong></a>.</p>
-<p>These defaults offer an efficient first pass for most analyses,
-giving users a clear initial sense of which model structures best
-capture their data.</p>
+<p>While these default modes are designed to be comprehensive and is
+generally the best starting point for first-time users, those who prefer
+a quicker initial exploration may first run the Erlang model alone to
+get a broad sense of the empirical data’s structure.</p>
 <div class="section level4">
 <h4 id="outputs-from-generlang_fit">Outputs from GenErlang_Fit<a class="anchor" aria-label="anchor" href="#outputs-from-generlang_fit"></a>
 </h4>
+<p>The object returned by GenErlang_Fit is a structured list that
+organizes all results produced during the fitting procedure. For
+example, after running:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span><span class="op">)</span></span></code></pre></div>
+<p>the main components of the output— <code>Results$BestFit</code> and
+<code>Results$SmallestK</code> — contain the corresponding fitted model
+summaries. Each of these components includes the estimated model
+parameters, the log-likelihood, the goodness-of-fit quantities, and
+summary statistics used in the evaluation.</p>
 <hr>
 </div>
 </div>
@@ -165,7 +170,7 @@ capture their data.</p>
 <h3 id="model-specific-fitting-options">Model Specific Fitting Options<a class="anchor" aria-label="anchor" href="#model-specific-fitting-options"></a>
 </h3>
 <p>Once users are familiar with the default behavior of
-<code>GenErlang_Fit.R</code>, it is helpful to clarify how users can
+<code>GenErlang_Fit</code>, users can proceed onto learning how to
 customize different aspects the fitting workflow. The following sections
 outline the main categories of options available when departing from the
 default settings: Fit Options (e.g., changing initial guesses or
@@ -182,28 +187,26 @@ defaults.</p>
 optimization routines. Users may optionally supply their own initial
 guesses to customize the fitting process or to assess the robustness of
 results to different starting values.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, <span class="st">'InitialguessK = VALUE'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, <span class="st">'InitialguessErlam = VALUE'</span><span class="op">)</span></span></code></pre></div>
 <ul>
-<li><p>Erlang model: the initial guess refers to the number of
-substates, K used during optimization.</p></li>
+<li><p>Erlang model: the initial guess refers to the Erlang shape
+parameter, K used during optimization.</p></li>
 <li><p>Erlang–Exponential model: the initial guess refers to the Erlang
-rate parameter𝜆because K is provided explicitly by the user.</p></li>
+rate parameter 𝜆 because K is provided explicitly by the user.</p></li>
 </ul>
 </div>
 <div class="section level4">
 <h4 id="additional-erlang-exp-fitting-option">Additional Erlang-Exp Fitting Option<a class="anchor" aria-label="anchor" href="#additional-erlang-exp-fitting-option"></a>
 </h4>
-<p>The Erlang–Exponential model requires manually specifying an
-additional input parameter K. Depending on the analysis, users may
-either:</p>
-<ol style="list-style-type: decimal">
-<li>Fix K and compute the MLE for that model structure, or</li>
-<li>Search over a window of nearby K values to automatically detect a
-better-fitting structure.</li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>For the Erlang–Exponential model, the input parameter K plays a dual
+role depending on user settings: it can either be treated as a fixed
+shape parameter for which the maximum likelihood estimate is computed
+directly, or it can serve as the central value around which the function
+searches a range of nearby K values to identify a better-fitting model
+structure.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, FixedK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, FixedK <span class="op">=</span> <span class="cn">FALSE</span>, KwindowSize <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span></code></pre></div>
 <p>When FixedK = TRUE, the function performs a pure MLE fit for the
@@ -225,65 +228,94 @@ both Erlang and Erlang–Exp models and include:</p>
 <li>Significance level (<code>Alpha</code>)</li>
 <li>Number of bootstrap samples (<code>NumBootStraps</code>)</li>
 </ul>
-<p>A detailed description of this section can be found here: <a href="FAQ.html%7B#gof%7D"><strong>FAQ: Goodness of Fit
-Evaluation</strong></a>.</p>
+<p>A detailed description on how the goodness of fit of a model is
+evaluated can be found here: <a href="FAQ.html%7B#gof%7D"><strong>FAQ:
+Goodness of Fit Evaluation</strong></a>.</p>
 <div class="section level4">
-<h4 id="overriding-choice-of-p-value-computation">Overriding choice of P Value Computation<a class="anchor" aria-label="anchor" href="#overriding-choice-of-p-value-computation"></a>
+<h4 id="overriding-choice-of-test-statistic">Overriding choice of Test Statistic<a class="anchor" aria-label="anchor" href="#overriding-choice-of-test-statistic"></a>
 </h4>
 <p>Users can select which distance measure to use in evaluating the
-model’s goodness-of-fit:</p>
+model’s goodness-of-fit. Available options are:</p>
 <ul>
 <li>“KS” — Kolmogorov–Smirnov Statistic</li>
 <li>“CVM” — Cramér–von Mises Statistic</li>
 <li>“AD” — Anderson–Darling Statistic</li>
-<li>“NIL” — skip p-value computation entirely</li>
+<li>“NIL” — skips evaluation entirely and just performs the model
+fit</li>
 </ul>
-<p>Choosing the test statistic modifies both the bootstrap distribution
-and the measure of fit.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">GenErlang_Fit</span>(<span class="st">'Erlang'</span>, empiricaldata, <span class="at">pvaloption =</span> <span class="st">'KS'</span>, <span class="st">'CVM'</span>, <span class="st">'AD'</span> or <span class="st">'NIL'</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">GenErlang_Fit</span>(<span class="st">'ErlangExp'</span>, empiricaldata, K, <span class="at">pvaloption =</span> <span class="st">'KS'</span>, <span class="st">'CVM'</span>, <span class="st">'AD'</span> or <span class="st">'NIL'</span>)</span></code></pre></div>
+<p>Users can specify the test statistic by providing the
+<code>pvaloption</code> argument as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, pvaloption <span class="op">=</span> <span class="st">'KS'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, pvaloption <span class="op">=</span> <span class="st">'NIL'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="overriding-choice-of-alpha">Overriding choice of Alpha<a class="anchor" aria-label="anchor" href="#overriding-choice-of-alpha"></a>
 </h4>
-<p>The argument alpha determines the rejection threshold used when
-comparing bootstrap test statistics. Smaller values imply more
-conservative goodness-of-fit assessment.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, alpha <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, alpha <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span></code></pre></div>
+<p>The argument <code>Alpha</code> determines the significance level
+(rejection threshold) used when evaluating the bootstrap test
+statistics. Smaller values correspond to a more conservative
+goodness-of-fit assessment.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, Alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, Alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="overriding-choice-of-number-of-bootstraps">Overriding choice of Number of Bootstraps<a class="anchor" aria-label="anchor" href="#overriding-choice-of-number-of-bootstraps"></a>
 </h4>
 <p>Increasing the number of bootstrap samples improves the stability and
-precision of p-value estimates—but increases runtime.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, NumBootStraps <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, NumBootStraps <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span></code></pre></div>
+precision of p-value estimates—but also increases runtime. Users can
+control this by setting the <code>NumBootStraps</code> argument to any
+value of interest as follows:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, NumBootStraps <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, NumBootStraps <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="smallest-k-option">Smallest K Option<a class="anchor" aria-label="anchor" href="#smallest-k-option"></a>
 </h3>
 <p>The “Smallest-K” routines automatically search for the simplest model
-that remains statistically consistent with the observed data. This
-process tests increasing values of K and identifies the smallest
-structure that passes the selected goodness-of-fit criteria.A detailed
-description of this section can be found here: <a href="FAQ.html#smallest-k"><strong>FAQ: Smallest K
+that remains statistically consistent with the observed data. Starting
+from the best-fitting K, the procedure iteratively tests decreasing
+values of K to identify the smallest value of K that still meets the
+user’s goodness-of-fit criteria (i.e., p &gt; α). A detailed description
+of this section can be found here: <a href="FAQ.html#smallest-k"><strong>FAQ: Smallest K
 Model</strong></a>.</p>
-<ul>
-<li>For Erlang models, this is a straightforward increasing-K
-search.</li>
-<li>For Erlang–Exp models, users may optionally set SmallestKvalue to
-limit the search range for computational speed.</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Users can enable the smallest-K search by specifying the
+<code>SmallestK</code> argument as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, SmallestK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, SmallestK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, SmallestK <span class="op">=</span> <span class="cn">TRUE</span>, SmallestKvalue <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span></code></pre></div>
+<p>For Erlang–Exponential models specifically, the optional
+<code>SmallestKvalue</code> sets the starting value of K for the
+iterative search. This can help reduce computational time if users
+suspect that the smallest acceptable K is much lower than the
+best-fitting K.</p>
+<hr>
 </div>
+</div>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
+<p>The GenErlangFit package offers a flexible and user-friendly toolkit
+for fitting generalized Erlang and Erlang–Exponential models to
+empirical time-to-event data. By identifying the appropriate number of
+substates (shape parameters) and transition rates, the package helps
+users build parsimonious compartmental models that more accurately
+capture the underlying biological or process dynamics.</p>
+<p>We encourage users to explore the different fitting options,
+goodness-of-fit evaluations, and the smallest-K search to tailor the
+analysis to their specific datasets and research questions. For a deeper
+dive into the theoretical foundations, algorithmic details, and
+troubleshooting tips, please consult the <a href="FAQ.html">FAQ vignette
+linked here</a>.</p>
+<p>If you encounter any issues or have suggestions, feel free to open an
+issue on the GitHub repository.</p>
+<p>Thank you for using GenErlangFit and We look forward to seeing how
+GenErlangFit aids your modeling efforts!</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

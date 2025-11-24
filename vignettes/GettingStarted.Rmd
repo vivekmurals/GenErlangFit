@@ -87,7 +87,7 @@ the main components of the output— `Results$BestFit` and `Results$SmallestK` �
 
 ## Model Specific Fitting Options 
 
-Once users are familiar with the default behavior of `GenErlang_Fit.R`, it is helpful to clarify how users can customize different aspects the fitting workflow. The following sections outline the main categories of options available when departing from the default settings: Fit Options (e.g., changing initial guesses or controlling the Erlang-exp search over K), Goodness-of-Fit Options (e.g., bootstrap-based confidence intervals and p-value estimation), and the Smallest-K Search tools used for model parsimony or computational efficiency. Each subsection explains the purpose of these options, how to call them, and in what situations users may want to override the defaults.
+Once users are familiar with the default behavior of `GenErlang_Fit`, users can proceed onto learning how to customize different aspects the fitting workflow. The following sections outline the main categories of options available when departing from the default settings: Fit Options (e.g., changing initial guesses or controlling the Erlang-exp search over K), Goodness-of-Fit Options (e.g., bootstrap-based confidence intervals and p-value estimation), and the Smallest-K Search tools used for model parsimony or computational efficiency. Each subsection explains the purpose of these options, how to call them, and in what situations users may want to override the defaults.
 
 ### Overriding initial guesses  
 GenErlang_Fit provides default initialization values for all optimization routines. Users may optionally supply their own initial guesses to customize the fitting process or to assess the robustness of results to different starting values. 
@@ -96,16 +96,12 @@ GenErlang_Fit('Erlang', empiricaldata, 'InitialguessK = VALUE')
 GenErlang_Fit('ErlangExp', empiricaldata, K, 'InitialguessErlam = VALUE')
 
 ```
- - Erlang model: the initial guess refers to the number of substates, K used during optimization.
+ - Erlang model: the initial guess refers to the Erlang shape parameter, K used during optimization.
 
- - Erlang–Exponential model: the initial guess refers to the Erlang rate parameter𝜆because K is provided
- explicitly by the user.
+ - Erlang–Exponential model: the initial guess refers to the Erlang rate parameter 𝜆 because K is provided explicitly by the user.
 
 ### Additional Erlang-Exp Fitting Option  
-The Erlang–Exponential model requires manually specifying an additional input parameter K. Depending on the analysis, users may either:
-
-1. Fix K and compute the MLE for that model structure, or
-2. Search over a window of nearby K values to automatically detect a better-fitting structure.
+For the Erlang–Exponential model, the input parameter K plays a dual role depending on user settings: it can either be treated as a fixed shape parameter for which the maximum likelihood estimate is computed directly, or it can serve as the central value around which the function searches a range of nearby K values to identify a better-fitting model structure.
 
 ```r
 GenErlang_Fit('ErlangExp', empiricaldata, K, FixedK = TRUE)
@@ -122,51 +118,51 @@ GenErlang_Fit provides built-in tools for assessing how well each fitted model m
 - Significance level (`Alpha`)
 - Number of bootstrap samples (`NumBootStraps`)
 
-A detailed description of this section can be found here: [**FAQ: Goodness of Fit Evaluation**](FAQ.html{#gof}).
+A detailed description on how the goodness of fit of a model is evaluated can be found here: [**FAQ: Goodness of Fit Evaluation**](FAQ.html{#gof}).
 
-### Overriding choice of P Value Computation 
+### Overriding choice of Test Statistic 
 
-Users can select which distance measure to use in evaluating the model's goodness-of-fit:
+Users can select which distance measure to use in evaluating the model's goodness-of-fit. Available options are: 
 
 - "KS" — Kolmogorov–Smirnov Statistic
 - "CVM" — Cramér–von Mises Statistic
 - "AD" — Anderson–Darling Statistic
-- "NIL" — skip p-value computation entirely
+- "NIL" — skips evaluation entirely and just performs the model fit
 
-Choosing the test statistic modifies both the bootstrap distribution and the measure of fit.
+Users can specify the test statistic by providing the `pvaloption` argument as follows:
 
 ```r
-GenErlang_Fit('Erlang', empiricaldata, pvaloption = 'KS', 'CVM', 'AD' or 'NIL')
-GenErlang_Fit('ErlangExp', empiricaldata, K, pvaloption = 'KS', 'CVM', 'AD' or 'NIL')
+GenErlang_Fit('Erlang', empiricaldata, pvaloption = 'KS')
+GenErlang_Fit('ErlangExp', empiricaldata, K, pvaloption = 'NIL')
 
 ```
 
 ### Overriding choice of Alpha 
 
-The argument alpha determines the rejection threshold used when comparing bootstrap test statistics. Smaller values imply more conservative goodness-of-fit assessment.
+The argument `Alpha` determines the significance level (rejection threshold) used when evaluating the bootstrap test statistics. Smaller values correspond to a more conservative goodness-of-fit assessment.
 
 ```r
-GenErlang_Fit('Erlang', empiricaldata, alpha = VALUE)
-GenErlang_Fit('ErlangExp', empiricaldata, K, alpha = VALUE)
+GenErlang_Fit('Erlang', empiricaldata, Alpha = 0.05)
+GenErlang_Fit('ErlangExp', empiricaldata, K, Alpha = 0.01)
 
 ```
 
 ### Overriding choice of Number of Bootstraps
 
-Increasing the number of bootstrap samples improves the stability and precision of p-value estimates—but increases runtime. 
+Increasing the number of bootstrap samples improves the stability and precision of p-value estimates—but also increases runtime. Users can control this by setting the `NumBootStraps` argument to any value of interest as follows:
 
 ```r
-GenErlang_Fit('Erlang', empiricaldata, NumBootStraps = VALUE)
-GenErlang_Fit('ErlangExp', empiricaldata, K, NumBootStraps = VALUE)
+GenErlang_Fit('Erlang', empiricaldata, NumBootStraps = 10000)
+GenErlang_Fit('ErlangExp', empiricaldata, K, NumBootStraps = 2000)
 
 ```
 
 
 ## Smallest K Option
-The “Smallest-K” routines automatically search for the simplest model that remains statistically consistent with the observed data. This process tests increasing values of K and identifies the smallest structure that passes the selected goodness-of-fit criteria.A detailed description of this section can be found here: [**FAQ: Smallest K Model**](FAQ.html#smallest-k).
+The “Smallest-K” routines automatically search for the simplest model that remains statistically consistent with the observed data. Starting from the best-fitting K, the procedure iteratively tests decreasing values of K to identify the smallest value of K that still meets the user's goodness-of-fit criteria (i.e., p > α). A detailed description of this section can be found here: [**FAQ: Smallest K Model**](FAQ.html#smallest-k).
 
-- For Erlang models, this is a straightforward increasing-K search.
-- For Erlang–Exp models, users may optionally set SmallestKvalue to limit the search range for computational speed.
+Users can enable the smallest-K search by specifying the `SmallestK` argument as follows:
+
 
 ```r
 GenErlang_Fit('Erlang', empiricaldata, SmallestK = TRUE)
@@ -175,3 +171,17 @@ GenErlang_Fit('ErlangExp', empiricaldata, K, SmallestK = TRUE)
 GenErlang_Fit('ErlangExp', empiricaldata, K, SmallestK = TRUE, SmallestKvalue = VALUE)
 
 ```
+
+For Erlang–Exponential models specifically, the optional `SmallestKvalue` sets the starting value of K for the iterative search. This can help reduce computational time if users suspect that the smallest acceptable K is much lower than the best-fitting K. 
+
+---
+
+# Conclusion 
+
+The GenErlangFit package offers a flexible and user-friendly toolkit for fitting generalized Erlang and Erlang–Exponential models to empirical time-to-event data. By identifying the appropriate number of substates (shape parameters) and transition rates, the package helps users build parsimonious compartmental models that more accurately capture the underlying biological or process dynamics.
+
+We encourage users to explore the different fitting options, goodness-of-fit evaluations, and the smallest-K search to tailor the analysis to their specific datasets and research questions. For a deeper dive into the theoretical foundations, algorithmic details, and troubleshooting tips, please consult the [FAQ vignette linked here](FAQ.html). 
+
+If you encounter any issues or have suggestions, feel free to open an issue on the GitHub repository.
+
+Thank you for using GenErlangFit and We look forward to seeing how GenErlangFit aids your modeling efforts!
