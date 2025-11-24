@@ -1,6 +1,8 @@
 url: https://vivekmurals.github.io/GenErlangFit
 template:
+  package: bslib
   bootstrap: 5
+  bootswatch: minty
 
 navbar:
   structure:
