@@ -69,7 +69,7 @@ GenErlang_Fit('Erlang', empiricaldata)
 GenErlang_Fit('ErlangExp', empiricaldata, K)
 
 ```
-**Quick Note:** When running specific models, the model name must always be provided as the first argument. For the Erlang-Exponential model, an additional input argument K must always be provided since the search for the optimal K is handled differently from that of the Erlang. See [**FAQ: Erlang-Exp Fit**](FAQ.html{#erlangexp-k}).
+**Quick Note:** When running specific models, the model name must always be provided as the first argument. For the Erlang-Exponential model, an additional input argument K must always be provided since the search for the optimal K is handled differently from that of the Erlang. See [**FAQ: Erlang-Exp Fit**](FAQ.html#erlangexp-k).
 
 While these default modes are designed to be comprehensive and is generally the best starting point for first-time users, those who prefer a quicker initial exploration may first run the Erlang model alone to get a broad sense of the empirical data’s structure.
 
@@ -118,7 +118,7 @@ GenErlang_Fit provides built-in tools for assessing how well each fitted model m
 - Significance level (`Alpha`)
 - Number of bootstrap samples (`NumBootStraps`)
 
-A detailed description on how the goodness of fit of a model is evaluated can be found here: [**FAQ: Goodness of Fit Evaluation**](FAQ.html{#gof}).
+A detailed description on how the goodness of fit of a model is evaluated can be found here: [**FAQ: Goodness of Fit Evaluation**](FAQ.html#gof).
 
 ### Overriding choice of Test Statistic 
 

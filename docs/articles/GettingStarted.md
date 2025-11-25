@@ -74,7 +74,7 @@ be provided as the first argument. For the Erlang-Exponential model, an
 additional input argument K must always be provided since the search for
 the optimal K is handled differently from that of the Erlang. See
 [**FAQ: Erlang-Exp
-Fit**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html%7B#erlangexp-k%7D).
+Fit**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#erlangexp-k).
 
 While these default modes are designed to be comprehensive and is
 generally the best starting point for first-time users, those who prefer
@@ -163,7 +163,7 @@ Erlang and Erlang–Exp models and include:
 
 A detailed description on how the goodness of fit of a model is
 evaluated can be found here: [**FAQ: Goodness of Fit
-Evaluation**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html%7B#gof%7D).
+Evaluation**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#gof).
 
 #### Overriding choice of Test Statistic
 
