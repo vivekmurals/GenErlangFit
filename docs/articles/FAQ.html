@@ -84,22 +84,8 @@ body {
 <p>This package computes the maximum likelihood estimates (MLE) of an
 Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential
 distribution (K, λ<sub>Erlang</sub>, λ<sub>Exponential</sub>) from
-observed data.</p>
-<div class="section level4">
-<h4 id="what-is-an-erlang-exponential-distribution">What is an Erlang-Exponential Distribution?<a class="anchor" aria-label="anchor" href="#what-is-an-erlang-exponential-distribution"></a>
-</h4>
-<p>The Erlang–Exponential distribution describes the sum of 2
-independent random variables: an erlang random variable with shape
-parameter K and rate parameter, λErlang and an exponential random
-variable with rate parameter λExponential. Essentially, this
-distribution generalizes the Erlang distribution by adding an extra
-exponential stage, which can be either faster or slower than the Erlang
-stages. This allows for better approximation of empirical distributions
-with varying skewness and tail behavior.</p>
-</div>
-<div class="section level3">
-<h3 id="erlang-fit-algorithm">Erlang Fit Algorithm<a class="anchor" aria-label="anchor" href="#erlang-fit-algorithm"></a>
-</h3>
+observed data.<br>
+## Erlang Fit Algorithm</p>
 <p>The algorithm calculates the maximum likelihood estimates (MLE) of an
 Erlang distribution from observed data. Since the Erlang shape parameter
 K must be an integer, direct optimization over K using common
@@ -111,29 +97,28 @@ be adjusted to nearest integers to identify the maximum likelihood
 estimates for the Erlang distribution. The exact details of this are
 explained below.</p>
 <p>This search starts from an initial guess for K specified by
-‘InitialguessK’. The cost function is specified in
-Erlang_Fit_CostFunction.m. Here the function to be minimized with
+<code>InitialguessK</code>. The cost function to be minimized with
 respect to K is the negative log likelihood of the observed data given a
-Gamma distribution.</p>
+Gamma distribution:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mfrac><mrow><msup><mi>λ</mi><mi>K</mi></msup><msubsup><mi>x</mi><mi>i</mi><mrow><mi>K</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msup><mi>e</mi><mrow><mi>−</mi><mi>λ</mi><msub><mi>x</mi><mi>i</mi></msub></mrow></msup></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>K</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>!</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 - \log \left( \prod_{i=1}^N \frac{\lambda^K x_i^{K - 1} e^{-\lambda x_i}}{(K - 1)!} \right)
 </annotation></semantics></math></p>
-<p>In the function above, xi refers to the observed data, N refers to
-the size of the observed data while K and λ are the shape and scale
-parameters of the Gamma distribution. The corresponding scale parameter,
-λ used in the evaluation of the negative log likelihood is calculated
-from the initial guess K via the following relationship, where μ is the
-mean of the observed data:
+<p>In the function above,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>
+refers to the observed data, N refers to the size of the observed data
+while K and λ are the shape and scale parameters of the Gamma
+distribution. The corresponding scale parameter, λ used in the
+evaluation of the negative log likelihood is calculated from the initial
+guess K via the following relationship, where μ is the mean of the
+observed data:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>K</mi><mi>λ</mi></mfrac><mo>=</mo><mi>μ</mi></mrow><annotation encoding="application/x-tex">
 \frac{K}{\lambda} = \mu
 </annotation></semantics></math> This relationship exists at the MLE of
 a Gamma distribution (and by extension an Erlang). Specifically, this
 relationship arises from the Gamma MLE conditions: differentiating the
 log-likelihood with respect to λ and setting that to 0 yields λ = K / μ.
-We leverage this relationship having to only search over one variable K.
-Side note: In implementation, since MATLAB’s gampdf and related Gamma
-functions parameterize the scale parameter as 1/λ, its reciprocal is
-used internally.</p>
+We leverage this relationship having to only search over one variable
+K.</p>
 <p>After finding the optimal continuous K, the floor ⌊K⌋ and ceiling ⌈K⌉
 of this value are evaluated as candidate integer K values for finding
 the MLE of the Erlang Distribution. For each candidate K, the respective
@@ -153,20 +138,42 @@ for the Gamma is found, the floor and ceiling of K are selected as the
 two corresponding Erlang candidates.</p>
 <p>This method assumes: (1) the maximum likelihood found for the
 continuous Gamma distribution along this line is the true global
-maximum, and (2) the likelihood function along the segment between
-floor(K) and ceil(K) is monotonic and continuous, allowing us to
-identify the MLE of an Erlang distribution by checking only these two
-integer neighbours.</p>
-</div>
+maximum, and (2) the likelihood function along the segment between floor
+⌊K⌋ and ceiling ⌈K⌉ is monotonic and continuous, allowing us to identify
+the MLE of an Erlang distribution by checking only these two integer
+neighbors.</p>
 <div class="section level3">
 <h3 id="erlangexp-k">Erlang-Exp Fit Algorithm<a class="anchor" aria-label="anchor" href="#erlangexp-k"></a>
 </h3>
+<div class="section level4">
+<h4 id="what-is-an-erlang-exponential-distribution">What is an Erlang-Exponential Distribution?<a class="anchor" aria-label="anchor" href="#what-is-an-erlang-exponential-distribution"></a>
+</h4>
+<p>The Erlang–Exponential distribution describes the sum of 2
+independent random variables: an erlang random variable with shape
+parameter K and rate parameter,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Erlang</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Erlang}}</annotation></semantics></math>
+and an exponential random variable with rate parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Exponential</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Exponential}}</annotation></semantics></math>.
+Essentially, this distribution generalizes the Erlang distribution by
+adding an extra exponential stage, which can be either faster or slower
+than the Erlang stages. This allows for better approximation of
+empirical distributions with varying skewness and tail behavior.</p>
+</div>
+<div class="section level4">
+<h4 id="fit-algorithm">Fit Algorithm<a class="anchor" aria-label="anchor" href="#fit-algorithm"></a>
+</h4>
 <p>By default, this algorithm performs an adaptive search across a range
 of K-values centered around the input value of K to best identify K –
-along with the corresponding λErlang and λExponential – that maximizes
-the likelihood of the observed data. If ‘FixedK’, true is specified, the
-algorithm instead computes the MLEs (λErlang and λExponential) for a
-fixed value of K (specified input value of K).</p>
+along with the corresponding
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Erlang</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Erlang}}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Exponential</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Exponential}}</annotation></semantics></math>
+– that maximizes the likelihood of the observed data. If ‘FixedK’, true
+is specified, the algorithm instead computes the MLEs
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Erlang</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Erlang}}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mtext mathvariant="normal">Exponential</mtext></msub><annotation encoding="application/x-tex">\lambda_{\text{Exponential}}</annotation></semantics></math>)
+for a fixed value of K (specified input value of K).</p>
 <p>This section details how the algorithm computes the MLE for a fixed
 input argument K. This is the backbone of the overall procedure, since
 the adaptive search described earlier simply repeats this fixed-K
@@ -203,6 +210,7 @@ that λErlang &gt; 0. In addition, a small error term (1e-2) is added for
 numerical consistency—this prevents undefined behavior during
 optimization.</p>
 <hr>
+</div>
 </div>
 </div>
 <div class="section level2">

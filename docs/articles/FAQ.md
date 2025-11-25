@@ -4,20 +4,8 @@
 
 This package computes the maximum likelihood estimates (MLE) of an
 Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential
-distribution (K, λ_(Erlang), λ_(Exponential)) from observed data.
-
-#### What is an Erlang-Exponential Distribution?
-
-The Erlang–Exponential distribution describes the sum of 2 independent
-random variables: an erlang random variable with shape parameter K and
-rate parameter, λErlang and an exponential random variable with rate
-parameter λExponential. Essentially, this distribution generalizes the
-Erlang distribution by adding an extra exponential stage, which can be
-either faster or slower than the Erlang stages. This allows for better
-approximation of empirical distributions with varying skewness and tail
-behavior.
-
-### Erlang Fit Algorithm
+distribution (K, λ_(Erlang), λ_(Exponential)) from observed data.  
+\## Erlang Fit Algorithm
 
 The algorithm calculates the maximum likelihood estimates (MLE) of an
 Erlang distribution from observed data. Since the Erlang shape parameter
@@ -31,18 +19,17 @@ estimates for the Erlang distribution. The exact details of this are
 explained below.
 
 This search starts from an initial guess for K specified by
-‘InitialguessK’. The cost function is specified in
-Erlang_Fit_CostFunction.m. Here the function to be minimized with
-respect to K is the negative log likelihood of the observed data given a
-Gamma distribution.
+`InitialguessK`. The cost function to be minimized with respect to K is
+the negative log likelihood of the observed data given a Gamma
+distribution:
 
 ``` math
 
 - \log \left( \prod_{i=1}^N \frac{\lambda^K x_i^{K - 1} e^{-\lambda x_i}}{(K - 1)!} \right)
 ```
 
-In the function above, xi refers to the observed data, N refers to the
-size of the observed data while K and λ are the shape and scale
+In the function above, $`x_i`$ refers to the observed data, N refers to
+the size of the observed data while K and λ are the shape and scale
 parameters of the Gamma distribution. The corresponding scale parameter,
 λ used in the evaluation of the negative log likelihood is calculated
 from the initial guess K via the following relationship, where μ is the
@@ -55,9 +42,7 @@ This relationship exists at the MLE of a Gamma distribution (and by
 extension an Erlang). Specifically, this relationship arises from the
 Gamma MLE conditions: differentiating the log-likelihood with respect to
 λ and setting that to 0 yields λ = K / μ. We leverage this relationship
-having to only search over one variable K. Side note: In implementation,
-since MATLAB’s gampdf and related Gamma functions parameterize the scale
-parameter as 1/λ, its reciprocal is used internally.
+having to only search over one variable K.
 
 After finding the optimal continuous K, the floor ⌊K⌋ and ceiling ⌈K⌉ of
 this value are evaluated as candidate integer K values for finding the
@@ -81,18 +66,33 @@ two corresponding Erlang candidates.
 
 This method assumes: (1) the maximum likelihood found for the continuous
 Gamma distribution along this line is the true global maximum, and (2)
-the likelihood function along the segment between floor(K) and ceil(K)
-is monotonic and continuous, allowing us to identify the MLE of an
-Erlang distribution by checking only these two integer neighbours.
+the likelihood function along the segment between floor ⌊K⌋ and ceiling
+⌈K⌉ is monotonic and continuous, allowing us to identify the MLE of an
+Erlang distribution by checking only these two integer neighbors.
 
 ### Erlang-Exp Fit Algorithm
 
+#### What is an Erlang-Exponential Distribution?
+
+The Erlang–Exponential distribution describes the sum of 2 independent
+random variables: an erlang random variable with shape parameter K and
+rate parameter, $`\lambda_{\text{Erlang}}`$ and an exponential random
+variable with rate parameter $`\lambda_{\text{Exponential}}`$.
+Essentially, this distribution generalizes the Erlang distribution by
+adding an extra exponential stage, which can be either faster or slower
+than the Erlang stages. This allows for better approximation of
+empirical distributions with varying skewness and tail behavior.
+
+#### Fit Algorithm
+
 By default, this algorithm performs an adaptive search across a range of
 K-values centered around the input value of K to best identify K – along
-with the corresponding λErlang and λExponential – that maximizes the
-likelihood of the observed data. If ‘FixedK’, true is specified, the
-algorithm instead computes the MLEs (λErlang and λExponential) for a
-fixed value of K (specified input value of K).
+with the corresponding $`\lambda_{\text{Erlang}}`$ and
+$`\lambda_{\text{Exponential}}`$ – that maximizes the likelihood of the
+observed data. If ‘FixedK’, true is specified, the algorithm instead
+computes the MLEs ($`\lambda_{\text{Erlang}}`$ and
+$`\lambda_{\text{Exponential}}`$) for a fixed value of K (specified
+input value of K).
 
 This section details how the algorithm computes the MLE for a fixed
 input argument K. This is the backbone of the overall procedure, since
