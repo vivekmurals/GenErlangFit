@@ -34,10 +34,12 @@ parameters of the Gamma distribution. The corresponding scale parameter,
 λ used in the evaluation of the negative log likelihood is calculated
 from the initial guess K via the following relationship, where μ is the
 mean of the observed data:
+
 ``` math
 
 \frac{K}{\lambda} = \mu
 ```
+
 This relationship exists at the MLE of a Gamma distribution (and by
 extension an Erlang). Specifically, this relationship arises from the
 Gamma MLE conditions: differentiating the log-likelihood with respect to
@@ -99,18 +101,18 @@ input argument K. This is the backbone of the overall procedure, since
 the adaptive search described earlier simply repeats this fixed-K
 estimation across multiple candidate K values.
 
-The algorithm calculates the MLE (λErlang & λExponential) of an
-Erlang-Exponential distribution from observed data for a given input
-shape parameter K through optimizing a cost function that minimizes the
-negative log likelihood of the observed data given an Erlang-Exponential
-distribution. This optimization starts from an initial guess for λErlang
-specified by ‘InitialguessErLam’ and is implemented in
-ErlangExp_Fit_v3_CostFunction.m.
+The algorithm calculates the MLE ($`\lambda_{\text{Erlang}}`$ &
+$`\lambda_{\text{Exponential}}`$) of an Erlang-Exponential distribution
+from observed data for a given input shape parameter K through
+optimizing a cost function that minimizes the negative log likelihood of
+the observed data given an Erlang-Exponential distribution. This
+optimization starts from an initial guess for
+$`\lambda_{\text{Erlang}}`$ specified by `InitialguessErLam`.
 
 The negative log likelihood itself is computed using a custom function
-embedded within ErlangExp_DirectInt.m. This function outputs both the
-pointwise PDF of the Erlang–Exponential distribution and the
-log-likelihood of the observed dataset under the model.
+which outputs both the pointwise PDF of the Erlang–Exponential
+distribution and the log-likelihood of the observed dataset under the
+model.
 
 Note: This custom function performs direct numerical integration of the
 convolution of an Erlang distribution with an Exponential distribution.
@@ -120,25 +122,20 @@ The expression for this convolution is as follows:
 
 \frac{\lambda_{Er}^k \lambda_{Exp}}{(k - 1)!} e^{-\lambda_{Exp} z} \int_0^z x^{k - 1} e^{-(\lambda_{Er} - \lambda_{Exp}) x} \, dx
 ```
-In computing the negative log likelihood, the corresponding λExponential
-is calculated via the following relationship, which exists at the MLE of
-this function:
+
+In computing the negative log likelihood, the corresponding
+$`\lambda_{\text{Exponential}}`$ is calculated via the following
+relationship, which exists at the MLE of this function:
 
 ``` math
 
 \frac{K}{\lambda_{Erlang}} + \frac{1}{\lambda_{Exponential}} = \mu
 ```
-The pair of λErlang & λExponential that maximizes the log-likelihood is
+
+The pair of $`\lambda_{\text{Erlang}}`$ &
+$`\lambda_{\text{Exponential}}`$ that maximizes the log-likelihood is
 selected as the MLE for the Erlang-Exponential Distribution from the
 observed data.
-
-Additional notes on optimization: Default parameter bounds are specified
-within the optimization to ensure stability. In particular, the lower
-bound on λErlang is derived from its analytical relationship with the
-other distribution parameters at the MLE with the restriction that
-λErlang \> 0. In addition, a small error term (1e-2) is added for
-numerical consistency—this prevents undefined behavior during
-optimization.
 
 ------------------------------------------------------------------------
 
@@ -146,83 +143,65 @@ optimization.
 
 ### Bootstrap Hypothesis Testing
 
-Assessment of the goodness-of-fit of the estimated Erlang model is
-evaluated through parametric bootstrap hypothesis testing via the
-function Erlang_Fit_Pvalue_v2.m
+Assessment of the goodness-of-fit of the estimated Erlang or Erlang-Exp
+model is evaluated through parametric bootstrap hypothesis testing.
 
-The null hypothesis (H0) is that the observed data could have truly come
-from the fitted Erlang distribution, while the alternative hypothesis
-(H1) is that the data is not consistent with having come from the best
-fit Erlang Distribution.
+The hypotheses are:
+
+- **$`H_0`$:** The observed data could have come from the fitted
+  distribution.
+- **$`H_1`$:** The observed data is not consistent with having come from
+  the fitted distribution.
 
 In assessing this, a test statistic, (T\*) is first computed between the
-observed data and the fitted Erlang model under the null hypothesis.
-Next, n (default n = 10,000) synthetic datasets are generated from the
-best-fit Erlang model, each being the same size as the empirical
-dataset. The same statistics are then computed for each synthetic
-dataset against the fitted model (without refitting) which yields an
-empirical null distribution of the statistic under the fitted model. The
-observed statistic (T\*) is then compared to this null distribution to
-obtain a bootstrap p-value (p\*), defined as the proportion of bootstrap
+observed data and the best-fit model under the null hypothesis. Next, n
+(default n = 10,000) synthetic datasets are generated from the best-fit
+model, each being the same size as the empirical dataset. The same
+statistics are then computed for each synthetic dataset against the
+best-fit model (without refitting) which yields an empirical null
+distribution of the statistic under the fitted model. The observed
+statistic (T\*) is then compared to this null distribution to obtain a
+bootstrap p-value (p\*), defined as the proportion of bootstrap
 statistics at least as extreme as the observed one. This p\* is further
 mapped to a binary decision variable q\* where q\* = 0 indicates
 rejection of the null hypothesis at a significance level α (specified by
 ‘Alpha’), and q\* = 1 indicates otherwise.
 
 The specific choice of the test statistic is determined by the
-user-specified ‘pvaloption’ (where ‘pvaloption’ = 2, 3, 4 correspond to
-distance based test statistics such as the Kolmogorov–Smirnov (KS),
-Anderson–Darling (AD), and the Cramér–von Mises (CvM) statistic,
-respectively). An additional option ‘pvaloption’ = 1 specifies a
-likelihood-based test, which currently remains under development.
+user-specified `pvaloption` (where `pvaloption` = `KS`, `AD`, `CvM`
+correspond to distance based test statistics such as the
+Kolmogorov–Smirnov (KS), Anderson–Darling (AD), and the Cramér–von Mises
+(CvM) statistic, respectively).
 
-As an example to illustrate this, when the default ‘pvaloption’ = 2 is
-specified, the Kolmogorov–Smirnov (KS) test statistic is used, which
+As an example to illustrate this, when the default `pvaloption` = `KS`
+is specified, the Kolmogorov–Smirnov (KS) test statistic is used, which
 calculates the maximum distance between empirical data CDF and the
-fitted model CDF. This statistic (T\*) is first computed for the
-observed data CDF against the fitted Erlang model CDF. This same
-statistic is then computed for each of the n synthetic datasets against
-fitted Erlang model CDF, producing an empirical null distribution under
-the assumption that the null hypothesis is true. The p-value (p\*) is
-calculated as the proportion of bootstrap statistics greater than or
-equal to the observed statistic (T\*), i.e., quantifies the probability
-of observing a statistic at least as extreme as the empirical one under
-the null (H0). At a chosen significance level α, the null is rejected if
-p\* \< α and retained otherwise. In implementation, this decision is
-encoded using a binary indicator q where q = 0 denotes rejection of the
-null (model fails) while q = 1 denotes non-rejection of the null (model
-passes)
+best-fit model CDF. This statistic (T\*) is first computed for the
+observed data CDF against the best-fit model CDF. This same statistic is
+then computed for each of the n synthetic datasets against best-fit
+model CDF, producing an empirical null distribution under the assumption
+that the null hypothesis is true. The p-value (p\*) is calculated as the
+proportion of bootstrap statistics greater than or equal to the observed
+statistic (T\*), i.e., quantifies the probability of observing a
+statistic at least as extreme as the empirical one under the null (H0).
+At a chosen significance level α, the null is rejected if p\* \< α and
+retained otherwise. In implementation, this decision is encoded using a
+binary indicator q where q = 0 denotes rejection of the null (model
+fails) while q = 1 denotes non-rejection of the null (model passes)
 
-Overall, the outputs of the algorithm are reported in varargout{1} as
-\[K\*, λ\*, p\*, q\*, L\*\] where K\* and λ\* are the MLE of the Erlang
-Distribution, L\* is the corresponding log-likelihood while p\* and q\*
-are the goodness of fit p-value and binary decision indicator
-respectively.
+#### Additional note for the Erlang-Exponential Fit
 
-### Additional note for the Erlang-Exponential Fit
-
-Assessment of the goodness-of-fit of the estimated Erlang model is
-evaluated through hypothesis testing via the function
-ErlangExp_Fit_Pvalue_DirectInt.m
-
-\[Same theory and logic for the Erlang Goodness of Fit Evaluation\]
-
-Additional Note: Construction of the CDF when using distance-based
-metrics to evaluate goodness-of-fit: Since there is no closed-form CDF
-for the Erlang–Exponential distribution, the cumulative distribution is
-obtained numerically through the function ErlangExpCDF_DirectInt.m.
+Since there is no closed-form CDF for the Erlang–Exponential
+distribution, the cumulative distribution is obtained through numerical
+integration of the convolution expression.
 
 This function first approximates the Erlang–Exponential PDF on a uniform
 grid of points 0:interval:max(observed data) (with default interval =
-0.01) using ErlangExp_DirectInt.m. (As mentioned, this is a custom
-function that estimates the Erlang–Exponential PDF via direct numerical
-integration of the convolution expression).
-
-These approximate PDF values are then cumulatively integrated across the
-grid to obtain the CDF. Interpolation is used to estimate CDF values at
-the observed data points. This approximate CDF is subsequently used to
-evaluate the distance-based test statistics, (i.e., maximum distance
-between empirical data CDF and the fitted model CDF).
+0.01). These approximate PDF values are then cumulatively integrated
+across the grid to obtain the CDF. Interpolation is used to estimate CDF
+values at the observed data points. This approximate CDF is subsequently
+used to evaluate the distance-based test statistics, (i.e., maximum
+distance between empirical data CDF and the fitted model CDF).
 
 Note that this procedure involves two layers of numerical
 integration—first to approximate the PDF and second to obtain the CDF—so
@@ -239,7 +218,7 @@ overhead.
 
 ### Erlang Smallest K
 
-When the ‘SmallestK’ option is passed as an input, the algorithm
+When the `SmallestK` option is passed as an input, the algorithm
 performs a search over decreasing integer values of K to identify the
 smallest K that still yields an adequate model fit. Starting from the
 best fit K\*, the procedure repeatedly lowers K (with λ updated to
@@ -248,13 +227,15 @@ This continues until the goodness-of-fit no longer passes at the
 significance level α (i.e., p\* \< α), at which point the last accepted
 K is recorded as the smallest admissible K. The corresponding λ,
 p-value, binary decision q, and log-likelihood are then reported under
-varargout{2}.
+the results.
 
 ### Erlang-Exp Smallest K
 
-This works the same way as above when the ‘SmallestK’ option is passed
-as an input but requires a starting value of K. . If an additional input
-‘SmallestKValue’ is provided, this is used directly. Otherwise the
-algorithm runs the Erlang-Fit function to identify the smallest
-admissible K and uses this as the starting value for the
-Erlang–Exponential model.
+This works the same way as above when the `SmallestK` option is passed
+as an input but internally, it requires a starting value of K. If an
+additional input `SmallestKValue` is provided, this is used directly and
+sets the starting value of K for the iterative search. This can help
+reduce computational time if users suspect that the smallest acceptable
+K is much lower than the best-fitting K. Otherwise the algorithm runs
+the Erlang-Fit function to identify the smallest admissible K and uses
+this as the starting value for the Erlang–Exponential model.
