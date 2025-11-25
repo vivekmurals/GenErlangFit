@@ -15,8 +15,12 @@ devtools::install_github("vivekmurals/GenErlangFit", build_vignettes = TRUE)
 
 ## Documentation
 
-The package documentation is available after installation. For a quick
-introduction, see the GettingStarted vignette by running:
+The package documentation is available online at
+<https://vivekmurals.github.io/GenErlangFit/>.
+
+The package documentation is also available after installation. For a
+quick introduction, see the Get started page. This can also be accessed
+from an R session with:
 
 ``` R
 vignette("GettingStarted", package = "GenErlangFit")
