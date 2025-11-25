@@ -25,10 +25,10 @@ distributions with varying skewness and tail behavior.
 This user-friendly package enables modelers to fit empirical data and
 build parsimonious, data-driven compartmental models across diverse
 domains. A thorough walk through of the fitting algorithms and
-assumptions can be found in the [FAQ vignette linked
-here](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md). This
-vignette serves as simple tutorial on how users can get started with
-this package.
+assumptions can be found in the [**FAQ vignette linked
+here**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
+This vignette serves as simple tutorial on how users can get started
+with this package.
 
 ------------------------------------------------------------------------
 
@@ -246,11 +246,12 @@ We encourage users to explore the different fitting options,
 goodness-of-fit evaluations, and the smallest-K search to tailor the
 analysis to their specific datasets and research questions. For a deeper
 dive into the theoretical foundations, algorithmic details, and
-troubleshooting tips, please consult the [FAQ vignette linked
-here](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
+troubleshooting tips, please consult the [**FAQ vignette linked
+here**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
 
-If you encounter any issues or have suggestions, feel free to open an
-issue on the GitHub repository.
+If you encounter any issues or have suggestions for new features, feel
+free to open an issue on the [**GitHub
+repository**](https://github.com/vivekmurals/GenErlangFit/issues).
 
 Thank you for using GenErlangFit and We look forward to seeing how
 GenErlangFit aids your modeling efforts!

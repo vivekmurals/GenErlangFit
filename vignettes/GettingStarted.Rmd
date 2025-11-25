@@ -35,7 +35,7 @@ Standard compartmental models of infectious diseases often assume constant trans
 
 Our approach combines maximum likelihood parameter estimation with non-parametric significance testing to prioritize the simplest model structures that produce waiting times consistent with observed data. To improve flexibility, we incorporate the Erlang-Exponential model—an extension of the standard Erlang distribution that adds a final exponential stage— allowing better approximation of empirical distributions with varying skewness and tail behavior. 
 
-This user-friendly package enables modelers to fit empirical data and build parsimonious, data-driven compartmental models across diverse domains. A thorough walk through of the fitting algorithms and assumptions can be found in the [FAQ vignette linked here](FAQ.html). This vignette serves as simple tutorial on how users can get started with this package. 
+This user-friendly package enables modelers to fit empirical data and build parsimonious, data-driven compartmental models across diverse domains. A thorough walk through of the fitting algorithms and assumptions can be found in the [**FAQ vignette linked here**](FAQ.html). This vignette serves as simple tutorial on how users can get started with this package. 
 
 ---
 
@@ -180,8 +180,8 @@ For Erlang–Exponential models specifically, the optional `SmallestKvalue` sets
 
 The GenErlangFit package offers a flexible and user-friendly toolkit for fitting generalized Erlang and Erlang–Exponential models to empirical time-to-event data. By identifying the appropriate number of substates (shape parameters) and transition rates, the package helps users build parsimonious compartmental models that more accurately capture the underlying biological or process dynamics.
 
-We encourage users to explore the different fitting options, goodness-of-fit evaluations, and the smallest-K search to tailor the analysis to their specific datasets and research questions. For a deeper dive into the theoretical foundations, algorithmic details, and troubleshooting tips, please consult the [FAQ vignette linked here](FAQ.html). 
+We encourage users to explore the different fitting options, goodness-of-fit evaluations, and the smallest-K search to tailor the analysis to their specific datasets and research questions. For a deeper dive into the theoretical foundations, algorithmic details, and troubleshooting tips, please consult the [**FAQ vignette linked here**](FAQ.html). 
 
-If you encounter any issues or have suggestions, feel free to open an issue on the GitHub repository.
+If you encounter any issues or have suggestions for new features, feel free to open an issue on the [**GitHub repository**](https://github.com/vivekmurals/GenErlangFit/issues).
 
 Thank you for using GenErlangFit and We look forward to seeing how GenErlangFit aids your modeling efforts!
