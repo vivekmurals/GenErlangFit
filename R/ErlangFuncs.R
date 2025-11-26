@@ -575,35 +575,6 @@ Erlang_Fit_v2_Pvalue <- function(empiricaldata, k_star, lambda_star,
             ". Data not consistent with the model.")
   }
 
-  # # -----------------------------
-  # # 6. Figures
-  # # -----------------------------
-  # P2 <- P3 <- NULL
-  # if (ShowFigures) {
-  #   # Empirical vs Erlang CDF
-  #   df_cdf <- data.frame(
-  #     x = x_vals,
-  #     Empirical = datY,
-  #     Erlang = gammaY
-  #   )
-  #   P2 <- ggplot(df_cdf, aes(x = x)) +
-  #     geom_step(aes(y = Empirical, color = "Empirical CDF")) +
-  #     geom_line(aes(y = Erlang, color = "Erlang CDF"), linewidth = 1.2) +
-  #     scale_color_manual(name = "", values = c("Empirical CDF" = "black", "Erlang CDF" = "red")) +
-  #     labs(title = "Empirical vs Erlang CDF",
-  #          x = "x", y = "CDF") +
-  #     theme_minimal()
-  #
-  #   # Histogram of bootstrap statistics
-  #   df_stats <- data.frame(Statistic = sampleStats)
-  #   P3 <- ggplot(df_stats, aes(x = Statistic)) +
-  #     geom_histogram(binwidth = diff(range(sampleStats)) / 30,
-  #                    fill = "#78A5A3", alpha = 0.6, color = "black") +
-  #     geom_vline(xintercept = metric_star, linetype = "dashed", color = "black", linewidth = 1) +
-  #     labs(title = paste("Bootstrap Distribution of", pvaloption_upper, "Statistic"),
-  #          x = paste(pvaloption_upper, "Statistic"), y = "Count") +
-  #     theme_minimal()
-  # }
 
   # -----------------------------
   # 7. Return
