@@ -84,8 +84,10 @@ body {
 <p>This package computes the maximum likelihood estimates (MLE) of an
 Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential
 distribution (K, λ<sub>Erlang</sub>, λ<sub>Exponential</sub>) from
-observed data.<br>
-## Erlang Fit Algorithm</p>
+observed data.</p>
+<div class="section level3">
+<h3 id="erlang-fit-algorithm">Erlang Fit Algorithm<a class="anchor" aria-label="anchor" href="#erlang-fit-algorithm"></a>
+</h3>
 <p>The algorithm calculates the maximum likelihood estimates (MLE) of an
 Erlang distribution from observed data. Since the Erlang shape parameter
 K must be an integer, direct optimization over K using common
@@ -142,6 +144,7 @@ maximum, and (2) the likelihood function along the segment between floor
 ⌊K⌋ and ceiling ⌈K⌉ is monotonic and continuous, allowing us to identify
 the MLE of an Erlang distribution by checking only these two integer
 neighbors.</p>
+</div>
 <div class="section level3">
 <h3 id="erlangexp-k">Erlang-Exp Fit Algorithm<a class="anchor" aria-label="anchor" href="#erlangexp-k"></a>
 </h3>

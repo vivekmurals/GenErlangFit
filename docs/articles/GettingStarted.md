@@ -43,13 +43,29 @@ library(GenErlangFit)
 library(ggplot2)
 ```
 
+------------------------------------------------------------------------
+
 ## Using the Package
+
+### Data Format
+
+Before fitting, the input `empiricaldata` must be provided as a single
+numeric vector of observed time-to-event values, with all entries
+strictly positive. If your data are stored in a CSV file with a column
+named Time, you can load them using:
+
+``` r
+empiricaldata <- c(1.2, 3.4, 2.1, 5.6, 4.3)
+
+# or loaded from a file:
+empiricaldata <- read.csv("mydata.csv")$Time
+```
 
 ### General Fitting under Default Settings
 
 In general, the user only needs to be familiar using one single function
 `GenErlang_Fit`. By default, if the user runs the following line of code
-with empiricaldata as the only argument,
+with `empiricaldata` as the only argument,
 
 ``` r
 GenErlang_Fit(empiricaldata)

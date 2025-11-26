@@ -23,7 +23,8 @@ knitr::opts_chunk$set(
 
 # Fitting Algorithms and Assumptions 
 
-This package computes the maximum likelihood estimates (MLE) of an Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential distribution (K, λ~Erlang~, λ~Exponential~) from observed data.  
+This package computes the maximum likelihood estimates (MLE) of an Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential distribution (K, λ~Erlang~, λ~Exponential~) from observed data.
+
 ## Erlang Fit Algorithm 
 
 The algorithm calculates the maximum likelihood estimates (MLE) of an Erlang distribution from observed data. Since the Erlang shape parameter K must be an integer, direct optimization over K using common optimization libraries is non-trivial. To address this, we first minimize the negative log-likelihood of the observed data under a Gamma distribution with respect to its continuous shape parameter K, using numerical optimization. This provides a candidate value of K which can be adjusted to nearest integers to identify the maximum likelihood estimates for the Erlang distribution. The exact details of this are explained below. 

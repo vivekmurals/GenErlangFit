@@ -4,8 +4,9 @@
 
 This package computes the maximum likelihood estimates (MLE) of an
 Erlang distribution (K, λ) and/or MLE of an Erlang-Exponential
-distribution (K, λ_(Erlang), λ_(Exponential)) from observed data.  
-\## Erlang Fit Algorithm
+distribution (K, λ_(Erlang), λ_(Exponential)) from observed data.
+
+### Erlang Fit Algorithm
 
 The algorithm calculates the maximum likelihood estimates (MLE) of an
 Erlang distribution from observed data. Since the Erlang shape parameter

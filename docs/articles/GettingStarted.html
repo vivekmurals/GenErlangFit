@@ -117,17 +117,32 @@ the R console and load the following libraries:</p>
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"vivekmurals/GenErlangFit"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">GenErlangFit</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="using-the-package">Using the Package<a class="anchor" aria-label="anchor" href="#using-the-package"></a>
 </h2>
 <div class="section level3">
+<h3 id="data-format">Data Format<a class="anchor" aria-label="anchor" href="#data-format"></a>
+</h3>
+<p>Before fitting, the input <code>empiricaldata</code> must be provided
+as a single numeric vector of observed time-to-event values, with all
+entries strictly positive. If your data are stored in a CSV file with a
+column named Time, you can load them using:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">empiricaldata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">3.4</span>, <span class="fl">2.1</span>, <span class="fl">5.6</span>, <span class="fl">4.3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># or loaded from a file:</span></span>
+<span><span class="va">empiricaldata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"mydata.csv"</span><span class="op">)</span><span class="op">$</span><span class="va">Time</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="general-fitting-under-default-settings">General Fitting under Default Settings<a class="anchor" aria-label="anchor" href="#general-fitting-under-default-settings"></a>
 </h3>
 <p>In general, the user only needs to be familiar using one single
 function <code>GenErlang_Fit</code>. By default, if the user runs the
-following line of code with empiricaldata as the only argument,</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+following line of code with <code>empiricaldata</code> as the only
+argument,</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="va">empiricaldata</span><span class="op">)</span></span></code></pre></div>
 <p>the function will run both the Erlang and Erlang-Exp fit, run
 goodness of fit evaluations for both and in addition, search for the
@@ -137,7 +152,7 @@ Model</strong></a>.</p>
 <p>Users also have the ability to choose the specific model they would
 like to fit the data to via specifying the following input
 arguments:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Quick Note:</strong> When running specific models, the model
@@ -156,7 +171,7 @@ get a broad sense of the empirical data’s structure.</p>
 <p>The object returned by GenErlang_Fit is a structured list that
 organizes all results produced during the fitting procedure. For
 example, after running:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span><span class="op">)</span></span></code></pre></div>
 <p>the main components of the output— <code>Results$BestFit</code> and
 <code>Results$SmallestK</code> — contain the corresponding fitted model
@@ -187,7 +202,7 @@ defaults.</p>
 optimization routines. Users may optionally supply their own initial
 guesses to customize the fitting process or to assess the robustness of
 results to different starting values.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, <span class="st">'InitialguessK = VALUE'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, <span class="st">'InitialguessErlam = VALUE'</span><span class="op">)</span></span></code></pre></div>
 <ul>
@@ -206,7 +221,7 @@ shape parameter for which the maximum likelihood estimate is computed
 directly, or it can serve as the central value around which the function
 searches a range of nearby K values to identify a better-fitting model
 structure.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, FixedK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, FixedK <span class="op">=</span> <span class="cn">FALSE</span>, KwindowSize <span class="op">=</span> <span class="va">VALUE</span><span class="op">)</span></span></code></pre></div>
 <p>When FixedK = TRUE, the function performs a pure MLE fit for the
@@ -245,7 +260,7 @@ fit</li>
 </ul>
 <p>Users can specify the test statistic by providing the
 <code>pvaloption</code> argument as follows:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, pvaloption <span class="op">=</span> <span class="st">'KS'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, pvaloption <span class="op">=</span> <span class="st">'NIL'</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -256,7 +271,7 @@ fit</li>
 (rejection threshold) used when evaluating the bootstrap test
 statistics. Smaller values correspond to a more conservative
 goodness-of-fit assessment.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, Alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, Alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -267,7 +282,7 @@ goodness-of-fit assessment.</p>
 precision of p-value estimates—but also increases runtime. Users can
 control this by setting the <code>NumBootStraps</code> argument to any
 value of interest as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, NumBootStraps <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, NumBootStraps <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -284,7 +299,7 @@ of this section can be found here: <a href="FAQ.html#smallest-k"><strong>FAQ: Sm
 Model</strong></a>.</p>
 <p>Users can enable the smallest-K search by specifying the
 <code>SmallestK</code> argument as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span>, SmallestK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, <span class="va">K</span>, SmallestK <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>

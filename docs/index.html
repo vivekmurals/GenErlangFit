@@ -84,13 +84,27 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">"GettingStarted"</span>, <span class="at">package =</span> <span class="st">"GenErlangFit"</span>)</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="data-format-and-quick-start">Data Format and Quick Start<a class="anchor" aria-label="anchor" href="#data-format-and-quick-start"></a>
 </h2>
-<p>Here is a simple example showing basic usage:</p>
+<p>The primary function <code>GenErlang_Fit</code> requires at minimum a single numeric vector of observed time-to-event values where all entries must be positive. In this documentation, we refer to this vector as <code>empiricaldata</code>.</p>
+<p>Once your data is ready, fitting an Erlang or Erlang-Exponential model is straightforward:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">GenErlangFit</span><span class="op">)</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default: Automatically fits both Erlang and Erlang-Exponential models,</span></span>
+<span><span class="co"># performs goodness-of-fit, and outputs the simplest statistically-acceptable model</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="va">empiricaldata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit only the Erlang model and performs goodness-of-fit</span></span>
+<span><span class="va">result_erlang</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'Erlang'</span>, <span class="va">empiricaldata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result_erlang</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fit only the Erlang-Exponential model and performs goodness-of-fit </span></span>
+<span><span class="co"># (This option requires specifying an initial guess for K)</span></span>
+<span><span class="va">result_erlangexp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/GenErlang_Fit.html">GenErlang_Fit</a></span><span class="op">(</span><span class="st">'ErlangExp'</span>, <span class="va">empiricaldata</span>, K <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result_erlangexp</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">

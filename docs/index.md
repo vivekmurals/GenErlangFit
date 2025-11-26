@@ -26,12 +26,31 @@ from an R session with:
 vignette("GettingStarted", package = "GenErlangFit")
 ```
 
-## Example
+## Data Format and Quick Start
 
-Here is a simple example showing basic usage:
+The primary function `GenErlang_Fit` requires at minimum a single
+numeric vector of observed time-to-event values where all entries must
+be positive. In this documentation, we refer to this vector as
+`empiricaldata`.
+
+Once your data is ready, fitting an Erlang or Erlang-Exponential model
+is straightforward:
 
 ``` r
 library(GenErlangFit)
-result <- GenErlang_Fit(data)
+library(ggplot2)
+
+# Default: Automatically fits both Erlang and Erlang-Exponential models,
+# performs goodness-of-fit, and outputs the simplest statistically-acceptable model
+result <- GenErlang_Fit(empiricaldata)
 print(result)
+
+# Fit only the Erlang model and performs goodness-of-fit
+result_erlang <- GenErlang_Fit('Erlang', empiricaldata)
+print(result_erlang)
+
+# Fit only the Erlang-Exponential model and performs goodness-of-fit 
+# (This option requires specifying an initial guess for K)
+result_erlangexp <- GenErlang_Fit('ErlangExp', empiricaldata, K = 3)
+print(result_erlangexp)
 ```
