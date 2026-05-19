@@ -16,7 +16,7 @@ ui <- navbarPage(
   theme = bs_theme(
     version = 5,
     bootswatch = "minty",
-    navbar_bg = "#90C0AE"
+    navbar_bg = "#79c2ad"
   ),
   
   
