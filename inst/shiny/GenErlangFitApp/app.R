@@ -556,13 +556,11 @@ server <- function(input, output, session) {
       )
 
 
-      # Optional K
       if (!is.na(input$initial_k)) {
         fit_args$K <- input$initial_k
       }
 
 
-      # Smallest K
       if (isTRUE(input$find_smallest_erlang)) {
         fit_args$SmallestK <- TRUE
       }
@@ -587,15 +585,20 @@ server <- function(input, output, session) {
       )
 
 
-      # Smallest K
       if (isTRUE(input$find_smallest_erlang_exp)) {
         fit_args$SmallestK <- TRUE
       }
 
 
-      # Window Search
-      if (input$search_type == "Search over a Window") {
+      if (input$search_type == "Fixed K") {
+
+        fit_args$FixedK <- TRUE
+
+      } else if (input$search_type == "Search over a Window") {
+
+        fit_args$FixedK <- FALSE
         fit_args$KWindowSize <- input$window_size
+
       }
 
 
@@ -631,18 +634,12 @@ server <- function(input, output, session) {
     valid <- FALSE
 
 
-    # -------------------------------------------------------
-    # DEFAULT
-    # -------------------------------------------------------
     if (input$gof_mode == "Default") {
 
       valid <- TRUE
     }
 
 
-    # -------------------------------------------------------
-    # USER SELECTION
-    # -------------------------------------------------------
     if (input$gof_mode == "User Selection") {
 
       if (
@@ -656,9 +653,6 @@ server <- function(input, output, session) {
     }
 
 
-    # -------------------------------------------------------
-    # BUTTON STATE
-    # -------------------------------------------------------
     if (valid) {
 
       actionButton(
@@ -689,9 +683,6 @@ server <- function(input, output, session) {
     empiricaldata <- data()[[1]]
 
 
-    # -------------------------------------------------------
-    # FREEDMAN-DIACONIS BIN WIDTH
-    # -------------------------------------------------------
     bin_width <- 2 * IQR(empiricaldata) /
       (length(empiricaldata)^(1/3))
 
@@ -725,16 +716,10 @@ server <- function(input, output, session) {
     empiricaldata <- data()[[1]]
 
 
-    # -------------------------------------------------------
-    # FREEDMAN-DIACONIS BIN WIDTH
-    # -------------------------------------------------------
     bin_width <- 2 * IQR(empiricaldata) /
       (length(empiricaldata)^(1/3))
 
 
-    # -------------------------------------------------------
-    # BASE HISTOGRAM
-    # -------------------------------------------------------
     p <- ggplot(
       data.frame(Value = empiricaldata),
       aes(x = Value)
@@ -753,23 +738,95 @@ server <- function(input, output, session) {
       theme_minimal(base_size = 15)
 
 
-    # =====================================================
-    # ONLY OVERLAY FIT AFTER RUN BUTTON
-    # =====================================================
-
     if (input$run_fit > 0) {
 
       req(fit_results())
 
 
-      # ---------------------------------------------------
-      # X GRID
-      # ---------------------------------------------------
       x_grid <- seq(
-        min(empiricaldata),
-        max(empiricaldata),
+        0,
+        1.2 * max(empiricaldata),
         length.out = 1000
       )
+
+
+      # ===================================================
+      # DEFAULT FIT
+      # ===================================================
+      if (input$fit_type == "Default") {
+
+        # Erlang Results
+        K_erlang <- fit_results()$Erlang_Results$Best$K_star
+
+        lambda_erlang <- fit_results()$Erlang_Results$Best$Lambda_star
+
+
+        erlang_density <- dgamma(
+          x_grid,
+          shape = K_erlang,
+          scale = lambda_erlang
+        )
+
+
+        erlang_df <- data.frame(
+          x = x_grid,
+          density = erlang_density
+        )
+
+        # Erlang-Exp Results
+        K_ErExp <- fit_results()$ErlangExp_Results$Best$K_star
+
+        erlang_lambda_ErExp <- fit_results()$ErlangExp_Results$Best$ErlangLambda_star
+
+        exp_lambda_ErExp <- fit_results()$ErlangExp_Results$Best$ExpLambda_star
+
+
+        density_exp <-
+          GenErlangFit:::ErlangExp_Func(
+            x_grid,
+            ErK = K_ErExp,
+            Erlam = erlang_lambda_ErExp,
+            Explam = exp_lambda_ErExp
+          )$Probability
+
+        df_exp <- data.frame(
+          x = x_grid,
+          density = density_exp,
+          Model = paste0(
+            "Erlang-Exp: K = ",
+            K_ErExp,
+            ", λE = ",
+            round(erlang_lambda_ErExp, 3),
+            ", λX = ",
+            round(exp_lambda_ErExp, 3)
+          )
+        )
+
+
+
+        p <- p +
+
+          geom_line(
+            data = erlang_df,
+            aes(x = x, y = density, color = "Erlang"),
+            linewidth = 1.5
+          ) +
+
+          geom_line(
+            data = df_exp,
+            aes(x = x, y = density, color = "Erlang-Exp"),
+            linewidth = 1.5
+          ) +
+
+          scale_color_manual(
+            values = c(
+              "Erlang" = "red",
+              "Erlang-Exp" = "blue"
+            ),
+            name = "Fit Type"
+          )
+      }
+
 
 
       # ===================================================
@@ -798,9 +855,141 @@ server <- function(input, output, session) {
         p <- p +
           geom_line(
             data = fit_df,
-            aes(x = x, y = density),
-            color = "red",
+            aes(x = x, y = density, color = "Erlang"),
             linewidth = 1.5
+          )
+
+
+        if (isTRUE(input$find_smallest_erlang)) {
+
+          K_small <- fit_results()$Smallest$K_star
+
+          lambda_small <- fit_results()$Smallest$Lambda_star
+
+
+          smallest_density <- dgamma(
+            x_grid,
+            shape = K_small,
+            scale = lambda_small
+          )
+
+
+          smallest_df <- data.frame(
+            x = x_grid,
+            density = smallest_density
+          )
+
+
+          p <- p +
+            geom_line(
+              data = smallest_df,
+              aes(x = x, y = density, color = "Erlang Smallest K"),
+              linewidth = 1.5
+            )
+        }
+
+
+        p <- p +
+          scale_color_manual(
+            values = c(
+              "Erlang" = "red",
+              "Erlang Smallest K" = "darkgreen"
+            ),
+            name = "Fit Type"
+          )
+      }
+
+
+
+      # ===================================================
+      # ERLANG-EXP FIT
+      # ===================================================
+      if (input$fit_type == "Erlang-Exp") {
+
+        K_ErExp <- fit_results()$Best$K_star
+
+        erlang_lambda_ErExp <- fit_results()$Best$ErlangLambda_star
+
+        exp_lambda_ErExp <- fit_results()$Best$ExpLambda_star
+
+
+        density_exp <-
+          GenErlangFit:::ErlangExp_Func(
+            x_grid,
+            ErK = K_ErExp,
+            Erlam = erlang_lambda_ErExp,
+            Explam = exp_lambda_ErExp
+          )$Probability
+
+        df_exp <- data.frame(
+          x = x_grid,
+          density = density_exp,
+          Model = paste0(
+            "Erlang-Exp: K = ",
+            K_ErExp,
+            ", λE = ",
+            round(erlang_lambda_ErExp, 3),
+            ", λX = ",
+            round(exp_lambda_ErExp, 3)
+          )
+        )
+
+
+        p <- p +
+          geom_line(
+            data = df_exp,
+            aes(x = x, y = density, color = "Erlang-Exp"),
+            linewidth = 1.5
+          )
+
+
+        if (isTRUE(input$find_smallest_erlang_exp)) {
+
+          K_small <- fit_results()$Smallest$K_star
+
+          erlang_lambda_small <- fit_results()$Smallest$ErlangLambda_star
+
+          exp_lambda_small <- fit_results()$Smallest$ExpLambda_star
+
+
+          erlang_component_small <- dgamma(
+            x_grid,
+            shape = K_small,
+            scale = erlang_lambda_small
+          )
+
+          exp_component_small <- dexp(
+            x_grid,
+            rate = 1 / exp_lambda_small
+          )
+
+
+          combined_density_small <- 0.5 * erlang_component_small +
+            0.5 * exp_component_small
+
+
+          smallest_df <- data.frame(
+            x = x_grid,
+            density = combined_density_small
+          )
+
+
+          p <- p +
+            geom_line(
+              data = smallest_df,
+              aes(x = x, y = density, color = "Erlang-Exp Smallest K"),
+              linewidth = 1.5
+            )
+        }
+
+
+        p <- p +
+          scale_color_manual(
+            values = c(
+              "Erlang-Exp" = "blue",
+              "Erlang-Exp Smallest K" = "purple"
+            ),
+            name = "Fit Type"
           )
       }
     }
@@ -825,9 +1014,6 @@ server <- function(input, output, session) {
       cat("-", input$gof_mode, "\n")
 
 
-      # -----------------------------------------------------
-      # USER SELECTION SETTINGS
-      # -----------------------------------------------------
       if (input$gof_mode == "User Selection") {
 
         cat(
