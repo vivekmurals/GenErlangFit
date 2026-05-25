@@ -4,6 +4,7 @@
 library(shiny)
 library(bslib)
 library(ggplot2)
+library(DT)
 library(GenErlangFit)
 
 
@@ -286,7 +287,7 @@ Dataset name,Time units,Case counts"
 
         br(),
 
-        verbatimTextOutput("fit_output")
+        DT::DTOutput("fit_table")
       )
     )
   ),
@@ -622,12 +623,18 @@ server <- function(input, output, session) {
   # FIT OUTPUT
   # =========================================================
 
-  output$fit_output <- renderPrint({
+  output$fit_table <- DT::renderDT({
 
     req(fit_results())
 
-    fit_results()
-  })
+    fit_results()$ResultsTable
+  },
+  options = list(
+    pageLength = 5,
+    searching = FALSE,
+    lengthChange = FALSE,
+    dom = "t"
+  ))
 
 
   # =========================================================
