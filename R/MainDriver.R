@@ -120,7 +120,8 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
       # Quick Erlang-Exp fit using best Erlang K
       ErlangExp_Results <- ErlangExp_Fit_v2(
         data,
-        Erlang_Results$Best$K_star - 1
+        Erlang_Results$Best$K_star - 1,
+        pvaloption = "nil"
       )
 
       # Store results
