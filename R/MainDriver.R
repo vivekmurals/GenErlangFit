@@ -65,6 +65,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
         row.names = NULL
       )
       print(ResultsTable, row.names = FALSE)
+      Erlang_Results$ResultsTable <- ResultsTable
       return(Erlang_Results)
 
     } else if (tolower(mode) == "erlangexp") {
@@ -99,7 +100,73 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
         row.names = NULL
       )
       print(ResultsTable, row.names = FALSE)
+      ErlangExp_Results$ResultsTable <- ResultsTable
       return(ErlangExp_Results)
+
+    } else if (tolower(mode) == "quickfitallmodels") {
+
+      if (is.null(empiricaldata)) {
+        stop("Provide empirical data.")
+      }
+
+      data <- empiricaldata
+
+      # Quick Erlang fit without p-value computation
+      Erlang_Results <- Erlang_Fit_v2(
+        data,
+        pvaloption = "nil"
+      )
+
+      # Quick Erlang-Exp fit using best Erlang K
+      ErlangExp_Results <- ErlangExp_Fit_v2(
+        data,
+        Erlang_Results$Best$K_star - 1
+      )
+
+      # Store results
+      GenErlang_Results <- list(
+        Erlang_Results = Erlang_Results,
+        ErlangExp_Results = ErlangExp_Results
+      )
+
+      # Build summary table
+      Model <- c(
+        "Erlang",
+        "Erlang–Exp"
+      )
+
+      K <- c(
+        Erlang_Results$Best$K_star,
+        ErlangExp_Results$Best$K_star
+      )
+
+      ErlangLambda <- c(
+        Erlang_Results$Best$Lambda_star,
+        ErlangExp_Results$Best$ErlangLambda_star
+      )
+
+      ExpLambda <- c(
+        0,
+        ErlangExp_Results$Best$ExpLambda_star
+      )
+
+      LogLikelihood <- c(
+        Erlang_Results$Best$LogLikelihood,
+        ErlangExp_Results$Best$LogLikelihood
+      )
+
+      ResultsTable <- data.frame(
+        Model,
+        K,
+        ErlangLambda,
+        ExpLambda,
+        LogLikelihood,
+        row.names = NULL
+      )
+
+      print(ResultsTable, row.names = FALSE)
+      GenErlang_Results$ResultsTable <- ResultsTable
+      return(GenErlang_Results)
 
     } else {
       stop('Unknown mode. Use "Erlang" or "ErlangExp".')
@@ -174,7 +241,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
 
 
     print(ResultsTable, row.names = FALSE)
-
+    GenErlang_Results$ResultsTable <- ResultsTable
     return(GenErlang_Results)
 
     # ---------------------------
