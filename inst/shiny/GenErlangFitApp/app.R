@@ -541,7 +541,7 @@ server <- function(input, output, session) {
     # =====================================================
     if (input$fit_type == "Default") {
 
-      results <- GenErlang_Fit(empiricaldata)
+      results <- GenErlang_Fit("QuickFitAllModels", empiricaldata)
     }
 
 
