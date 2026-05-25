@@ -555,6 +555,7 @@ server <- function(input, output, session) {
         empiricaldata = empiricaldata
       )
 
+      fit_args$pvaloption = "nil" # By default, does not compute p-value.
 
       if (!is.na(input$initial_k)) {
         fit_args$K <- input$initial_k
@@ -563,7 +564,9 @@ server <- function(input, output, session) {
 
       if (isTRUE(input$find_smallest_erlang)) {
         fit_args$SmallestK <- TRUE
+        fit_args$pvaloption = "KS"
       }
+
 
 
       results <- do.call(
@@ -584,9 +587,11 @@ server <- function(input, output, session) {
         K = input$initial_k_exp
       )
 
+      fit_args$pvaloption = "nil" # By default, does not compute p-value.
 
       if (isTRUE(input$find_smallest_erlang_exp)) {
         fit_args$SmallestK <- TRUE
+        fit_args$pvaloption = "KS"
       }
 
 
@@ -952,25 +957,17 @@ server <- function(input, output, session) {
           exp_lambda_small <- fit_results()$Smallest$ExpLambda_star
 
 
-          erlang_component_small <- dgamma(
-            x_grid,
-            shape = K_small,
-            scale = erlang_lambda_small
-          )
-
-          exp_component_small <- dexp(
-            x_grid,
-            rate = 1 / exp_lambda_small
-          )
-
-
-          combined_density_small <- 0.5 * erlang_component_small +
-            0.5 * exp_component_small
-
+          density_small <-
+            GenErlangFit:::ErlangExp_Func(
+              x_grid,
+              ErK = K_small,
+              Erlam = erlang_lambda_small,
+              Explam = exp_lambda_small
+            )$Probability
 
           smallest_df <- data.frame(
             x = x_grid,
-            density = combined_density_small
+            density = density_small
           )
 
 
