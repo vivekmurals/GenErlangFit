@@ -351,6 +351,12 @@ Example CSV / Manual Entry:<br>
 
         h4("GOF Options"),
 
+        # ---------------------------------------------------
+        # DISPLAY CURRENT FIT INFO
+        # ---------------------------------------------------
+        uiOutput("current_fit_info"),
+
+        hr(),
 
         # ---------------------------------------------------
         # GOF MODE
@@ -381,8 +387,8 @@ Example CSV / Manual Entry:<br>
           numericInput(
             "alpha_value",
             "Alpha Value",
-            value = NA,
-            min = 0,
+            value = 0.05,
+            min = 0.001,
             max = 1,
             step = 0.01
           ),
@@ -394,25 +400,24 @@ Example CSV / Manual Entry:<br>
           numericInput(
             "num_bootstraps",
             "Number of Bootstraps",
-            value = NA,
-            min = 1,
-            step = 1
+            value = 200,
+            min = 10,
+            step = 10
           ),
 
 
           # -----------------------------------------------
           # TEST STATISTICS
           # -----------------------------------------------
-          checkboxGroupInput(
-            "test_statistics",
+          radioButtons(
+            "test_statistic",
             "Choice of Test Statistic",
             choices = c(
-              "Likelihood-Ratio Test",
-              "Distance Measure - KS",
-              "Distance Measure - AD",
-              "Distance Measure - CvM"
+              "KS" = "KS",
+              "Anderson-Darling" = "AD",
+              "Cramer-von Mises" = "CvM"
             ),
-            selected = NULL
+            selected = "KS"
           )
         ),
 
@@ -433,6 +438,8 @@ Example CSV / Manual Entry:<br>
       mainPanel(
 
         h3("Goodness of Fit Results"),
+
+        br(),
 
         verbatimTextOutput("gof_output")
       )
@@ -743,24 +750,28 @@ server <- function(input, output, session) {
 
   output$run_gof_button <- renderUI({
 
+    # Check if fit results exist
+    fit_exists <- !is.null(tryCatch(fit_results(), error = function(e) NULL))
+
     valid <- FALSE
 
+    # Check for Erlang or Erlang-Exp fit types
+    if (fit_exists && input$fit_type %in% c("Erlang", "Erlang-Exp")) {
 
-    if (input$gof_mode == "Default") {
-
-      valid <- TRUE
-    }
-
-
-    if (input$gof_mode == "User Selection") {
-
-      if (
-        !is.na(input$alpha_value) &&
-        !is.na(input$num_bootstraps) &&
-        length(input$test_statistics) > 0
-      ) {
-
+      if (input$gof_mode == "Default") {
         valid <- TRUE
+      }
+
+      if (input$gof_mode == "User Selection") {
+        if (
+          !is.na(input$alpha_value) &&
+          !is.na(input$num_bootstraps) &&
+          input$alpha_value > 0 &&
+          input$alpha_value <= 1 &&
+          input$num_bootstraps >= 10
+        ) {
+          valid <- TRUE
+        }
       }
     }
 
@@ -780,6 +791,295 @@ server <- function(input, output, session) {
         "Compute GOF",
         class = "btn-primary disabled"
       )
+    }
+  })
+
+
+  # =========================================================
+  # CURRENT FIT INFO DISPLAY
+  # =========================================================
+
+  output$current_fit_info <- renderUI({
+
+    fit_exists <- !is.null(tryCatch(fit_results(), error = function(e) NULL))
+
+    if (!fit_exists) {
+      return(
+        div(
+          style = "color: #856404; background-color: #fff3cd; padding: 10px; border-radius: 5px;",
+          icon("exclamation-triangle"),
+          " No fit computed yet. Please run a fit first."
+        )
+      )
+    }
+
+    # Get fit type
+    fit_type <- input$fit_type
+
+    if (fit_type == "Erlang") {
+
+      k_star <- fit_results()$Best$K_star
+      lambda_star <- fit_results()$Best$Lambda_star
+
+      return(
+        div(
+          style = "background-color: #d4edda; padding: 10px; border-radius: 5px;",
+          strong("Current Fit: Erlang"),
+          br(),
+          sprintf("K* = %d, λ* = %.4f", k_star, lambda_star)
+        )
+      )
+
+    } else if (fit_type == "Erlang-Exp") {
+
+      k_star <- fit_results()$Best$K_star
+      erlang_lambda_star <- fit_results()$Best$ErlangLambda_star
+      exp_lambda_star <- fit_results()$Best$ExpLambda_star
+
+      return(
+        div(
+          style = "background-color: #d4edda; padding: 10px; border-radius: 5px;",
+          strong("Current Fit: Erlang-Exp"),
+          br(),
+          sprintf("K* = %d", k_star),
+          br(),
+          sprintf("Erlang λ* = %.4f", erlang_lambda_star),
+          br(),
+          sprintf("Exp λ* = %.4f", exp_lambda_star)
+        )
+      )
+
+    } else if (fit_type == "Default") {
+
+      return(
+        div(
+          style = "color: #856404; background-color: #fff3cd; padding: 10px; border-radius: 5px;",
+          icon("info-circle"),
+          " Please select Erlang or Erlang-Exp fit type for GOF computation."
+        )
+      )
+    }
+  })
+
+
+  # =========================================================
+  # GOF COMPUTATION
+  # =========================================================
+
+  gof_results <- eventReactive(input$run_gof, {
+
+    req(fit_results())
+    req(data())
+
+    empiricaldata <- data()[[1]]
+
+    # =====================================================
+    # ERLANG GOF
+    # =====================================================
+    if (input$fit_type == "Erlang") {
+
+      # Get fitted parameters
+      k_star <- fit_results()$Best$K_star
+      lambda_star <- fit_results()$Best$Lambda_star
+
+      # Set GOF parameters based on mode
+      if (input$gof_mode == "Default") {
+        alpha <- 0.05
+        n_bootstraps <- 200
+        pvaloption <- "KS"
+      } else {
+        alpha <- input$alpha_value
+        n_bootstraps <- input$num_bootstraps
+        pvaloption <- input$test_statistic
+      }
+
+      # Call the GOF function
+      gof_res <- GenErlangFit:::Erlang_Fit_v2_Pvalue(
+        empiricaldata = empiricaldata,
+        k_star = k_star,
+        lambda_star = lambda_star,
+        s = length(empiricaldata),
+        n = n_bootstraps,
+        alpha = alpha,
+        pvaloption = pvaloption,
+        ShowFigures = FALSE
+      )
+
+      # Return results with metadata
+      return(list(
+        fit_type = "Erlang",
+        k_star = k_star,
+        lambda_star = lambda_star,
+        erlang_lambda_star = NULL,
+        exp_lambda_star = NULL,
+        alpha = alpha,
+        n_bootstraps = n_bootstraps,
+        pvaloption = pvaloption,
+        p_value = gof_res$p_value,
+        q_value = gof_res$q_value,
+        metric_star = gof_res$metric_star,
+        sample_stats = gof_res$sample_stats
+      ))
+    }
+
+    # =====================================================
+    # ERLANG-EXP GOF
+    # =====================================================
+    if (input$fit_type == "Erlang-Exp") {
+
+      # Get fitted parameters
+      k_star <- fit_results()$Best$K_star
+      erlang_lambda_star <- fit_results()$Best$ErlangLambda_star
+      exp_lambda_star <- fit_results()$Best$ExpLambda_star
+
+      # Set GOF parameters based on mode
+      if (input$gof_mode == "Default") {
+        alpha <- 0.05
+        n_bootstraps <- 200
+        pvaloption <- "KS"
+      } else {
+        alpha <- input$alpha_value
+        n_bootstraps <- input$num_bootstraps
+        pvaloption <- input$test_statistic
+      }
+
+      # Call the GOF function
+      gof_res <- GenErlangFit:::ErlangExp_Fit_v2_Pvalue(
+        empiricaldata = empiricaldata,
+        k_star = k_star,
+        erlambda_star = erlang_lambda_star,
+        explambda_star = exp_lambda_star,
+        s = length(empiricaldata),
+        n = n_bootstraps,
+        alpha = alpha,
+        pvaloption = pvaloption,
+        ShowFigures = FALSE
+      )
+
+      # Return results with metadata
+      return(list(
+        fit_type = "Erlang-Exp",
+        k_star = k_star,
+        lambda_star = NULL,
+        erlang_lambda_star = erlang_lambda_star,
+        exp_lambda_star = exp_lambda_star,
+        alpha = alpha,
+        n_bootstraps = n_bootstraps,
+        pvaloption = pvaloption,
+        p_value = gof_res$p_value,
+        q_value = gof_res$q_value,
+        metric_star = gof_res$metric_star,
+        sample_stats = gof_res$sample_stats
+      ))
+    }
+
+    return(NULL)
+  })
+
+
+  # =========================================================
+  # GOF OUTPUT
+  # =========================================================
+
+  output$gof_output <- renderPrint({
+
+    req(gof_results())
+
+    res <- gof_results()
+
+    # =====================================================
+    # ERLANG OUTPUT
+    # =====================================================
+    if (res$fit_type == "Erlang") {
+
+      cat("==============================================\n")
+      cat("       GOODNESS OF FIT RESULTS (ERLANG)       \n")
+      cat("==============================================\n\n")
+
+      cat("--- Fitted Model Parameters ---\n")
+      cat(sprintf("  K*      : %d\n", res$k_star))
+      cat(sprintf("  Lambda* : %.6f\n", res$lambda_star))
+      cat("\n")
+
+      cat("--- GOF Test Settings ---\n")
+      cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
+      cat(sprintf("  Alpha          : %.4f\n", res$alpha))
+      cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
+      cat("\n")
+
+      cat("--- GOF Test Results ---\n")
+      cat(sprintf("  Observed Statistic : %.6f\n", res$metric_star))
+      cat(sprintf("  P-value            : %.6f\n", res$p_value))
+      cat(sprintf("  Q-value            : %d\n", res$q_value))
+      cat("\n")
+
+      cat("--- Decision ---\n")
+      if (res$q_value == 1) {
+        cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
+        cat("  Interpretation: Data is CONSISTENT with the Erlang model.\n")
+      } else {
+        cat(sprintf("  REJECT null hypothesis at alpha = %.4f\n", res$alpha))
+        cat("  Interpretation: Data is NOT consistent with the Erlang model.\n")
+      }
+      cat("\n")
+
+      cat("--- Bootstrap Sample Statistics Summary ---\n")
+      cat(sprintf("  Min    : %.6f\n", min(res$sample_stats)))
+      cat(sprintf("  Q1     : %.6f\n", quantile(res$sample_stats, 0.25)))
+      cat(sprintf("  Median : %.6f\n", median(res$sample_stats)))
+      cat(sprintf("  Q3     : %.6f\n", quantile(res$sample_stats, 0.75)))
+      cat(sprintf("  Max    : %.6f\n", max(res$sample_stats)))
+      cat("\n")
+
+      cat("==============================================\n")
+    }
+
+    # =====================================================
+    # ERLANG-EXP OUTPUT
+    # =====================================================
+    if (res$fit_type == "Erlang-Exp") {
+
+      cat("==============================================\n")
+      cat("     GOODNESS OF FIT RESULTS (ERLANG-EXP)     \n")
+      cat("==============================================\n\n")
+
+      cat("--- Fitted Model Parameters ---\n")
+      cat(sprintf("  K*             : %d\n", res$k_star))
+      cat(sprintf("  Erlang Lambda* : %.6f\n", res$erlang_lambda_star))
+      cat(sprintf("  Exp Lambda*    : %.6f\n", res$exp_lambda_star))
+      cat("\n")
+
+      cat("--- GOF Test Settings ---\n")
+      cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
+      cat(sprintf("  Alpha          : %.4f\n", res$alpha))
+      cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
+      cat("\n")
+
+      cat("--- GOF Test Results ---\n")
+      cat(sprintf("  Observed Statistic : %.6f\n", res$metric_star))
+      cat(sprintf("  P-value            : %.6f\n", res$p_value))
+      cat(sprintf("  Q-value            : %d\n", res$q_value))
+      cat("\n")
+
+      cat("--- Decision ---\n")
+      if (res$q_value == 1) {
+        cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
+        cat("  Interpretation: Data is CONSISTENT with the Erlang-Exp model.\n")
+      } else {
+        cat(sprintf("  REJECT null hypothesis at alpha = %.4f\n", res$alpha))
+        cat("  Interpretation: Data is NOT consistent with the Erlang-Exp model.\n")
+      }
+      cat("\n")
+
+      cat("--- Bootstrap Sample Statistics Summary ---\n")
+      cat(sprintf("  Min    : %.6f\n", min(res$sample_stats)))
+      cat(sprintf("  Q1     : %.6f\n", quantile(res$sample_stats, 0.25)))
+      cat(sprintf("  Median : %.6f\n", median(res$sample_stats)))
+      cat(sprintf("  Q3     : %.6f\n", quantile(res$sample_stats, 0.75)))
+      cat(sprintf("  Max    : %.6f\n", max(res$sample_stats)))
+      cat("\n")
+
+      cat("==============================================\n")
     }
   })
 
@@ -1100,48 +1400,6 @@ server <- function(input, output, session) {
 
 
     p
-  })
-
-
-  # =========================================================
-  # GOF OUTPUT
-  # =========================================================
-
-  output$gof_output <- renderPrint({
-
-    input$run_gof
-
-    isolate({
-
-      cat("Selected GOF Mode:\n\n")
-
-      cat("-", input$gof_mode, "\n")
-
-
-      if (input$gof_mode == "User Selection") {
-
-        cat(
-          "\nAlpha Value:",
-          input$alpha_value,
-          "\n"
-        )
-
-        cat(
-          "Number of Bootstraps:",
-          input$num_bootstraps,
-          "\n"
-        )
-
-        cat(
-          "\nSelected Test Statistics:\n"
-        )
-
-        for (i in input$test_statistics) {
-
-          cat("-", i, "\n")
-        }
-      }
-    })
   })
 
 }
