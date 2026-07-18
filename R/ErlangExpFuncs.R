@@ -193,10 +193,15 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
       currentK <- WindowK[maxIdx]
       currentML <- maxLL
       ErlangExpBest_RightWindow <- NULL
+      max_K_limit <- 100  # Prevent numerical overflow issues
 
       while (criteria > 0) {
         count <- count + 1
         newK <- currentK + 1
+        if (newK > max_K_limit) {
+          cat("Reached maximum K limit (", max_K_limit, "). Stopping right extension.\n")
+          break
+        }
         # suboptions$InitialguessErLam <- newK / mean(empiricaldata) # MODIFIED
         res <- do.call(ErlangExp_Fit_v2_FixedK, c(list(empiricaldata, newK), suboptions))
         new_row <- c(newK, res$ErlangLambda, res$ExpLambda, res$LogLikelihood)
@@ -206,8 +211,14 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
         currentK <- newK
       }
 
-      combined <- rbind(ErlangExpBest, ErlangExpBest_RightWindow)
-      best_row <- combined[nrow(combined) - 1, ]
+      # Handle case where we hit max_K_limit on first iteration
+      if (is.null(ErlangExpBest_RightWindow)) {
+        combined <- ErlangExpBest
+        best_row <- combined[nrow(combined), ]
+      } else {
+        combined <- rbind(ErlangExpBest, ErlangExpBest_RightWindow)
+        best_row <- combined[nrow(combined) - 1, ]
+      }
     }
 
 
