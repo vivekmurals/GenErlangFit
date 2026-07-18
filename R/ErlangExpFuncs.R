@@ -178,7 +178,12 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
         currentK <- newK
       }
 
-      combined <- rbind(ErlangExpBest_LeftWindow[nrow(ErlangExpBest_LeftWindow):1, ], ErlangExpBest)
+      # Handle case where no left extension was possible
+      if (is.null(ErlangExpBest_LeftWindow)) {
+        combined <- ErlangExpBest
+      } else {
+        combined <- rbind(ErlangExpBest_LeftWindow[nrow(ErlangExpBest_LeftWindow):1, ], ErlangExpBest)
+      }
       best_row <- combined[1 + 1 - shift, ]
 
     } else if (maxIdx == nrow(ErlangExpBest)) {
