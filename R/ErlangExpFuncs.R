@@ -170,7 +170,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
           break
         }
         # suboptions$InitialguessErLam <- newK / mean(empiricaldata) # MODIFIED
-        res <- do.call(ErlangExp_v2_Fit_FixedK, c(list(empiricaldata, newK), suboptions))
+        res <- do.call(ErlangExp_Fit_v2_FixedK, c(list(empiricaldata, newK), suboptions))
         new_row <- c(newK, res$ErlangLambda, res$ExpLambda, res$LogLikelihood)
         ErlangExpBest_LeftWindow <- rbind(ErlangExpBest_LeftWindow, new_row)
         criteria <- new_row[4] > currentML
