@@ -165,7 +165,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
       while (criteria > 0) {
         count <- count + 1
         newK <- currentK - 1
-        if (newK < 0) {
+        if (newK < 1) {
           shift <- 1
           break
         }
