@@ -121,7 +121,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
     # -----------------------------
     ErExpK <- K
     WindowK <- seq(ErExpK - KWindowSize, ErExpK + KWindowSize)
-    WindowK <- WindowK[WindowK >= 0] # Ensures that ErExp Ks are >= 0.
+    WindowK <- WindowK[WindowK > 0] # Ensures that ErExp Ks are >= 0.
 
     suboptions$pvaloption <- "NIL"  # speed up inner fits by not computing the P-value.
 
