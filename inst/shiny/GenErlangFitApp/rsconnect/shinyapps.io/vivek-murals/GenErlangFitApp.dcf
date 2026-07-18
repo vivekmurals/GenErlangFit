@@ -5,6 +5,6 @@ account: vivek-murals
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 17565190
-bundleId: 12203116
+bundleId: 12286740
 url: https://vivek-murals.shinyapps.io/GenErlangFitApp/
 version: 1
