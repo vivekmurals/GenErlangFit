@@ -13,16 +13,16 @@ library(GenErlangFit)
 #------------------------
 
 ui <- navbarPage(
-  
+
   title = "GenErlangFit",
-  
+
   theme = bs_theme(
     version = 5,
     bootswatch = "minty",
     navbar_bg = "#90C0AE"
   ),
-  
-  
+
+
   # =========================================================
   # ADD CSS (hover + small button styling) - Just a custom UI Feature.
   # =========================================================
@@ -65,25 +65,25 @@ ui <- navbarPage(
 
   "))
   ),
-  
+
   # =========================================================
   # 0. ABOUT
   # =========================================================
   tabPanel(
     "About",
-    
+
     fluidPage(
       h2("About GenErlangFit"),
-      
+
       br(),
-      
+
       p("Welcome to the GenErlangFit Shiny application."),
-      
+
       p("This app provides an interactive interface for fitting Erlang and
         Erlang-Exponential distributions to empirical data using the GenErlangFit R package."),
-      
+
       br(),
-      
+
       h4("Features"),
       tags$ul(
         tags$li("Upload or manually enter data"),
@@ -91,9 +91,9 @@ ui <- navbarPage(
         tags$li("Compute goodness-of-fit tests with bootstrap p-values"),
         tags$li("Find the smallest K that passes the goodness-of-fit test")
       ),
-      
+
       br(),
-      
+
       h4("Resources"),
       p(
         "Package documentation: ",
@@ -113,20 +113,20 @@ ui <- navbarPage(
       )
     )
   ),
-  
+
   # =========================================================
   # 1. DATA ENTRY
   # =========================================================
   tabPanel(
     "Data Entry",
-    
+
     sidebarLayout(
-      
+
       # -----------------------------------------------------
       # SIDEBAR
       # -----------------------------------------------------
       sidebarPanel(
-        
+
         h4("Enter Data"),
         # =====================================================
         # FORMAT TOGGLE (MOVED UP + SMALL BUTTON)
@@ -136,16 +136,16 @@ ui <- navbarPage(
           "Show Required Format",
           class = "btn btn-primary format-btn"
         ),
-        
+
         # FORMAT BOX
         conditionalPanel(
           condition = "input.toggle_format % 2 == 1",
-          
+
           div(
             class = "format-box",
-            
+
             strong("Required Format"),
-            
+
             div(
               HTML("
 Upload a CSV file or manually enter data in the following format:<br>
@@ -166,83 +166,83 @@ Example CSV / Manual Entry:<br>
             )
           )
         ),
-        
-        
-        
+
+
+
         fileInput(
           "file",
           "Upload CSV"
         ),
         textOutput("csv_error"),
         br(),
-        
+
         h4("Manual Data Entry"),
-        
+
         textAreaInput(
           "manual_data",
           "Paste or type data here:",
           rows = 5
         ),
-        
+
         actionButton(
           "submit_manual",
           "Submit Manual Data"
         ),
-        
+
         textOutput("manual_error"),
-        
+
         br(), br(),
-        
+
         actionButton(
           "clear",
           "Clear Data"
         ),
-        
+
       ),
-      
+
       # -----------------------------------------------------
       # MAIN PANEL
       # -----------------------------------------------------
       mainPanel(
-        
+
         tabsetPanel(
-          
+
           # ONLY ONE TAB NOW
           tabPanel(
             "View Data",
-            
+
             h3("Uploaded / Entered Dataset"),
-            
+
             br(),
-            
+
             plotOutput(
               "data_histogram",
               height = "500px"
             )
           )
-          
+
         )
       )
     )
   ),
-  
-  
+
+
   # =========================================================
   # 2. COMPUTE FIT
   # =========================================================
   tabPanel(
     "Compute Fit",
-    
+
     sidebarLayout(
-      
+
       # -----------------------------------------------------
       # SIDEBAR
       # -----------------------------------------------------
       sidebarPanel(
-        
+
         h4("Fit Settings"),
-        
-        
+
+
         # ----------------------------------------------
         # FIT TYPE
         # ----------------------------------------------
@@ -256,8 +256,8 @@ Example CSV / Manual Entry:<br>
           ),
           selected = "Default"
         ),
-        
-        
+
+
         # =================================================
         # ERLANG
         # =================================================
@@ -265,8 +265,8 @@ Example CSV / Manual Entry:<br>
           condition = "
             input.fit_type == 'Erlang'
           ",
-          
-          
+
+
           # ------------------------------------------
           # OPTIONAL K
           # ------------------------------------------
@@ -277,8 +277,8 @@ Example CSV / Manual Entry:<br>
             min = 1,
             step = 1
           ),
-          
-          
+
+
           # ------------------------------------------
           # OPTIONAL SMALLEST K
           # ------------------------------------------
@@ -296,8 +296,8 @@ Example CSV / Manual Entry:<br>
             )
           )
         ),
-        
-        
+
+
         # =================================================
         # ERLANG-EXP
         # =================================================
@@ -305,8 +305,8 @@ Example CSV / Manual Entry:<br>
           condition = "
             input.fit_type == 'Erlang-Exp'
           ",
-          
-          
+
+
           # ------------------------------------------
           # REQUIRED K
           # ------------------------------------------
@@ -317,11 +317,11 @@ Example CSV / Manual Entry:<br>
             min = 1,
             step = 1
           ),
-          
-          
+
+
           br(),
-          
-          
+
+
           # ------------------------------------------
           # SEARCH TYPE
           # ------------------------------------------
@@ -334,8 +334,8 @@ Example CSV / Manual Entry:<br>
             ),
             selected = character(0)
           ),
-          
-          
+
+
           # ------------------------------------------
           # WINDOW SIZE
           # ------------------------------------------
@@ -343,7 +343,7 @@ Example CSV / Manual Entry:<br>
             condition = "
               input.search_type == 'Search over a Window'
             ",
-            
+
             numericInput(
               "window_size",
               "Window Size",
@@ -352,11 +352,11 @@ Example CSV / Manual Entry:<br>
               step = 1
             )
           ),
-          
-          
+
+
           br(),
-          
-          
+
+
           # ------------------------------------------
           # OPTIONAL SMALLEST K
           # ------------------------------------------
@@ -374,63 +374,63 @@ Example CSV / Manual Entry:<br>
             )
           )
         ),
-        
-        
-        
+
+
+
         br(),
-        
-        
+
+
         # ----------------------------------------------
         # RUN FIT BUTTON
         # ----------------------------------------------
         uiOutput("run_fit_button")
       ),
-      
-      
+
+
       # -----------------------------------------------------
       # MAIN PANEL
       # -----------------------------------------------------
       mainPanel(
-        
+
         h3("Model Fit Output"),
-        
+
         br(),
-        
+
         plotOutput(
           "fit_plot",
           height = "550px"
         ),
-        
+
         br(),
-        
+
         DT::DTOutput("fit_table")
       )
     )
   ),
-  
-  
+
+
   # =========================================================
   # 3. GOODNESS OF FIT
   # =========================================================
   tabPanel(
     "Compute Goodness of Fit",
-    
+
     sidebarLayout(
-      
+
       # -----------------------------------------------------
       # SIDEBAR
       # -----------------------------------------------------
       sidebarPanel(
-        
+
         h4("GOF Options"),
-        
+
         # ---------------------------------------------------
         # DISPLAY CURRENT FIT INFO
         # ---------------------------------------------------
         uiOutput("current_fit_info"),
-        
+
         hr(),
-        
+
         # ---------------------------------------------------
         # GOF MODE
         # ---------------------------------------------------
@@ -443,8 +443,8 @@ Example CSV / Manual Entry:<br>
           ),
           selected = "Default"
         ),
-        
-        
+
+
         # ===================================================
         # USER SELECTION OPTIONS
         # ===================================================
@@ -452,8 +452,8 @@ Example CSV / Manual Entry:<br>
           condition = "
             input.gof_mode == 'User Selection'
           ",
-          
-          
+
+
           # -----------------------------------------------
           # ALPHA VALUE
           # -----------------------------------------------
@@ -465,8 +465,8 @@ Example CSV / Manual Entry:<br>
             max = 1,
             step = 0.01
           ),
-          
-          
+
+
           # -----------------------------------------------
           # NUMBER OF BOOTSTRAPS
           # -----------------------------------------------
@@ -477,8 +477,8 @@ Example CSV / Manual Entry:<br>
             min = 10,
             step = 10
           ),
-          
-          
+
+
           # -----------------------------------------------
           # TEST STATISTICS
           # -----------------------------------------------
@@ -493,33 +493,33 @@ Example CSV / Manual Entry:<br>
             selected = "KS"
           )
         ),
-        
-        
+
+
         br(),
-        
-        
+
+
         # ---------------------------------------------------
         # COMPUTE GOF BUTTON
         # ---------------------------------------------------
         uiOutput("run_gof_button"),
-        
-        
+
+
         # ---------------------------------------------------
         # SMALLEST K SECTION (appears after GOF is run)
         # ---------------------------------------------------
         uiOutput("smallest_k_section")
       ),
-      
-      
+
+
       # -----------------------------------------------------
       # MAIN PANEL
       # -----------------------------------------------------
       mainPanel(
-        
+
         h3("Goodness of Fit Results"),
-        
+
         br(),
-        
+
         # ---------------------------------------------------
         # DYNAMIC GOF OUTPUT
         # ---------------------------------------------------
@@ -536,90 +536,90 @@ Example CSV / Manual Entry:<br>
 #------------------------
 
 server <- function(input, output, session) {
-  
+
   # =========================================================
   # DATA STORAGE
   # =========================================================
-  
+
   data <- reactiveVal(NULL)
-  
-  
+
+
   # =========================================================
   # CSV UPLOAD
   # =========================================================
-  
+
   observeEvent(input$file, {
-    
+
     req(input$file)
-    
+
     uploaded_data <- read.csv(
       input$file$datapath,
       header = FALSE
     )
-    
+
     colnames(uploaded_data) <- "Value"
-    
+
     data(uploaded_data)
   })
-  
-  
+
+
   # =========================================================
   # MANUAL UPLOAD AND ERROR
   # =========================================================
   manual_error <- reactiveVal("")
-  
+
   output$manual_error <- renderText({
     manual_error()
   })
-  
+
   observeEvent(input$submit_manual, {
-    
+
     req(input$manual_data)
-    
+
     raw <- input$manual_data
-    
+
     manual_error("")
-    
+
     # -------------------------------------------------------
     # Split by commas OR newlines
     # -------------------------------------------------------
     tokens <- unlist(strsplit(raw, "[,\n\r]+"))
-    
+
     tokens <- trimws(tokens)
     tokens <- tokens[tokens != ""]
-    
+
     # -------------------------------------------------------
     # Validate format
     # -------------------------------------------------------
     is_valid <- all(grepl("^\\d+$", tokens))
-    
+
     if (!is_valid || length(tokens) == 0) {
-      
+
       manual_error("Input data does not match the required format.")
       return(NULL)
     }
-    
+
     values <- as.numeric(tokens)
-    
+
     df <- data.frame(Value = values)
-    
+
     data(df)
-    
+
     manual_error("")  # clear error on success
   })
-  
-  
-  
+
+
+
   # =========================================================
   # FORMAT TOGGLE BUTTON
   # =========================================================
-  
+
   format_state <- reactiveVal(FALSE)
-  
+
   observeEvent(input$toggle_format, {
-    
+
     format_state(!format_state())
-    
+
     updateActionButton(
       session,
       "toggle_format",
@@ -630,82 +630,82 @@ server <- function(input, output, session) {
       }
     )
   })
-  
+
   # =========================================================
   # FORMAT CLEAR BUTTON
   # =========================================================
-  
+
   observeEvent(input$clear, {
-    
+
     data(NULL)
-    
+
   })
-  
-  
+
+
   # =========================================================
   # DYNAMIC RUN FIT BUTTON
   # =========================================================
-  
+
   output$run_fit_button <- renderUI({
-    
+
     valid <- FALSE
-    
-    
+
+
     # -------------------------------------------------------
     # DEFAULT
     # -------------------------------------------------------
     if (input$fit_type == "Default") {
-      
+
       valid <- TRUE
     }
-    
-    
+
+
     # -------------------------------------------------------
     # ERLANG
     # -------------------------------------------------------
     if (input$fit_type == "Erlang") {
-      
+
       valid <- TRUE
     }
-    
-    
+
+
     # -------------------------------------------------------
     # ERLANG-EXP
     # -------------------------------------------------------
     if (input$fit_type == "Erlang-Exp") {
-      
+
       if (!is.na(input$initial_k_exp)) {
-        
+
         if (input$search_type == "Fixed K") {
-          
+
           valid <- TRUE
         }
-        
-        
+
+
         if (
           input$search_type == "Search over a Window" &&
           !is.na(input$window_size)
         ) {
-          
+
           valid <- TRUE
         }
       }
     }
-    
-    
+
+
     # -------------------------------------------------------
     # BUTTON STATE
     # -------------------------------------------------------
     if (valid) {
-      
+
       actionButton(
         "run_fit",
         "Run Fit",
         class = "btn-primary"
       )
-      
+
     } else {
-      
+
       actionButton(
         "run_fit",
         "Run Fit",
@@ -713,109 +713,109 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  
+
+
   # =========================================================
   # FIT COMPUTATION
   # =========================================================
-  
+
   fit_results <- eventReactive(input$run_fit, {
-    
+
     req(data())
-    
+
     empiricaldata <- data()[[1]]
-    
-    
+
+
     # =====================================================
     # DEFAULT
     # =====================================================
     if (input$fit_type == "Default") {
-      
+
       results <- GenErlang_Fit("QuickFitAllModels", empiricaldata)
     }
-    
-    
+
+
     # =====================================================
     # ERLANG
     # =====================================================
     if (input$fit_type == "Erlang") {
-      
+
       fit_args <- list(
         mode = "Erlang",
         empiricaldata = empiricaldata
       )
-      
+
       fit_args$pvaloption = "nil" # By default, does not compute p-value.
-      
+
       if (!is.na(input$initial_k)) {
         fit_args$K <- input$initial_k
       }
-      
-      
+
+
       if (isTRUE(input$find_smallest_erlang)) {
         fit_args$SmallestK <- TRUE
         fit_args$pvaloption = "KS"
       }
-      
-      
-      
+
+
+
       results <- do.call(
         GenErlang_Fit,
         fit_args
       )
     }
-    
-    
+
+
     # =====================================================
     # ERLANG-EXP
     # =====================================================
     if (input$fit_type == "Erlang-Exp") {
-      
+
       fit_args <- list(
         mode = "ErlangExp",
         empiricaldata = empiricaldata,
         K = input$initial_k_exp
       )
-      
+
       fit_args$pvaloption = "nil" # By default, does not compute p-value.
-      
+
       if (isTRUE(input$find_smallest_erlang_exp)) {
         fit_args$SmallestK <- TRUE
         fit_args$pvaloption = "KS"
       }
-      
-      
+
+
       if (input$search_type == "Fixed K") {
-        
+
         fit_args$FixedK <- TRUE
-        
+
       } else if (input$search_type == "Search over a Window") {
-        
+
         fit_args$FixedK <- FALSE
         fit_args$KWindowSize <- input$window_size
-        
+
       }
-      
-      
+
+
       results <- do.call(
         GenErlang_Fit,
         fit_args
       )
     }
-    
-    
+
+
     return(results)
   })
-  
-  
+
+
   # =========================================================
   # FIT OUTPUT
   # =========================================================
-  
+
   output$fit_table <- DT::renderDT({
-    
+
     req(fit_results())
-    
+
     fit_results()$ResultsTable
   },
   options = list(
@@ -824,26 +824,26 @@ server <- function(input, output, session) {
     lengthChange = FALSE,
     dom = "t"
   ))
-  
-  
+
+
   # =========================================================
   # DYNAMIC GOF BUTTON
   # =========================================================
-  
+
   output$run_gof_button <- renderUI({
-    
+
     # Check if fit results exist
     fit_exists <- !is.null(tryCatch(fit_results(), error = function(e) NULL))
-    
+
     valid <- FALSE
-    
+
     # Check for Erlang, Erlang-Exp, or Default fit types
     if (fit_exists && input$fit_type %in% c("Erlang", "Erlang-Exp", "Default")) {
-      
+
       if (input$gof_mode == "Default") {
         valid <- TRUE
       }
-      
+
       if (input$gof_mode == "User Selection") {
         if (
           !is.na(input$alpha_value) &&
@@ -856,18 +856,18 @@ server <- function(input, output, session) {
         }
       }
     }
-    
-    
+
+
     if (valid) {
-      
+
       actionButton(
         "run_gof",
         "Compute GOF",
         class = "btn-primary"
       )
-      
+
     } else {
-      
+
       actionButton(
         "run_gof",
         "Compute GOF",
@@ -875,16 +875,16 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  
+
+
   # =========================================================
   # CURRENT FIT INFO DISPLAY
   # =========================================================
-  
+
   output$current_fit_info <- renderUI({
-    
+
     fit_exists <- !is.null(tryCatch(fit_results(), error = function(e) NULL))
-    
+
     if (!fit_exists) {
       return(
         div(
@@ -894,15 +894,15 @@ server <- function(input, output, session) {
         )
       )
     }
-    
+
     # Get fit type
     fit_type <- input$fit_type
-    
+
     if (fit_type == "Erlang") {
-      
+
       k_star <- fit_results()$Best$K_star
       lambda_star <- fit_results()$Best$Lambda_star
-      
+
       return(
         div(
           style = "background-color: #d4edda; padding: 10px; border-radius: 5px;",
@@ -911,13 +911,13 @@ server <- function(input, output, session) {
           sprintf("K* = %d, λ* = %.4f", k_star, lambda_star)
         )
       )
-      
+
     } else if (fit_type == "Erlang-Exp") {
-      
+
       k_star <- fit_results()$Best$K_star
       erlang_lambda_star <- fit_results()$Best$ErlangLambda_star
       exp_lambda_star <- fit_results()$Best$ExpLambda_star
-      
+
       return(
         div(
           style = "background-color: #d4edda; padding: 10px; border-radius: 5px;",
@@ -930,18 +930,18 @@ server <- function(input, output, session) {
           sprintf("Exp λ* = %.4f", exp_lambda_star)
         )
       )
-      
+
     } else if (fit_type == "Default") {
-      
+
       # Get Erlang results
       k_erlang <- fit_results()$Erlang_Results$Best$K_star
       lambda_erlang <- fit_results()$Erlang_Results$Best$Lambda_star
-      
+
       # Get Erlang-Exp results
       k_erlang_exp <- fit_results()$ErlangExp_Results$Best$K_star
       erlang_lambda_exp <- fit_results()$ErlangExp_Results$Best$ErlangLambda_star
       exp_lambda_exp <- fit_results()$ErlangExp_Results$Best$ExpLambda_star
-      
+
       return(
         div(
           style = "background-color: #d4edda; padding: 10px; border-radius: 5px;",
@@ -956,33 +956,33 @@ server <- function(input, output, session) {
       )
     }
   })
-  
-  
+
+
   # =========================================================
   # GOF COMPUTATION
   # =========================================================
-  
+
   gof_results <- eventReactive(input$run_gof, {
-    
+
     req(fit_results())
     req(data())
-    
+
     empiricaldata <- data()[[1]]
-    
+
     # =====================================================
     # DEFAULT GOF (Both Erlang and Erlang-Exp)
     # =====================================================
     if (input$fit_type == "Default") {
-      
+
       # Get Erlang fitted parameters
       k_erlang <- fit_results()$Erlang_Results$Best$K_star
       lambda_erlang <- fit_results()$Erlang_Results$Best$Lambda_star
-      
+
       # Get Erlang-Exp fitted parameters
       k_erlang_exp <- fit_results()$ErlangExp_Results$Best$K_star
       erlang_lambda_exp <- fit_results()$ErlangExp_Results$Best$ErlangLambda_star
       exp_lambda_exp <- fit_results()$ErlangExp_Results$Best$ExpLambda_star
-      
+
       # Set GOF parameters based on mode
       if (input$gof_mode == "Default") {
         alpha <- 0.05
@@ -993,7 +993,7 @@ server <- function(input, output, session) {
         n_bootstraps <- input$num_bootstraps
         pvaloption <- input$test_statistic
       }
-      
+
       # Compute Erlang GOF
       gof_erlang <- GenErlangFit:::Erlang_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
@@ -1005,7 +1005,7 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         ShowFigures = FALSE
       )
-      
+
       # Compute Erlang-Exp GOF
       gof_erlang_exp <- GenErlangFit:::ErlangExp_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
@@ -1018,7 +1018,7 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         ShowFigures = FALSE
       )
-      
+
       # Return combined results
       return(list(
         fit_type = "Default",
@@ -1047,16 +1047,16 @@ server <- function(input, output, session) {
         )
       ))
     }
-    
+
     # =====================================================
     # ERLANG GOF
     # =====================================================
     if (input$fit_type == "Erlang") {
-      
+
       # Get fitted parameters
       k_star <- fit_results()$Best$K_star
       lambda_star <- fit_results()$Best$Lambda_star
-      
+
       # Set GOF parameters based on mode
       if (input$gof_mode == "Default") {
         alpha <- 0.05
@@ -1067,7 +1067,7 @@ server <- function(input, output, session) {
         n_bootstraps <- input$num_bootstraps
         pvaloption <- input$test_statistic
       }
-      
+
       # Call the GOF function
       gof_res <- GenErlangFit:::Erlang_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
@@ -1079,7 +1079,7 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         ShowFigures = FALSE
       )
-      
+
       # Return results with metadata
       return(list(
         fit_type = "Erlang",
@@ -1097,17 +1097,17 @@ server <- function(input, output, session) {
         empiricaldata = empiricaldata
       ))
     }
-    
+
     # =====================================================
     # ERLANG-EXP GOF
     # =====================================================
     if (input$fit_type == "Erlang-Exp") {
-      
+
       # Get fitted parameters
       k_star <- fit_results()$Best$K_star
       erlang_lambda_star <- fit_results()$Best$ErlangLambda_star
       exp_lambda_star <- fit_results()$Best$ExpLambda_star
-      
+
       # Set GOF parameters based on mode
       if (input$gof_mode == "Default") {
         alpha <- 0.05
@@ -1118,7 +1118,7 @@ server <- function(input, output, session) {
         n_bootstraps <- input$num_bootstraps
         pvaloption <- input$test_statistic
       }
-      
+
       # Call the GOF function
       gof_res <- GenErlangFit:::ErlangExp_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
@@ -1131,7 +1131,7 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         ShowFigures = FALSE
       )
-      
+
       # Return results with metadata
       return(list(
         fit_type = "Erlang-Exp",
@@ -1149,28 +1149,28 @@ server <- function(input, output, session) {
         empiricaldata = empiricaldata
       ))
     }
-    
+
     return(NULL)
   })
-  
-  
+
+
   # =========================================================
-  # GOF SUMMARY TABLE DATA (WITH LOG-LIKELIHOOD) - V1 
+  # GOF SUMMARY TABLE DATA (WITH LOG-LIKELIHOOD) - V1
   # =========================================================
-  
+
   gof_summary_data <- reactive({
-    
+
     # Check if GOF results exist
     gof_exists <- !is.null(tryCatch(gof_results(), error = function(e) NULL))
-    
+
     if (!gof_exists) {
       return(NULL)
     }
-    
+
     res <- gof_results()
     results <- list()
     empiricaldata <- res$empiricaldata
-    
+
     # ---------------------------------------------------
     # Helper function to calculate Erlang log-likelihood
     # ---------------------------------------------------
@@ -1181,7 +1181,7 @@ server <- function(input, output, session) {
         sum(dgamma(data, shape = k, scale = lambda, log = TRUE))
       }, error = function(e) NA_real_)
     }
-    
+
     # ---------------------------------------------------
     # Helper function to calculate Erlang-Exp log-likelihood
     # ---------------------------------------------------
@@ -1194,12 +1194,12 @@ server <- function(input, output, session) {
         res$Likelihood  # This is the log-likelihood (sum of log PDFs)
       }, error = function(e) NA_real_)
     }
-    
+
     # =====================================================
     # DEFAULT MODE - Both models
     # =====================================================
     if (res$fit_type == "Default") {
-      
+
       # Erlang results
       erl_loglik <- calc_erlang_loglik(res$erlang$k_star, res$erlang$lambda_star, empiricaldata)
       results$erlang <- data.frame(
@@ -1213,12 +1213,12 @@ server <- function(input, output, session) {
         stringsAsFactors = FALSE,
         check.names = FALSE
       )
-      
+
       # Erlang-Exp results
       erlexp_loglik <- calc_erlangexp_loglik(
-        res$erlang_exp$k_star, 
-        res$erlang_exp$erlang_lambda_star, 
-        res$erlang_exp$exp_lambda_star, 
+        res$erlang_exp$k_star,
+        res$erlang_exp$erlang_lambda_star,
+        res$erlang_exp$exp_lambda_star,
         empiricaldata
       )
       results$erlang_exp <- data.frame(
@@ -1232,18 +1232,18 @@ server <- function(input, output, session) {
         stringsAsFactors = FALSE,
         check.names = FALSE
       )
-      
+
       # Check for Smallest K results (Default mode)
       smallest_k_res <- tryCatch(smallest_k_results_default(), error = function(e) NULL)
-      
-      
+
+
       if (isTRUE(smallest_k_res$erlang_selected) && !is.null(smallest_k_res$erlang)) {
-  
+
         # Smallest K Erlang
         if (!is.null(smallest_k_res$erlang)) {
           sk_erl_loglik <- calc_erlang_loglik(
-            smallest_k_res$erlang$smallest_k, 
-            smallest_k_res$erlang$smallest_lambda, 
+            smallest_k_res$erlang$smallest_k,
+            smallest_k_res$erlang$smallest_lambda,
             empiricaldata
           )
           results$smallest_k_erlang <- data.frame(
@@ -1258,7 +1258,7 @@ server <- function(input, output, session) {
             check.names = FALSE
           )
         }
-        
+
         # Smallest K Erlang-Exp
         if (isTRUE(smallest_k_res$erlang_exp_selected) && !is.null(smallest_k_res$erlang_exp)){
           sk_erlexp_loglik <- calc_erlangexp_loglik(
@@ -1280,12 +1280,12 @@ server <- function(input, output, session) {
           )
         }
       }
-      
+
     } else {
       # =====================================================
       # SINGLE MODEL MODE
       # =====================================================
-      
+
       if (res$fit_type == "Erlang") {
         erl_loglik <- calc_erlang_loglik(res$k_star, res$lambda_star, empiricaldata)
         results$single <- data.frame(
@@ -1301,9 +1301,9 @@ server <- function(input, output, session) {
         )
       } else {
         erlexp_loglik <- calc_erlangexp_loglik(
-          res$k_star, 
-          res$erlang_lambda_star, 
-          res$exp_lambda_star, 
+          res$k_star,
+          res$erlang_lambda_star,
+          res$exp_lambda_star,
           empiricaldata
         )
         results$single <- data.frame(
@@ -1318,15 +1318,15 @@ server <- function(input, output, session) {
           check.names = FALSE
         )
       }
-      
+
       # Smallest K for single model
       smallest_k_single <- tryCatch(smallest_k_results(), error = function(e) NULL)
-      
+
       if (!is.null(smallest_k_single)) {
         if (res$fit_type == "Erlang") {
           sk_erl_loglik <- calc_erlang_loglik(
-            smallest_k_single$smallest_k, 
-            smallest_k_single$smallest_lambda, 
+            smallest_k_single$smallest_k,
+            smallest_k_single$smallest_lambda,
             empiricaldata
           )
           results$smallest_k_single <- data.frame(
@@ -1361,7 +1361,7 @@ server <- function(input, output, session) {
         }
       }
     }
-    
+
     # Combine all results
     if (length(results) > 0) {
       # DEBUG - add these lines
@@ -1382,20 +1382,20 @@ server <- function(input, output, session) {
       NULL
     }
   })
-  
-  
+
+
   # =========================================================
   # GOF SUMMARY TABLE RENDER
   # =========================================================
-  
+
   output$gof_summary_table <- DT::renderDT({
-    
+
     df <- gof_summary_data()
     req(df)
     # Get alpha value for caption
     gof_res <- tryCatch(gof_results(), error = function(e) NULL)
     alpha_val <- if (!is.null(gof_res)) gof_res$alpha else 0.05
-    
+
     DT::datatable(
       df,
       rownames = FALSE,
@@ -1429,17 +1429,17 @@ server <- function(input, output, session) {
         fontWeight = 'bold'
       )
   })
-  
-  
+
+
   # =========================================================
   # DYNAMIC GOF MAIN OUTPUT
   # =========================================================
-  
+
   output$gof_main_output <- renderUI({
-    
+
     # Check if GOF results exist
     gof_exists <- !is.null(tryCatch(gof_results(), error = function(e) NULL))
-    
+
     if (!gof_exists) {
       return(
         div(
@@ -1448,14 +1448,14 @@ server <- function(input, output, session) {
         )
       )
     }
-    
+
     res <- gof_results()
-    
+
     # =====================================================
     # DEFAULT (BOTH MODELS) OUTPUT
     # =====================================================
     if (res$fit_type == "Default") {
-      
+
       return(
         tagList(
           # ---------------------------------------------------
@@ -1470,9 +1470,9 @@ server <- function(input, output, session) {
               DT::DTOutput("gof_summary_table")
             )
           ),
-          
+
           br(),
-          
+
           # ---------------------------------------------------
           # PLOTS ROW - Combined CDF
           # ---------------------------------------------------
@@ -1485,9 +1485,9 @@ server <- function(input, output, session) {
               )
             )
           ),
-          
+
           br(),
-          
+
           # ---------------------------------------------------
           # BOOTSTRAP HISTOGRAMS ROW
           # ---------------------------------------------------
@@ -1509,16 +1509,16 @@ server <- function(input, output, session) {
               )
             )
           ),
-          
+
           br(),
-          
+
           hr(),
-          
+
           # ---------------------------------------------------
           # TEXT OUTPUT
           # ---------------------------------------------------
           h4("Detailed Results"),
-          
+
           fluidRow(
             column(
               width = 6,
@@ -1531,7 +1531,7 @@ server <- function(input, output, session) {
               verbatimTextOutput("gof_output_erlang_exp")
             )
           ),
-          
+
           # ---------------------------------------------------
           # SMALLEST K OUTPUT FOR DEFAULT (appears after run)
           # ---------------------------------------------------
@@ -1539,7 +1539,7 @@ server <- function(input, output, session) {
         )
       )
     }
-    
+
     # =====================================================
     # SINGLE MODEL OUTPUT (Erlang or Erlang-Exp)
     # =====================================================
@@ -1557,9 +1557,9 @@ server <- function(input, output, session) {
             DT::DTOutput("gof_summary_table")
           )
         ),
-        
+
         br(),
-        
+
         # ---------------------------------------------------
         # PLOTS ROW
         # ---------------------------------------------------
@@ -1579,18 +1579,18 @@ server <- function(input, output, session) {
             )
           )
         ),
-        
+
         br(),
-        
+
         hr(),
-        
+
         # ---------------------------------------------------
         # TEXT OUTPUT
         # ---------------------------------------------------
         h4("Detailed Results"),
-        
+
         verbatimTextOutput("gof_output"),
-        
+
         # ---------------------------------------------------
         # SMALLEST K OUTPUT (appears after Smallest K is run)
         # ---------------------------------------------------
@@ -1598,28 +1598,28 @@ server <- function(input, output, session) {
       )
     )
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K SECTION (appears after GOF is run)
   # =========================================================
-  
+
   output$smallest_k_section <- renderUI({
-    
+
     # Check if GOF results exist
     gof_exists <- !is.null(tryCatch(gof_results(), error = function(e) NULL))
-    
+
     if (!gof_exists) {
       return(NULL)
     }
-    
+
     res <- gof_results()
-    
+
     # =====================================================
     # DEFAULT MODE - Show checkboxes for model selection
     # =====================================================
     if (res$fit_type == "Default") {
-      
+
       stat_name <- switch(
         toupper(res$pvaloption),
         "KS" = "Kolmogorov-Smirnov",
@@ -1627,15 +1627,15 @@ server <- function(input, output, session) {
         "CVM" = "Cramér-von Mises",
         res$pvaloption
       )
-      
+
       return(
         div(
           class = "smallest-k-box",
-          
+
           strong("Find Smallest K"),
           br(),
           br(),
-          
+
           p(
             style = "font-size: 12px; color: #555;",
             sprintf(
@@ -1644,7 +1644,7 @@ server <- function(input, output, session) {
               res$alpha
             )
           ),
-          
+
           # Checkboxes for model selection
           div(
             style = "margin-bottom: 10px;",
@@ -1659,7 +1659,7 @@ server <- function(input, output, session) {
               value = FALSE
             )
           ),
-          
+
           actionButton(
             "run_smallest_k_default",
             "Compute Smallest K",
@@ -1668,7 +1668,7 @@ server <- function(input, output, session) {
         )
       )
     }
-    
+
     # =====================================================
     # SINGLE MODEL MODE
     # =====================================================
@@ -1679,14 +1679,14 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     div(
       class = "smallest-k-box",
-      
+
       strong("Find Smallest K"),
       br(),
       br(),
-      
+
       p(
         style = "font-size: 12px; color: #555;",
         sprintf(
@@ -1695,7 +1695,7 @@ server <- function(input, output, session) {
           res$alpha
         )
       ),
-      
+
       actionButton(
         "run_smallest_k",
         "Compute Smallest K",
@@ -1703,29 +1703,29 @@ server <- function(input, output, session) {
       )
     )
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K COMPUTATION (Single Model)
   # =========================================================
-  
+
   smallest_k_results <- eventReactive(input$run_smallest_k, {
-    
+
     req(gof_results())
     req(data())
-    
+
     empiricaldata <- data()[[1]]
     gof_res <- gof_results()
-    
+
     # Get the pvaloption and alpha from GOF results
     pvaloption <- gof_res$pvaloption
     alpha <- gof_res$alpha
-    
+
     # =====================================================
     # ERLANG SMALLEST K
     # =====================================================
     if (input$fit_type == "Erlang") {
-      
+
       fit_args <- list(
         mode = "Erlang",
         empiricaldata = empiricaldata,
@@ -1733,17 +1733,17 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         Alpha = alpha
       )
-      
+
       # Include initial K if it was specified
       if (!is.na(input$initial_k)) {
         fit_args$K <- input$initial_k
       }
-      
+
       results <- do.call(
         GenErlang_Fit,
         fit_args
       )
-      
+
       return(list(
         fit_type = "Erlang",
         pvaloption = pvaloption,
@@ -1759,12 +1759,12 @@ server <- function(input, output, session) {
         empiricaldata = empiricaldata
       ))
     }
-    
+
     # =====================================================
     # ERLANG-EXP SMALLEST K
     # =====================================================
     if (input$fit_type == "Erlang-Exp") {
-      
+
       fit_args <- list(
         mode = "ErlangExp",
         empiricaldata = empiricaldata,
@@ -1773,7 +1773,7 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         Alpha = alpha
       )
-      
+
       # Set FixedK or Window based on original selection
       if (input$search_type == "Fixed K") {
         fit_args$FixedK <- TRUE
@@ -1781,12 +1781,12 @@ server <- function(input, output, session) {
         fit_args$FixedK <- FALSE
         fit_args$KWindowSize <- input$window_size
       }
-      
+
       results <- do.call(
         GenErlang_Fit,
         fit_args
       )
-      
+
       return(list(
         fit_type = "Erlang-Exp",
         pvaloption = pvaloption,
@@ -1804,35 +1804,35 @@ server <- function(input, output, session) {
         empiricaldata = empiricaldata
       ))
     }
-    
+
     return(NULL)
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K COMPUTATION (Default Mode - Both Models)
   # =========================================================
-  
+
   smallest_k_results_default <- eventReactive(input$run_smallest_k_default, {
-    
+
     req(gof_results())
     req(data())
-    
+
     # Check if at least one checkbox is selected
     erlang_selected <- isTRUE(input$smallest_k_erlang_check)
     erlang_exp_selected <- isTRUE(input$smallest_k_erlang_exp_check)
-    
+
     if (!erlang_selected && !erlang_exp_selected) {
       return(list(error = "Please select at least one model."))
     }
-    
+
     empiricaldata <- data()[[1]]
     gof_res <- gof_results()
-    
+
     # Get the pvaloption and alpha from GOF results
     pvaloption <- gof_res$pvaloption
     alpha <- gof_res$alpha
-    
+
     results <- list(
       pvaloption = pvaloption,
       alpha = alpha,
@@ -1840,12 +1840,12 @@ server <- function(input, output, session) {
       erlang_exp_selected = erlang_exp_selected,
       empiricaldata = empiricaldata
     )
-    
+
     # =====================================================
     # ERLANG SMALLEST K
     # =====================================================
     if (erlang_selected) {
-      
+
       fit_args <- list(
         mode = "Erlang",
         empiricaldata = empiricaldata,
@@ -1853,12 +1853,12 @@ server <- function(input, output, session) {
         pvaloption = pvaloption,
         Alpha = alpha
       )
-      
+
       erlang_results <- do.call(
         GenErlang_Fit,
         fit_args
       )
-      
+
       results$erlang <- list(
         smallest_k = erlang_results$Smallest$K_star,
         smallest_lambda = erlang_results$Smallest$Lambda_star,
@@ -1870,15 +1870,15 @@ server <- function(input, output, session) {
         best_lambda = erlang_results$Best$Lambda_star
       )
     }
-    
+
     # =====================================================
     # ERLANG-EXP SMALLEST K
     # =====================================================
     if (erlang_exp_selected) {
-      
+
       # Get K from the original fit results
       k_erlang_exp <- gof_res$erlang_exp$k_star
-      
+
       fit_args <- list(
         mode = "ErlangExp",
         empiricaldata = empiricaldata,
@@ -1888,12 +1888,12 @@ server <- function(input, output, session) {
         Alpha = alpha,
         FixedK = TRUE  # Use Fixed K for Default mode
       )
-      
+
       erlang_exp_results <- do.call(
         GenErlang_Fit,
         fit_args
       )
-      
+
       results$erlang_exp <- list(
         smallest_k = erlang_exp_results$Smallest$K_star,
         smallest_erlang_lambda = erlang_exp_results$Smallest$ErlangLambda_star,
@@ -1907,31 +1907,31 @@ server <- function(input, output, session) {
         best_exp_lambda = erlang_exp_results$Best$ExpLambda_star
       )
     }
-    
+
     return(results)
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K OUTPUT SECTION (Single Model)
   # =========================================================
-  
+
   output$smallest_k_output_section <- renderUI({
-    
+
     # Check if smallest K results exist
     smallest_k_exists <- !is.null(tryCatch(smallest_k_results(), error = function(e) NULL))
-    
+
     if (!smallest_k_exists) {
       return(NULL)
     }
-    
+
     tagList(
       hr(),
-      
+
       h4("Smallest K Results"),
-      
+
       br(),
-      
+
       # ---------------------------------------------------
       # ROW 1: PDF Plot (full width)
       # ---------------------------------------------------
@@ -1944,9 +1944,9 @@ server <- function(input, output, session) {
           )
         )
       ),
-      
+
       br(),
-      
+
       # ---------------------------------------------------
       # ROW 2: CDF Plot and Bootstrap Histogram
       # ---------------------------------------------------
@@ -1966,33 +1966,33 @@ server <- function(input, output, session) {
           )
         )
       ),
-      
+
       br(),
-      
+
       hr(),
-      
+
       h4("Detailed Smallest K Results"),
-      
+
       verbatimTextOutput("smallest_k_output")
     )
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K OUTPUT SECTION (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_output_section_default <- renderUI({
-    
+
     # Check if smallest K results exist for default mode
     smallest_k_exists <- !is.null(tryCatch(smallest_k_results_default(), error = function(e) NULL))
-    
+
     if (!smallest_k_exists) {
       return(NULL)
     }
-    
+
     res <- smallest_k_results_default()
-    
+
     # Check for error
     if (!is.null(res$error)) {
       return(
@@ -2003,17 +2003,17 @@ server <- function(input, output, session) {
         )
       )
     }
-    
+
     erlang_selected <- res$erlang_selected
     erlang_exp_selected <- res$erlang_exp_selected
-    
+
     tagList(
       hr(),
-      
+
       h4("Smallest K Results"),
-      
+
       br(),
-      
+
       # ---------------------------------------------------
       # PDF PLOTS
       # ---------------------------------------------------
@@ -2060,9 +2060,9 @@ server <- function(input, output, session) {
           )
         )
       },
-      
+
       br(),
-      
+
       # ---------------------------------------------------
       # CDF AND BOOTSTRAP PLOTS
       # ---------------------------------------------------
@@ -2146,16 +2146,16 @@ server <- function(input, output, session) {
           )
         )
       },
-      
+
       br(),
-      
+
       hr(),
-      
+
       # ---------------------------------------------------
       # TEXT OUTPUT
       # ---------------------------------------------------
       h4("Detailed Smallest K Results"),
-      
+
       if (erlang_selected && erlang_exp_selected) {
         fluidRow(
           column(
@@ -2176,53 +2176,58 @@ server <- function(input, output, session) {
       }
     )
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K PDF PLOT - ERLANG (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_pdf_plot_erlang_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang)) {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
     erlang <- res$erlang
-    
+
     # Calculate bin width
     bin_width <- 2 * IQR(empiricaldata) / (length(empiricaldata)^(1/3))
-    
+
+    # For cases where all data points are identical or nearly identical
+    if (bin_width < .Machine$double.eps || !is.finite(bin_width)) {
+      bin_width <- 1  # Default fallback bin width
+    }
+
     # Create x grid for density curves
     x_grid <- seq(0, 1.2 * max(empiricaldata), length.out = 1000)
-    
+
     # Best K density
     best_density <- dgamma(
       x_grid,
       shape = erlang$best_k,
       scale = erlang$best_lambda
     )
-    
+
     # Smallest K density
     smallest_density <- dgamma(
       x_grid,
       shape = erlang$smallest_k,
       scale = erlang$smallest_lambda
     )
-    
+
     # Create labels
     best_label <- sprintf("Best K (MLE): K=%d, λ=%.3f", erlang$best_k, erlang$best_lambda)
     smallest_label <- sprintf("Smallest K: K=%d, λ=%.3f", erlang$smallest_k, erlang$smallest_lambda)
-    
+
     # Create data frames
     df_best <- data.frame(x = x_grid, density = best_density)
     df_smallest <- data.frame(x = x_grid, density = smallest_density)
-    
+
     # Base plot
     p <- ggplot(
       data.frame(Value = empiricaldata),
@@ -2269,34 +2274,39 @@ server <- function(input, output, session) {
         plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
         legend.position = "bottom"
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K PDF PLOT - ERLANG-EXP (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_pdf_plot_erlang_exp_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang_exp)) {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
     erlang_exp <- res$erlang_exp
-    
+
     # Calculate bin width
     bin_width <- 2 * IQR(empiricaldata) / (length(empiricaldata)^(1/3))
-    
+
+    # For cases where all data points are identical or nearly identical
+    if (bin_width < .Machine$double.eps || !is.finite(bin_width)) {
+      bin_width <- 1  # Default fallback bin width
+    }
+
     # Create x grid for density curves
     x_grid <- seq(0, 1.2 * max(empiricaldata), length.out = 1000)
-    
+
     # Best K density
     best_density <- GenErlangFit:::ErlangExp_Func(
       x_grid,
@@ -2304,7 +2314,7 @@ server <- function(input, output, session) {
       Erlam = erlang_exp$best_erlang_lambda,
       Explam = erlang_exp$best_exp_lambda
     )$Probability
-    
+
     # Smallest K density
     smallest_density <- GenErlangFit:::ErlangExp_Func(
       x_grid,
@@ -2312,7 +2322,7 @@ server <- function(input, output, session) {
       Erlam = erlang_exp$smallest_erlang_lambda,
       Explam = erlang_exp$smallest_exp_lambda
     )$Probability
-    
+
     # Create labels
     best_label <- sprintf(
       "Best K (MLE): K=%d, λE=%.3f, λX=%.3f",
@@ -2322,11 +2332,11 @@ server <- function(input, output, session) {
       "Smallest K: K=%d, λE=%.3f, λX=%.3f",
       erlang_exp$smallest_k, erlang_exp$smallest_erlang_lambda, erlang_exp$smallest_exp_lambda
     )
-    
+
     # Create data frames
     df_best <- data.frame(x = x_grid, density = best_density)
     df_smallest <- data.frame(x = x_grid, density = smallest_density)
-    
+
     # Base plot
     p <- ggplot(
       data.frame(Value = empiricaldata),
@@ -2373,43 +2383,43 @@ server <- function(input, output, session) {
         plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
         legend.position = "bottom"
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K CDF PLOT - ERLANG (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_cdf_plot_erlang_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang)) {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
     erlang <- res$erlang
-    
+
     # Compute empirical CDF
     ecdf_data <- ecdf(empiricaldata)
     x_vals <- sort(empiricaldata)
     ecdf_vals <- ecdf_data(x_vals)
-    
+
     # Best K CDF
     best_cdf <- pgamma(x_vals, shape = erlang$best_k, scale = erlang$best_lambda)
-    
+
     # Smallest K CDF
     smallest_cdf <- pgamma(x_vals, shape = erlang$smallest_k, scale = erlang$smallest_lambda)
-    
+
     # Create labels
     best_label <- sprintf("Best K: K=%d, λ=%.3f", erlang$best_k, erlang$best_lambda)
     smallest_label <- sprintf("Smallest K: K=%d, λ=%.3f", erlang$smallest_k, erlang$smallest_lambda)
-    
+
     # Build data frame
     df_cdf <- data.frame(
       x = rep(x_vals, 3),
@@ -2423,7 +2433,7 @@ server <- function(input, output, session) {
         levels = c("Empirical CDF", best_label, smallest_label)
       )
     )
-    
+
     # Create plot
     p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type, linetype = Type)) +
       geom_step(
@@ -2470,41 +2480,41 @@ server <- function(input, output, session) {
         color = guide_legend(ncol = 1),
         linetype = guide_legend(ncol = 1)
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K CDF PLOT - ERLANG-EXP (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_cdf_plot_erlang_exp_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang_exp)) {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
     erlang_exp <- res$erlang_exp
-    
+
     # Compute empirical CDF
     ecdf_data <- ecdf(empiricaldata)
     x_vals <- sort(empiricaldata)
     ecdf_vals <- ecdf_data(x_vals)
-    
+
     # Best K CDF
     best_params <- c(erlang_exp$best_k, erlang_exp$best_erlang_lambda, erlang_exp$best_exp_lambda)
     best_cdf <- GenErlangFit:::ErlangExpCDF_Func(best_params, x_vals, interval = 0.01)
-    
+
     # Smallest K CDF
     smallest_params <- c(erlang_exp$smallest_k, erlang_exp$smallest_erlang_lambda, erlang_exp$smallest_exp_lambda)
     smallest_cdf <- GenErlangFit:::ErlangExpCDF_Func(smallest_params, x_vals, interval = 0.01)
-    
+
     # Create labels
     best_label <- sprintf(
       "Best K: K=%d, λE=%.2f, λX=%.2f",
@@ -2514,7 +2524,7 @@ server <- function(input, output, session) {
       "Smallest K: K=%d, λE=%.2f, λX=%.2f",
       erlang_exp$smallest_k, erlang_exp$smallest_erlang_lambda, erlang_exp$smallest_exp_lambda
     )
-    
+
     # Build data frame
     df_cdf <- data.frame(
       x = rep(x_vals, 3),
@@ -2528,7 +2538,7 @@ server <- function(input, output, session) {
         levels = c("Empirical CDF", best_label, smallest_label)
       )
     )
-    
+
     # Create plot
     p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type, linetype = Type)) +
       geom_step(
@@ -2575,27 +2585,27 @@ server <- function(input, output, session) {
         color = guide_legend(ncol = 1),
         linetype = guide_legend(ncol = 1)
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K BOOTSTRAP PLOT - ERLANG (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_bootstrap_plot_erlang_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang)) {
       return(NULL)
     }
-    
+
     erlang <- res$erlang
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -2604,15 +2614,15 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = erlang$smallest_sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(erlang$smallest_sample_stats)) / 30
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -2659,27 +2669,27 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K BOOTSTRAP PLOT - ERLANG-EXP (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_bootstrap_plot_erlang_exp_default <- renderPlot({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang_exp)) {
       return(NULL)
     }
-    
+
     erlang_exp <- res$erlang_exp
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -2688,15 +2698,15 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = erlang_exp$smallest_sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(erlang_exp$smallest_sample_stats)) / 30
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -2743,27 +2753,27 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K TEXT OUTPUT - ERLANG (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_output_erlang_default <- renderPrint({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang)) {
       return(NULL)
     }
-    
+
     erlang <- res$erlang
-    
+
     stat_name <- switch(
       toupper(res$pvaloption),
       "KS" = "Kolmogorov-Smirnov",
@@ -2771,32 +2781,32 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     cat("==============================================\n")
     cat("       SMALLEST K RESULTS (ERLANG)            \n")
     cat("==============================================\n\n")
-    
+
     cat("--- Search Settings ---\n")
     cat(sprintf("  Test Statistic : %s (%s)\n", res$pvaloption, stat_name))
     cat(sprintf("  Alpha          : %.4f\n", res$alpha))
     cat("\n")
-    
+
     cat("--- Best K (MLE) ---\n")
     cat(sprintf("  K*      : %d\n", erlang$best_k))
     cat(sprintf("  Lambda* : %.6f\n", erlang$best_lambda))
     cat("\n")
-    
+
     cat("--- Smallest K (passing GOF) ---\n")
     cat(sprintf("  K*      : %d\n", erlang$smallest_k))
     cat(sprintf("  Lambda* : %.6f\n", erlang$smallest_lambda))
     cat("\n")
-    
+
     cat("--- GOF Results for Smallest K ---\n")
     cat(sprintf("  Observed Statistic : %.6f\n", erlang$smallest_metric))
     cat(sprintf("  P-value            : %.6f\n", erlang$smallest_p_value))
     cat(sprintf("  Q-value            : %d\n", erlang$smallest_q_value))
     cat("\n")
-    
+
     cat("--- Interpretation ---\n")
     if (erlang$smallest_q_value == 1) {
       cat(sprintf("  Smallest K = %d passes the %s test at alpha = %.4f\n",
@@ -2806,27 +2816,27 @@ server <- function(input, output, session) {
                   stat_name, res$alpha))
     }
     cat("\n")
-    
+
     cat("==============================================\n")
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K TEXT OUTPUT - ERLANG-EXP (Default Mode)
   # =========================================================
-  
+
   output$smallest_k_output_erlang_exp_default <- renderPrint({
-    
+
     req(smallest_k_results_default())
-    
+
     res <- smallest_k_results_default()
-    
+
     if (is.null(res$erlang_exp)) {
       return(NULL)
     }
-    
+
     erlang_exp <- res$erlang_exp
-    
+
     stat_name <- switch(
       toupper(res$pvaloption),
       "KS" = "Kolmogorov-Smirnov",
@@ -2834,34 +2844,34 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     cat("==============================================\n")
     cat("     SMALLEST K RESULTS (ERLANG-EXP)          \n")
     cat("==============================================\n\n")
-    
+
     cat("--- Search Settings ---\n")
     cat(sprintf("  Test Statistic : %s (%s)\n", res$pvaloption, stat_name))
     cat(sprintf("  Alpha          : %.4f\n", res$alpha))
     cat("\n")
-    
+
     cat("--- Best K (MLE) ---\n")
     cat(sprintf("  K*             : %d\n", erlang_exp$best_k))
     cat(sprintf("  Erlang Lambda* : %.6f\n", erlang_exp$best_erlang_lambda))
     cat(sprintf("  Exp Lambda*    : %.6f\n", erlang_exp$best_exp_lambda))
     cat("\n")
-    
+
     cat("--- Smallest K (passing GOF) ---\n")
     cat(sprintf("  K*             : %d\n", erlang_exp$smallest_k))
     cat(sprintf("  Erlang Lambda* : %.6f\n", erlang_exp$smallest_erlang_lambda))
     cat(sprintf("  Exp Lambda*    : %.6f\n", erlang_exp$smallest_exp_lambda))
     cat("\n")
-    
+
     cat("--- GOF Results for Smallest K ---\n")
     cat(sprintf("  Observed Statistic : %.6f\n", erlang_exp$smallest_metric))
     cat(sprintf("  P-value            : %.6f\n", erlang_exp$smallest_p_value))
     cat(sprintf("  Q-value            : %d\n", erlang_exp$smallest_q_value))
     cat("\n")
-    
+
     cat("--- Interpretation ---\n")
     if (erlang_exp$smallest_q_value == 1) {
       cat(sprintf("  Smallest K = %d passes the %s test at alpha = %.4f\n",
@@ -2871,30 +2881,33 @@ server <- function(input, output, session) {
                   stat_name, res$alpha))
     }
     cat("\n")
-    
+
     cat("==============================================\n")
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K PDF PLOT (Single Model)
   # =========================================================
-  
+
   output$smallest_k_pdf_plot <- renderPlot({
-    
+
     req(smallest_k_results())
     req(gof_results())
-    
+
     res <- smallest_k_results()
     gof_res <- gof_results()
     empiricaldata <- res$empiricaldata
-    
+
     # Calculate bin width
     bin_width <- 2 * IQR(empiricaldata) / (length(empiricaldata)^(1/3))
-    
+    if (bin_width < .Machine$double.eps || !is.finite(bin_width)) {
+      bin_width <- 1  # Default fallback bin width
+    }
+
     # Create x grid for density curves
     x_grid <- seq(0, 1.2 * max(empiricaldata), length.out = 1000)
-    
+
     # Base plot with histogram
     p <- ggplot(
       data.frame(Value = empiricaldata),
@@ -2913,34 +2926,34 @@ server <- function(input, output, session) {
         plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
         legend.position = "bottom"
       )
-    
+
     # =====================================================
     # ERLANG PDF
     # =====================================================
     if (res$fit_type == "Erlang") {
-      
+
       # Best K density
       best_density <- dgamma(
         x_grid,
         shape = res$best_k,
         scale = res$best_lambda
       )
-      
+
       # Smallest K density
       smallest_density <- dgamma(
         x_grid,
         shape = res$smallest_k,
         scale = res$smallest_lambda
       )
-      
+
       # Create labels
       best_label <- sprintf("Best K (MLE): K=%d, λ=%.3f", res$best_k, res$best_lambda)
       smallest_label <- sprintf("Smallest K: K=%d, λ=%.3f", res$smallest_k, res$smallest_lambda)
-      
+
       # Create data frames
       df_best <- data.frame(x = x_grid, density = best_density)
       df_smallest <- data.frame(x = x_grid, density = smallest_density)
-      
+
       p <- p +
         geom_line(
           data = df_best,
@@ -2971,12 +2984,12 @@ server <- function(input, output, session) {
           y = "Density"
         )
     }
-    
+
     # =====================================================
     # ERLANG-EXP PDF
     # =====================================================
     if (res$fit_type == "Erlang-Exp") {
-      
+
       # Best K density
       best_density <- GenErlangFit:::ErlangExp_Func(
         x_grid,
@@ -2984,7 +2997,7 @@ server <- function(input, output, session) {
         Erlam = res$best_erlang_lambda,
         Explam = res$best_exp_lambda
       )$Probability
-      
+
       # Smallest K density
       smallest_density <- GenErlangFit:::ErlangExp_Func(
         x_grid,
@@ -2992,7 +3005,7 @@ server <- function(input, output, session) {
         Erlam = res$smallest_erlang_lambda,
         Explam = res$smallest_exp_lambda
       )$Probability
-      
+
       # Create labels
       best_label <- sprintf(
         "Best K (MLE): K=%d, λE=%.3f, λX=%.3f",
@@ -3002,11 +3015,11 @@ server <- function(input, output, session) {
         "Smallest K: K=%d, λE=%.3f, λX=%.3f",
         res$smallest_k, res$smallest_erlang_lambda, res$smallest_exp_lambda
       )
-      
+
       # Create data frames
       df_best <- data.frame(x = x_grid, density = best_density)
       df_smallest <- data.frame(x = x_grid, density = smallest_density)
-      
+
       p <- p +
         geom_line(
           data = df_best,
@@ -3037,44 +3050,44 @@ server <- function(input, output, session) {
           y = "Density"
         )
     }
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K CDF PLOT (Single Model)
   # =========================================================
-  
+
   output$smallest_k_cdf_plot <- renderPlot({
-    
+
     req(smallest_k_results())
     req(gof_results())
-    
+
     res <- smallest_k_results()
     gof_res <- gof_results()
     empiricaldata <- res$empiricaldata
-    
+
     # Compute empirical CDF
     ecdf_data <- ecdf(empiricaldata)
     x_vals <- sort(empiricaldata)
     ecdf_vals <- ecdf_data(x_vals)
-    
+
     # =====================================================
     # ERLANG CDF
     # =====================================================
     if (res$fit_type == "Erlang") {
-      
+
       # Best K CDF
       best_cdf <- pgamma(x_vals, shape = res$best_k, scale = res$best_lambda)
-      
+
       # Smallest K CDF
       smallest_cdf <- pgamma(x_vals, shape = res$smallest_k, scale = res$smallest_lambda)
-      
+
       # Create labels
       best_label <- sprintf("Best K: K=%d, λ=%.3f", res$best_k, res$best_lambda)
       smallest_label <- sprintf("Smallest K: K=%d, λ=%.3f", res$smallest_k, res$smallest_lambda)
-      
+
       # Build data frame
       df_cdf <- data.frame(
         x = rep(x_vals, 3),
@@ -3088,7 +3101,7 @@ server <- function(input, output, session) {
           levels = c("Empirical CDF", best_label, smallest_label)
         )
       )
-      
+
       # Create plot
       p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type, linetype = Type)) +
         geom_step(
@@ -3136,20 +3149,20 @@ server <- function(input, output, session) {
           linetype = guide_legend(ncol = 1)
         )
     }
-    
+
     # =====================================================
     # ERLANG-EXP CDF
     # =====================================================
     if (res$fit_type == "Erlang-Exp") {
-      
+
       # Best K CDF
       best_params <- c(res$best_k, res$best_erlang_lambda, res$best_exp_lambda)
       best_cdf <- GenErlangFit:::ErlangExpCDF_Func(best_params, x_vals, interval = 0.01)
-      
+
       # Smallest K CDF
       smallest_params <- c(res$smallest_k, res$smallest_erlang_lambda, res$smallest_exp_lambda)
       smallest_cdf <- GenErlangFit:::ErlangExpCDF_Func(smallest_params, x_vals, interval = 0.01)
-      
+
       # Create labels
       best_label <- sprintf(
         "Best K: K=%d, λE=%.2f, λX=%.2f",
@@ -3159,7 +3172,7 @@ server <- function(input, output, session) {
         "Smallest K: K=%d, λE=%.2f, λX=%.2f",
         res$smallest_k, res$smallest_erlang_lambda, res$smallest_exp_lambda
       )
-      
+
       # Build data frame
       df_cdf <- data.frame(
         x = rep(x_vals, 3),
@@ -3173,7 +3186,7 @@ server <- function(input, output, session) {
           levels = c("Empirical CDF", best_label, smallest_label)
         )
       )
-      
+
       # Create plot
       p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type, linetype = Type)) +
         geom_step(
@@ -3221,21 +3234,21 @@ server <- function(input, output, session) {
           linetype = guide_legend(ncol = 1)
         )
     }
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K BOOTSTRAP PLOT (Single Model)
   # =========================================================
-  
+
   output$smallest_k_bootstrap_plot <- renderPlot({
-    
+
     req(smallest_k_results())
-    
+
     res <- smallest_k_results()
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -3244,18 +3257,18 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = res$smallest_sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(res$smallest_sample_stats)) / 30
-    
+
     # Determine color based on fit type
     hist_fill <- if (res$fit_type == "Erlang") "#98D8AA" else "#B4A7D6"
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -3306,21 +3319,21 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # SMALLEST K TEXT OUTPUT (Single Model)
   # =========================================================
-  
+
   output$smallest_k_output <- renderPrint({
-    
+
     req(smallest_k_results())
-    
+
     res <- smallest_k_results()
-    
+
     stat_name <- switch(
       toupper(res$pvaloption),
       "KS" = "Kolmogorov-Smirnov",
@@ -3328,37 +3341,37 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # =====================================================
     # ERLANG SMALLEST K OUTPUT
     # =====================================================
     if (res$fit_type == "Erlang") {
-      
+
       cat("==============================================\n")
       cat("       SMALLEST K RESULTS (ERLANG)            \n")
       cat("==============================================\n\n")
-      
+
       cat("--- Search Settings ---\n")
       cat(sprintf("  Test Statistic : %s (%s)\n", res$pvaloption, stat_name))
       cat(sprintf("  Alpha          : %.4f\n", res$alpha))
       cat("\n")
-      
+
       cat("--- Best K (MLE) ---\n")
       cat(sprintf("  K*      : %d\n", res$best_k))
       cat(sprintf("  Lambda* : %.6f\n", res$best_lambda))
       cat("\n")
-      
+
       cat("--- Smallest K (passing GOF) ---\n")
       cat(sprintf("  K*      : %d\n", res$smallest_k))
       cat(sprintf("  Lambda* : %.6f\n", res$smallest_lambda))
       cat("\n")
-      
+
       cat("--- GOF Results for Smallest K ---\n")
       cat(sprintf("  Observed Statistic : %.6f\n", res$smallest_metric))
       cat(sprintf("  P-value            : %.6f\n", res$smallest_p_value))
       cat(sprintf("  Q-value            : %d\n", res$smallest_q_value))
       cat("\n")
-      
+
       cat("--- Interpretation ---\n")
       if (res$smallest_q_value == 1) {
         cat(sprintf("  Smallest K = %d passes the %s test at alpha = %.4f\n",
@@ -3368,42 +3381,42 @@ server <- function(input, output, session) {
                     stat_name, res$alpha))
       }
       cat("\n")
-      
+
       cat("==============================================\n")
     }
-    
+
     # =====================================================
     # ERLANG-EXP SMALLEST K OUTPUT
     # =====================================================
     if (res$fit_type == "Erlang-Exp") {
-      
+
       cat("==============================================\n")
       cat("     SMALLEST K RESULTS (ERLANG-EXP)          \n")
       cat("==============================================\n\n")
-      
+
       cat("--- Search Settings ---\n")
       cat(sprintf("  Test Statistic : %s (%s)\n", res$pvaloption, stat_name))
       cat(sprintf("  Alpha          : %.4f\n", res$alpha))
       cat("\n")
-      
+
       cat("--- Best K (MLE) ---\n")
       cat(sprintf("  K*             : %d\n", res$best_k))
       cat(sprintf("  Erlang Lambda* : %.6f\n", res$best_erlang_lambda))
       cat(sprintf("  Exp Lambda*    : %.6f\n", res$best_exp_lambda))
       cat("\n")
-      
+
       cat("--- Smallest K (passing GOF) ---\n")
       cat(sprintf("  K*             : %d\n", res$smallest_k))
       cat(sprintf("  Erlang Lambda* : %.6f\n", res$smallest_erlang_lambda))
       cat(sprintf("  Exp Lambda*    : %.6f\n", res$smallest_exp_lambda))
       cat("\n")
-      
+
       cat("--- GOF Results for Smallest K ---\n")
       cat(sprintf("  Observed Statistic : %.6f\n", res$smallest_metric))
       cat(sprintf("  P-value            : %.6f\n", res$smallest_p_value))
       cat(sprintf("  Q-value            : %d\n", res$smallest_q_value))
       cat("\n")
-      
+
       cat("--- Interpretation ---\n")
       if (res$smallest_q_value == 1) {
         cat(sprintf("  Smallest K = %d passes the %s test at alpha = %.4f\n",
@@ -3413,40 +3426,40 @@ server <- function(input, output, session) {
                     stat_name, res$alpha))
       }
       cat("\n")
-      
+
       cat("==============================================\n")
     }
   })
-  
-  
+
+
   # =========================================================
   # GOF COMBINED CDF PLOT (for Default fit type)
   # =========================================================
-  
+
   output$gof_cdf_plot_combined <- renderPlot({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     if (res$fit_type != "Default") {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
-    
+
     # Compute empirical CDF
     ecdf_data <- ecdf(empiricaldata)
     x_vals <- sort(empiricaldata)
     ecdf_vals <- ecdf_data(x_vals)
-    
+
     # Compute Erlang CDF
     erlang_cdf <- pgamma(
       x_vals,
       shape = res$erlang$k_star,
       scale = res$erlang$lambda_star
     )
-    
+
     # Compute Erlang-Exp CDF
     params_exp <- c(res$erlang_exp$k_star, res$erlang_exp$erlang_lambda_star, res$erlang_exp$exp_lambda_star)
     erlang_exp_cdf <- GenErlangFit:::ErlangExpCDF_Func(
@@ -3454,21 +3467,21 @@ server <- function(input, output, session) {
       x_vals,
       interval = 0.01
     )
-    
+
     # Create labels
     erlang_label <- sprintf(
       "Erlang: K=%d, λ=%.3f",
       res$erlang$k_star,
       res$erlang$lambda_star
     )
-    
+
     erlang_exp_label <- sprintf(
       "Erlang-Exp: K=%d, λE=%.3f, λX=%.3f",
       res$erlang_exp$k_star,
       res$erlang_exp$erlang_lambda_star,
       res$erlang_exp$exp_lambda_star
     )
-    
+
     # Build data frame
     df_cdf <- data.frame(
       x = rep(x_vals, 3),
@@ -3482,7 +3495,7 @@ server <- function(input, output, session) {
         levels = c("Empirical CDF", erlang_label, erlang_exp_label)
       )
     )
-    
+
     # Create plot
     p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type, linetype = Type)) +
       geom_step(
@@ -3529,25 +3542,25 @@ server <- function(input, output, session) {
         color = guide_legend(ncol = 1),
         linetype = guide_legend(ncol = 1)
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # GOF BOOTSTRAP PLOT - ERLANG (for Default fit type)
   # =========================================================
-  
+
   output$gof_bootstrap_plot_erlang <- renderPlot({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     if (res$fit_type != "Default") {
       return(NULL)
     }
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -3556,15 +3569,15 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = res$erlang$sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(res$erlang$sample_stats)) / 30
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -3611,25 +3624,25 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # GOF BOOTSTRAP PLOT - ERLANG-EXP (for Default fit type)
   # =========================================================
-  
+
   output$gof_bootstrap_plot_erlang_exp <- renderPlot({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     if (res$fit_type != "Default") {
       return(NULL)
     }
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -3638,15 +3651,15 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = res$erlang_exp$sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(res$erlang_exp$sample_stats)) / 30
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -3693,46 +3706,46 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # GOF TEXT OUTPUT - ERLANG (for Default fit type)
   # =========================================================
-  
+
   output$gof_output_erlang <- renderPrint({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     if (res$fit_type != "Default") {
       return(NULL)
     }
-    
+
     cat("==============================================\n")
     cat("       GOODNESS OF FIT RESULTS (ERLANG)       \n")
     cat("==============================================\n\n")
-    
+
     cat("--- Fitted Model Parameters ---\n")
     cat(sprintf("  K*      : %d\n", res$erlang$k_star))
     cat(sprintf("  Lambda* : %.6f\n", res$erlang$lambda_star))
     cat("\n")
-    
+
     cat("--- GOF Test Settings ---\n")
     cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
     cat(sprintf("  Alpha          : %.4f\n", res$alpha))
     cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
     cat("\n")
-    
+
     cat("--- GOF Test Results ---\n")
     cat(sprintf("  Observed Statistic : %.6f\n", res$erlang$metric_star))
     cat(sprintf("  P-value            : %.6f\n", res$erlang$p_value))
     cat(sprintf("  Q-value            : %d\n", res$erlang$q_value))
     cat("\n")
-    
+
     cat("--- Decision ---\n")
     if (res$erlang$q_value == 1) {
       cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
@@ -3742,47 +3755,47 @@ server <- function(input, output, session) {
       cat("  Interpretation: Data is NOT consistent with the Erlang model.\n")
     }
     cat("\n")
-    
+
     cat("==============================================\n")
   })
-  
-  
+
+
   # =========================================================
   # GOF TEXT OUTPUT - ERLANG-EXP (for Default fit type)
   # =========================================================
-  
+
   output$gof_output_erlang_exp <- renderPrint({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     if (res$fit_type != "Default") {
       return(NULL)
     }
-    
+
     cat("==============================================\n")
     cat("     GOODNESS OF FIT RESULTS (ERLANG-EXP)     \n")
     cat("==============================================\n\n")
-    
+
     cat("--- Fitted Model Parameters ---\n")
     cat(sprintf("  K*             : %d\n", res$erlang_exp$k_star))
     cat(sprintf("  Erlang Lambda* : %.6f\n", res$erlang_exp$erlang_lambda_star))
     cat(sprintf("  Exp Lambda*    : %.6f\n", res$erlang_exp$exp_lambda_star))
     cat("\n")
-    
+
     cat("--- GOF Test Settings ---\n")
     cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
     cat(sprintf("  Alpha          : %.4f\n", res$alpha))
     cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
     cat("\n")
-    
+
     cat("--- GOF Test Results ---\n")
     cat(sprintf("  Observed Statistic : %.6f\n", res$erlang_exp$metric_star))
     cat(sprintf("  P-value            : %.6f\n", res$erlang_exp$p_value))
     cat(sprintf("  Q-value            : %d\n", res$erlang_exp$q_value))
     cat("\n")
-    
+
     cat("--- Decision ---\n")
     if (res$erlang_exp$q_value == 1) {
       cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
@@ -3792,52 +3805,52 @@ server <- function(input, output, session) {
       cat("  Interpretation: Data is NOT consistent with the Erlang-Exp model.\n")
     }
     cat("\n")
-    
+
     cat("==============================================\n")
   })
-  
-  
+
+
   # =========================================================
   # GOF CDF COMPARISON PLOT (for single model)
   # =========================================================
-  
+
   output$gof_cdf_plot <- renderPlot({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     # Skip if Default fit type (handled by combined plot)
     if (res$fit_type == "Default") {
       return(NULL)
     }
-    
+
     empiricaldata <- res$empiricaldata
-    
+
     # Compute empirical CDF
     ecdf_data <- ecdf(empiricaldata)
     x_vals <- sort(empiricaldata)
     ecdf_vals <- ecdf_data(x_vals)
-    
+
     # =====================================================
     # ERLANG CDF
     # =====================================================
     if (res$fit_type == "Erlang") {
-      
+
       # Compute theoretical Erlang CDF
       theoretical_cdf <- pgamma(
         x_vals,
         shape = res$k_star,
         scale = res$lambda_star
       )
-      
+
       # Create label for legend
       fit_label <- sprintf(
         "Erlang CDF: K=%d, λ=%.3f",
         res$k_star,
         res$lambda_star
       )
-      
+
       # Build data frame for plotting
       df_cdf <- data.frame(
         x = rep(x_vals, 2),
@@ -3850,7 +3863,7 @@ server <- function(input, output, session) {
           levels = c("Empirical CDF", fit_label)
         )
       )
-      
+
       # Create plot
       p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type)) +
         geom_step(
@@ -3881,12 +3894,12 @@ server <- function(input, output, session) {
           plot.title = element_text(hjust = 0.5, face = "bold")
         )
     }
-    
+
     # =====================================================
     # ERLANG-EXP CDF
     # =====================================================
     if (res$fit_type == "Erlang-Exp") {
-      
+
       # Compute theoretical Erlang-Exp CDF using custom function
       params <- c(res$k_star, res$erlang_lambda_star, res$exp_lambda_star)
       theoretical_cdf <- GenErlangFit:::ErlangExpCDF_Func(
@@ -3894,7 +3907,7 @@ server <- function(input, output, session) {
         x_vals,
         interval = 0.01
       )
-      
+
       # Create label for legend
       fit_label <- sprintf(
         "Erlang-Exp CDF: K=%d, λE=%.3f, λX=%.3f",
@@ -3902,7 +3915,7 @@ server <- function(input, output, session) {
         res$erlang_lambda_star,
         res$exp_lambda_star
       )
-      
+
       # Build data frame for plotting
       df_cdf <- data.frame(
         x = rep(x_vals, 2),
@@ -3915,7 +3928,7 @@ server <- function(input, output, session) {
           levels = c("Empirical CDF", fit_label)
         )
       )
-      
+
       # Create plot
       p <- ggplot(df_cdf, aes(x = x, y = cdf, color = Type)) +
         geom_step(
@@ -3946,26 +3959,26 @@ server <- function(input, output, session) {
           plot.title = element_text(hjust = 0.5, face = "bold")
         )
     }
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # GOF BOOTSTRAP HISTOGRAM PLOT (for single model)
   # =========================================================
-  
+
   output$gof_bootstrap_plot <- renderPlot({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     # Skip if Default fit type (handled by separate plots)
     if (res$fit_type == "Default") {
       return(NULL)
     }
-    
+
     # Get test statistic name for labels
     stat_name <- switch(
       toupper(res$pvaloption),
@@ -3974,18 +3987,18 @@ server <- function(input, output, session) {
       "CVM" = "Cramér-von Mises",
       res$pvaloption
     )
-    
+
     # Create data frame for histogram
     df_bootstrap <- data.frame(
       Statistic = res$sample_stats
     )
-    
+
     # Calculate appropriate bin width
     bin_width <- diff(range(res$sample_stats)) / 30
-    
+
     # Determine color based on fit type
     hist_fill <- if (res$fit_type == "Erlang") "#F8766D" else "#619CFF"
-    
+
     # Create plot
     p <- ggplot(df_bootstrap, aes(x = Statistic)) +
       geom_histogram(
@@ -4036,52 +4049,52 @@ server <- function(input, output, session) {
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, color = "gray40")
       )
-    
+
     p
   })
-  
-  
+
+
   # =========================================================
   # GOF TEXT OUTPUT (for single model)
   # =========================================================
-  
+
   output$gof_output <- renderPrint({
-    
+
     req(gof_results())
-    
+
     res <- gof_results()
-    
+
     # Skip if Default fit type (handled by separate outputs)
     if (res$fit_type == "Default") {
       return(NULL)
     }
-    
+
     # =====================================================
     # ERLANG OUTPUT
     # =====================================================
     if (res$fit_type == "Erlang") {
-      
+
       cat("==============================================\n")
       cat("       GOODNESS OF FIT RESULTS (ERLANG)       \n")
       cat("==============================================\n\n")
-      
+
       cat("--- Fitted Model Parameters ---\n")
       cat(sprintf("  K*      : %d\n", res$k_star))
       cat(sprintf("  Lambda* : %.6f\n", res$lambda_star))
       cat("\n")
-      
+
       cat("--- GOF Test Settings ---\n")
       cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
       cat(sprintf("  Alpha          : %.4f\n", res$alpha))
       cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
       cat("\n")
-      
+
       cat("--- GOF Test Results ---\n")
       cat(sprintf("  Observed Statistic : %.6f\n", res$metric_star))
       cat(sprintf("  P-value            : %.6f\n", res$p_value))
       cat(sprintf("  Q-value            : %d\n", res$q_value))
       cat("\n")
-      
+
       cat("--- Decision ---\n")
       if (res$q_value == 1) {
         cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
@@ -4091,7 +4104,7 @@ server <- function(input, output, session) {
         cat("  Interpretation: Data is NOT consistent with the Erlang model.\n")
       }
       cat("\n")
-      
+
       cat("--- Bootstrap Sample Statistics Summary ---\n")
       cat(sprintf("  Min    : %.6f\n", min(res$sample_stats)))
       cat(sprintf("  Q1     : %.6f\n", quantile(res$sample_stats, 0.25)))
@@ -4099,37 +4112,37 @@ server <- function(input, output, session) {
       cat(sprintf("  Q3     : %.6f\n", quantile(res$sample_stats, 0.75)))
       cat(sprintf("  Max    : %.6f\n", max(res$sample_stats)))
       cat("\n")
-      
+
       cat("==============================================\n")
     }
-    
+
     # =====================================================
     # ERLANG-EXP OUTPUT
     # =====================================================
     if (res$fit_type == "Erlang-Exp") {
-      
+
       cat("==============================================\n")
       cat("     GOODNESS OF FIT RESULTS (ERLANG-EXP)     \n")
       cat("==============================================\n\n")
-      
+
       cat("--- Fitted Model Parameters ---\n")
       cat(sprintf("  K*             : %d\n", res$k_star))
       cat(sprintf("  Erlang Lambda* : %.6f\n", res$erlang_lambda_star))
       cat(sprintf("  Exp Lambda*    : %.6f\n", res$exp_lambda_star))
       cat("\n")
-      
+
       cat("--- GOF Test Settings ---\n")
       cat(sprintf("  Test Statistic : %s\n", res$pvaloption))
       cat(sprintf("  Alpha          : %.4f\n", res$alpha))
       cat(sprintf("  Bootstraps     : %d\n", res$n_bootstraps))
       cat("\n")
-      
+
       cat("--- GOF Test Results ---\n")
       cat(sprintf("  Observed Statistic : %.6f\n", res$metric_star))
       cat(sprintf("  P-value            : %.6f\n", res$p_value))
       cat(sprintf("  Q-value            : %d\n", res$q_value))
       cat("\n")
-      
+
       cat("--- Decision ---\n")
       if (res$q_value == 1) {
         cat(sprintf("  FAIL TO REJECT null hypothesis at alpha = %.4f\n", res$alpha))
@@ -4139,7 +4152,7 @@ server <- function(input, output, session) {
         cat("  Interpretation: Data is NOT consistent with the Erlang-Exp model.\n")
       }
       cat("\n")
-      
+
       cat("--- Bootstrap Sample Statistics Summary ---\n")
       cat(sprintf("  Min    : %.6f\n", min(res$sample_stats)))
       cat(sprintf("  Q1     : %.6f\n", quantile(res$sample_stats, 0.25)))
@@ -4147,27 +4160,30 @@ server <- function(input, output, session) {
       cat(sprintf("  Q3     : %.6f\n", quantile(res$sample_stats, 0.75)))
       cat(sprintf("  Max    : %.6f\n", max(res$sample_stats)))
       cat("\n")
-      
+
       cat("==============================================\n")
     }
   })
-  
-  
+
+
   # =========================================================
   # DATA HISTOGRAM
   # =========================================================
-  
+
   output$data_histogram <- renderPlot({
-    
+
     req(data())
-    
+
     empiricaldata <- data()[[1]]
-    
-    
+
+
     bin_width <- 2 * IQR(empiricaldata) /
       (length(empiricaldata)^(1/3))
-    
-    
+
+    if (bin_width < .Machine$double.eps || !is.finite(bin_width)) {
+      bin_width <- 1  # Default fallback bin width
+    }
+
     ggplot(
       data.frame(Value = empiricaldata),
       aes(x = Value)
@@ -4184,23 +4200,26 @@ server <- function(input, output, session) {
       ) +
       theme_minimal(base_size = 15)
   })
-  
-  
+
+
   # =========================================================
   # FIT PLOT
   # =========================================================
-  
+
   output$fit_plot <- renderPlot({
-    
+
     req(data())
-    
+
     empiricaldata <- data()[[1]]
-    
-    
+
+
     bin_width <- 2 * IQR(empiricaldata) /
       (length(empiricaldata)^(1/3))
-    
-    
+
+    if (bin_width < .Machine$double.eps || !is.finite(bin_width)) {
+      bin_width <- 1  # Default fallback bin width
+    }
+
     p <- ggplot(
       data.frame(Value = empiricaldata),
       aes(x = Value)
@@ -4217,51 +4236,51 @@ server <- function(input, output, session) {
         y = "Density"
       ) +
       theme_minimal(base_size = 15)
-    
-    
+
+
     if (input$run_fit > 0) {
-      
+
       req(fit_results())
-      
-      
+
+
       x_grid <- seq(
         0,
         1.2 * max(empiricaldata),
         length.out = 1000
       )
-      
-      
+
+
       # ===================================================
       # DEFAULT FIT
       # ===================================================
       if (input$fit_type == "Default") {
-        
+
         # Erlang Results
         K_erlang <- fit_results()$Erlang_Results$Best$K_star
-        
+
         lambda_erlang <- fit_results()$Erlang_Results$Best$Lambda_star
-        
-        
+
+
         erlang_density <- dgamma(
           x_grid,
           shape = K_erlang,
           scale = lambda_erlang
         )
-        
-        
+
+
         erlang_df <- data.frame(
           x = x_grid,
           density = erlang_density
         )
-        
+
         # Erlang-Exp Results
         K_ErExp <- fit_results()$ErlangExp_Results$Best$K_star
-        
+
         erlang_lambda_ErExp <- fit_results()$ErlangExp_Results$Best$ErlangLambda_star
-        
+
         exp_lambda_ErExp <- fit_results()$ErlangExp_Results$Best$ExpLambda_star
-        
-        
+
+
         density_exp <-
           GenErlangFit:::ErlangExp_Func(
             x_grid,
@@ -4269,7 +4288,7 @@ server <- function(input, output, session) {
             Erlam = erlang_lambda_ErExp,
             Explam = exp_lambda_ErExp
           )$Probability
-        
+
         df_exp <- data.frame(
           x = x_grid,
           density = density_exp,
@@ -4282,23 +4301,23 @@ server <- function(input, output, session) {
             round(exp_lambda_ErExp, 3)
           )
         )
-        
-        
-        
+
+
+
         p <- p +
-          
+
           geom_line(
             data = erlang_df,
             aes(x = x, y = density, color = "Erlang"),
             linewidth = 1.5
           ) +
-          
+
           geom_line(
             data = df_exp,
             aes(x = x, y = density, color = "Erlang-Exp"),
             linewidth = 1.5
           ) +
-          
+
           scale_color_manual(
             values = c(
               "Erlang" = "red",
@@ -4307,60 +4326,60 @@ server <- function(input, output, session) {
             name = "Fit Type"
           )
       }
-      
-      
-      
+
+
+
       # ===================================================
       # ERLANG FIT
       # ===================================================
       if (input$fit_type == "Erlang") {
-        
+
         K_fit <- fit_results()$Best$K_star
-        
+
         lambda_fit <- fit_results()$Best$Lambda_star
-        
-        
+
+
         fitted_density <- dgamma(
           x_grid,
           shape = K_fit,
           scale = lambda_fit
         )
-        
-        
+
+
         fit_df <- data.frame(
           x = x_grid,
           density = fitted_density
         )
-        
-        
+
+
         p <- p +
           geom_line(
             data = fit_df,
             aes(x = x, y = density, color = "Erlang"),
             linewidth = 1.5
           )
-        
-        
+
+
         if (isTRUE(input$find_smallest_erlang)) {
-          
+
           K_small <- fit_results()$Smallest$K_star
-          
+
           lambda_small <- fit_results()$Smallest$Lambda_star
-          
-          
+
+
           smallest_density <- dgamma(
             x_grid,
             shape = K_small,
             scale = lambda_small
           )
-          
-          
+
+
           smallest_df <- data.frame(
             x = x_grid,
             density = smallest_density
           )
-          
-          
+
+
           p <- p +
             geom_line(
               data = smallest_df,
@@ -4368,8 +4387,8 @@ server <- function(input, output, session) {
               linewidth = 1.5
             )
         }
-        
-        
+
+
         p <- p +
           scale_color_manual(
             values = c(
@@ -4379,21 +4398,21 @@ server <- function(input, output, session) {
             name = "Fit Type"
           )
       }
-      
-      
-      
+
+
+
       # ===================================================
       # ERLANG-EXP FIT
       # ===================================================
       if (input$fit_type == "Erlang-Exp") {
-        
+
         K_ErExp <- fit_results()$Best$K_star
-        
+
         erlang_lambda_ErExp <- fit_results()$Best$ErlangLambda_star
-        
+
         exp_lambda_ErExp <- fit_results()$Best$ExpLambda_star
-        
-        
+
+
         density_exp <-
           GenErlangFit:::ErlangExp_Func(
             x_grid,
@@ -4401,7 +4420,7 @@ server <- function(input, output, session) {
             Erlam = erlang_lambda_ErExp,
             Explam = exp_lambda_ErExp
           )$Probability
-        
+
         df_exp <- data.frame(
           x = x_grid,
           density = density_exp,
@@ -4414,25 +4433,25 @@ server <- function(input, output, session) {
             round(exp_lambda_ErExp, 3)
           )
         )
-        
-        
+
+
         p <- p +
           geom_line(
             data = df_exp,
             aes(x = x, y = density, color = "Erlang-Exp"),
             linewidth = 1.5
           )
-        
-        
+
+
         if (isTRUE(input$find_smallest_erlang_exp)) {
-          
+
           K_small <- fit_results()$Smallest$K_star
-          
+
           erlang_lambda_small <- fit_results()$Smallest$ErlangLambda_star
-          
+
           exp_lambda_small <- fit_results()$Smallest$ExpLambda_star
-          
-          
+
+
           density_small <-
             GenErlangFit:::ErlangExp_Func(
               x_grid,
@@ -4440,13 +4459,13 @@ server <- function(input, output, session) {
               Erlam = erlang_lambda_small,
               Explam = exp_lambda_small
             )$Probability
-          
+
           smallest_df <- data.frame(
             x = x_grid,
             density = density_small
           )
-          
-          
+
+
           p <- p +
             geom_line(
               data = smallest_df,
@@ -4454,8 +4473,8 @@ server <- function(input, output, session) {
               linewidth = 1.5
             )
         }
-        
-        
+
+
         p <- p +
           scale_color_manual(
             values = c(
@@ -4466,11 +4485,11 @@ server <- function(input, output, session) {
           )
       }
     }
-    
-    
+
+
     p
   })
-  
+
 }
 
 
