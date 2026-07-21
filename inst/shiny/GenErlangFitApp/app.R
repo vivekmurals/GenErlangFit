@@ -816,7 +816,30 @@ server <- function(input, output, session) {
 
     req(fit_results())
 
-    fit_results()$ResultsTable
+    # Get the results table
+    fit_table_df <- fit_results()$ResultsTable
+
+    # Round numeric columns to 4 decimal places
+    numeric_cols <- sapply(fit_table_df, is.numeric)
+    fit_table_df[numeric_cols] <- lapply(fit_table_df[numeric_cols], function(x) round(x, 4))
+
+    # Rename columns based on what's present
+    current_names <- colnames(fit_table_df)
+    new_names <- current_names
+
+    new_names[current_names == "ErlangLambda"] <- "Erlang λ"
+    new_names[current_names == "ExpLambda"] <- "Exp λ"
+    new_names[current_names == "Lambda"] <- "Erlang λ"
+    new_names[current_names == "LogLikelihood"] <- "Neg LogLikelihood"
+
+    colnames(fit_table_df) <- new_names
+
+    # Replace 0 with NA in Exp λ column (shows as blank)
+    if ("Exp λ" %in% colnames(fit_table_df)) {
+      fit_table_df[["Exp λ"]][fit_table_df[["Exp λ"]] == 0] <- NA
+    }
+
+    fit_table_df
   },
   options = list(
     pageLength = 5,
@@ -948,10 +971,10 @@ server <- function(input, output, session) {
           strong("Current Fit: Default (Both Models)"),
           br(), br(),
           tags$span(style = "color: red;", strong("Erlang:")),
-          sprintf(" K* = %d, λ* = %.4f", k_erlang, lambda_erlang),
+          sprintf(" K* = %d, λ Erlang* = %.4f", k_erlang, lambda_erlang),
           br(),
           tags$span(style = "color: blue;", strong("Erlang-Exp:")),
-          sprintf(" K* = %d, λE* = %.4f, λX* = %.4f", k_erlang_exp, erlang_lambda_exp, exp_lambda_exp)
+          sprintf(" K* = %d, λ Erlang* = %.4f, λ Exp* = %.4f", k_erlang_exp, erlang_lambda_exp, exp_lambda_exp)
         )
       )
     }
@@ -998,7 +1021,7 @@ server <- function(input, output, session) {
       gof_erlang <- GenErlangFit:::Erlang_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
         k_star = k_erlang,
-        lambda_star = lambda_erlang,
+        lambda_star = 1/lambda_erlang,
         s = length(empiricaldata),
         n = n_bootstraps,
         alpha = alpha,
@@ -1072,7 +1095,7 @@ server <- function(input, output, session) {
       gof_res <- GenErlangFit:::Erlang_Fit_v2_Pvalue(
         empiricaldata = empiricaldata,
         k_star = k_star,
-        lambda_star = lambda_star,
+        lambda_star = 1/lambda_star,
         s = length(empiricaldata),
         n = n_bootstraps,
         alpha = alpha,
@@ -1178,7 +1201,7 @@ server <- function(input, output, session) {
       if (is.null(k) || is.null(lambda) || is.na(k) || is.na(lambda)) return(NA_real_)
       if (k <= 0 || lambda <= 0) return(NA_real_)
       tryCatch({
-        sum(dgamma(data, shape = k, scale = lambda, log = TRUE))
+        sum(dgamma(data, shape = k, scale = 1/lambda, log = TRUE))
       }, error = function(e) NA_real_)
     }
 
@@ -1207,7 +1230,7 @@ server <- function(input, output, session) {
         K = res$erlang$k_star,
         `Erlang λ` = round(res$erlang$lambda_star, 4),
         `Exp λ` = NA,
-        LogLikelihood = if (!is.na(erl_loglik)) round(erl_loglik, 2) else NA_real_,
+        `Neg LogLikelihood` = if (!is.na(erl_loglik)) round(erl_loglik, 2) else NA_real_,
         `p-value` = round(res$erlang$p_value, 4),
         Result = ifelse(res$erlang$p_value >= res$alpha, "PASS", "FAIL"),
         stringsAsFactors = FALSE,
@@ -1226,7 +1249,7 @@ server <- function(input, output, session) {
         K = res$erlang_exp$k_star,
         `Erlang λ` = round(res$erlang_exp$erlang_lambda_star, 4),
         `Exp λ` = round(res$erlang_exp$exp_lambda_star, 4),
-        LogLikelihood = if (!is.na(erlexp_loglik)) round(erlexp_loglik, 2) else NA_real_,
+        `Neg LogLikelihood` = if (!is.na(erlexp_loglik)) round(erlexp_loglik, 2) else NA_real_,
         `p-value` = round(res$erlang_exp$p_value, 4),
         Result = ifelse(res$erlang_exp$p_value >= res$alpha, "PASS", "FAIL"),
         stringsAsFactors = FALSE,
@@ -1251,7 +1274,7 @@ server <- function(input, output, session) {
             K = smallest_k_res$erlang$smallest_k,
             `Erlang λ` = round(smallest_k_res$erlang$smallest_lambda, 4),
             `Exp λ` = NA,
-            LogLikelihood = if (!is.na(sk_erl_loglik)) round(sk_erl_loglik, 2) else NA_real_,
+            `Neg LogLikelihood` = if (!is.na(sk_erl_loglik)) round(sk_erl_loglik, 2) else NA_real_,
             `p-value` = round(smallest_k_res$erlang$smallest_p_value, 4),
             Result = ifelse(smallest_k_res$erlang$smallest_q_value == 1, "PASS", "FAIL"),
             stringsAsFactors = FALSE,
@@ -1272,7 +1295,7 @@ server <- function(input, output, session) {
             K = smallest_k_res$erlang_exp$smallest_k,
             `Erlang λ` = round(smallest_k_res$erlang_exp$smallest_erlang_lambda, 4),
             `Exp λ` = round(smallest_k_res$erlang_exp$smallest_exp_lambda, 4),
-            LogLikelihood = if (!is.na(sk_erlexp_loglik)) round(sk_erlexp_loglik, 2) else NA_real_,
+            `Neg LogLikelihood` = if (!is.na(sk_erlexp_loglik)) round(sk_erlexp_loglik, 2) else NA_real_,
             `p-value` = round(smallest_k_res$erlang_exp$smallest_p_value, 4),
             Result = ifelse(smallest_k_res$erlang_exp$smallest_q_value == 1, "PASS", "FAIL"),
             stringsAsFactors = FALSE,
@@ -1293,7 +1316,7 @@ server <- function(input, output, session) {
           K = res$k_star,
           `Erlang λ` = round(res$lambda_star, 4),
           `Exp λ` = NA,
-          LogLikelihood = if (!is.na(erl_loglik)) round(erl_loglik, 2) else NA_real_,
+          `Neg LogLikelihood` = if (!is.na(erl_loglik)) round(erl_loglik, 2) else NA_real_,
           `p-value` = round(res$p_value, 4),
           Result = ifelse(res$p_value >= res$alpha, "PASS", "FAIL"),
           stringsAsFactors = FALSE,
@@ -1311,7 +1334,7 @@ server <- function(input, output, session) {
           K = res$k_star,
           `Erlang λ` = round(res$erlang_lambda_star, 4),
           `Exp λ` = round(res$exp_lambda_star, 4),
-          LogLikelihood = if (!is.na(erlexp_loglik)) round(erlexp_loglik, 2) else NA_real_,
+          `Neg LogLikelihood` = if (!is.na(erlexp_loglik)) round(erlexp_loglik, 2) else NA_real_,
           `p-value` = round(res$p_value, 4),
           Result = ifelse(res$p_value >= res$alpha, "PASS", "FAIL"),
           stringsAsFactors = FALSE,
@@ -1334,7 +1357,7 @@ server <- function(input, output, session) {
             K = smallest_k_single$smallest_k,
             `Erlang λ` = round(smallest_k_single$smallest_lambda, 4),
             `Exp λ` = NA,
-            LogLikelihood = if (!is.na(sk_erl_loglik)) round(sk_erl_loglik, 2) else NA_real_,
+            `Neg LogLikelihood` = if (!is.na(sk_erl_loglik)) round(sk_erl_loglik, 2) else NA_real_,
             `p-value` = round(smallest_k_single$smallest_p_value, 4),
             Result = ifelse(smallest_k_single$smallest_q_value == 1, "PASS", "FAIL"),
             stringsAsFactors = FALSE,
@@ -1352,7 +1375,7 @@ server <- function(input, output, session) {
             K = smallest_k_single$smallest_k,
             `Erlang λ` = round(smallest_k_single$smallest_erlang_lambda, 4),
             `Exp λ` = round(smallest_k_single$smallest_exp_lambda, 4),
-            LogLikelihood = if (!is.na(sk_erlexp_loglik)) round(sk_erlexp_loglik, 2) else NA_real_,
+            `Neg LogLikelihood` = if (!is.na(sk_erlexp_loglik)) round(sk_erlexp_loglik, 2) else NA_real_,
             `p-value` = round(smallest_k_single$smallest_p_value, 4),
             Result = ifelse(smallest_k_single$smallest_q_value == 1, "PASS", "FAIL"),
             stringsAsFactors = FALSE,
@@ -2210,14 +2233,14 @@ server <- function(input, output, session) {
     best_density <- dgamma(
       x_grid,
       shape = erlang$best_k,
-      scale = erlang$best_lambda
+      scale = 1/erlang$best_lambda
     )
 
     # Smallest K density
     smallest_density <- dgamma(
       x_grid,
       shape = erlang$smallest_k,
-      scale = erlang$smallest_lambda
+      scale = 1/erlang$smallest_lambda
     )
 
     # Create labels
@@ -2325,11 +2348,11 @@ server <- function(input, output, session) {
 
     # Create labels
     best_label <- sprintf(
-      "Best K (MLE): K=%d, λE=%.3f, λX=%.3f",
+      "Best K (MLE): K=%d, λEr=%.3f, λExp=%.3f",
       erlang_exp$best_k, erlang_exp$best_erlang_lambda, erlang_exp$best_exp_lambda
     )
     smallest_label <- sprintf(
-      "Smallest K: K=%d, λE=%.3f, λX=%.3f",
+      "Smallest K: K=%d, λEr=%.3f, λExp=%.3f",
       erlang_exp$smallest_k, erlang_exp$smallest_erlang_lambda, erlang_exp$smallest_exp_lambda
     )
 
@@ -2411,10 +2434,10 @@ server <- function(input, output, session) {
     ecdf_vals <- ecdf_data(x_vals)
 
     # Best K CDF
-    best_cdf <- pgamma(x_vals, shape = erlang$best_k, scale = erlang$best_lambda)
+    best_cdf <- pgamma(x_vals, shape = erlang$best_k, scale = 1/erlang$best_lambda)
 
     # Smallest K CDF
-    smallest_cdf <- pgamma(x_vals, shape = erlang$smallest_k, scale = erlang$smallest_lambda)
+    smallest_cdf <- pgamma(x_vals, shape = erlang$smallest_k, scale = 1/erlang$smallest_lambda)
 
     # Create labels
     best_label <- sprintf("Best K: K=%d, λ=%.3f", erlang$best_k, erlang$best_lambda)
@@ -2517,11 +2540,11 @@ server <- function(input, output, session) {
 
     # Create labels
     best_label <- sprintf(
-      "Best K: K=%d, λE=%.2f, λX=%.2f",
+      "Best K: K=%d, λEr=%.2f, λExp=%.2f",
       erlang_exp$best_k, erlang_exp$best_erlang_lambda, erlang_exp$best_exp_lambda
     )
     smallest_label <- sprintf(
-      "Smallest K: K=%d, λE=%.2f, λX=%.2f",
+      "Smallest K: K=%d, λEr=%.2f, λExp=%.2f",
       erlang_exp$smallest_k, erlang_exp$smallest_erlang_lambda, erlang_exp$smallest_exp_lambda
     )
 
@@ -2936,14 +2959,14 @@ server <- function(input, output, session) {
       best_density <- dgamma(
         x_grid,
         shape = res$best_k,
-        scale = res$best_lambda
+        scale = 1/res$best_lambda
       )
 
       # Smallest K density
       smallest_density <- dgamma(
         x_grid,
         shape = res$smallest_k,
-        scale = res$smallest_lambda
+        scale = 1/res$smallest_lambda
       )
 
       # Create labels
@@ -3008,11 +3031,11 @@ server <- function(input, output, session) {
 
       # Create labels
       best_label <- sprintf(
-        "Best K (MLE): K=%d, λE=%.3f, λX=%.3f",
+        "Best K (MLE): K=%d, λEr=%.3f, λExp=%.3f",
         res$best_k, res$best_erlang_lambda, res$best_exp_lambda
       )
       smallest_label <- sprintf(
-        "Smallest K: K=%d, λE=%.3f, λX=%.3f",
+        "Smallest K: K=%d, λEr=%.3f, λExp=%.3f",
         res$smallest_k, res$smallest_erlang_lambda, res$smallest_exp_lambda
       )
 
@@ -3079,10 +3102,10 @@ server <- function(input, output, session) {
     if (res$fit_type == "Erlang") {
 
       # Best K CDF
-      best_cdf <- pgamma(x_vals, shape = res$best_k, scale = res$best_lambda)
+      best_cdf <- pgamma(x_vals, shape = res$best_k, scale = 1/res$best_lambda)
 
       # Smallest K CDF
-      smallest_cdf <- pgamma(x_vals, shape = res$smallest_k, scale = res$smallest_lambda)
+      smallest_cdf <- pgamma(x_vals, shape = res$smallest_k, scale = 1/res$smallest_lambda)
 
       # Create labels
       best_label <- sprintf("Best K: K=%d, λ=%.3f", res$best_k, res$best_lambda)
@@ -3165,11 +3188,11 @@ server <- function(input, output, session) {
 
       # Create labels
       best_label <- sprintf(
-        "Best K: K=%d, λE=%.2f, λX=%.2f",
+        "Best K: K=%d, λEr=%.2f, λExp=%.2f",
         res$best_k, res$best_erlang_lambda, res$best_exp_lambda
       )
       smallest_label <- sprintf(
-        "Smallest K: K=%d, λE=%.2f, λX=%.2f",
+        "Smallest K: K=%d, λEr=%.2f, λExp=%.2f",
         res$smallest_k, res$smallest_erlang_lambda, res$smallest_exp_lambda
       )
 
@@ -3457,7 +3480,7 @@ server <- function(input, output, session) {
     erlang_cdf <- pgamma(
       x_vals,
       shape = res$erlang$k_star,
-      scale = res$erlang$lambda_star
+      scale = 1/res$erlang$lambda_star
     )
 
     # Compute Erlang-Exp CDF
@@ -3476,7 +3499,7 @@ server <- function(input, output, session) {
     )
 
     erlang_exp_label <- sprintf(
-      "Erlang-Exp: K=%d, λE=%.3f, λX=%.3f",
+      "Erlang-Exp: K=%d, λEr=%.3f, λExp=%.3f",
       res$erlang_exp$k_star,
       res$erlang_exp$erlang_lambda_star,
       res$erlang_exp$exp_lambda_star
@@ -3841,7 +3864,7 @@ server <- function(input, output, session) {
       theoretical_cdf <- pgamma(
         x_vals,
         shape = res$k_star,
-        scale = res$lambda_star
+        scale = 1/res$lambda_star
       )
 
       # Create label for legend
@@ -3910,7 +3933,7 @@ server <- function(input, output, session) {
 
       # Create label for legend
       fit_label <- sprintf(
-        "Erlang-Exp CDF: K=%d, λE=%.3f, λX=%.3f",
+        "Erlang-Exp CDF: K=%d, λEr=%.3f, λExp=%.3f",
         res$k_star,
         res$erlang_lambda_star,
         res$exp_lambda_star
@@ -4264,7 +4287,7 @@ server <- function(input, output, session) {
         erlang_density <- dgamma(
           x_grid,
           shape = K_erlang,
-          scale = lambda_erlang
+          scale = 1/lambda_erlang
         )
 
 
@@ -4295,9 +4318,9 @@ server <- function(input, output, session) {
           Model = paste0(
             "Erlang-Exp: K = ",
             K_ErExp,
-            ", λE = ",
+            ", λEr = ",
             round(erlang_lambda_ErExp, 3),
-            ", λX = ",
+            ", λExp = ",
             round(exp_lambda_ErExp, 3)
           )
         )
@@ -4342,7 +4365,7 @@ server <- function(input, output, session) {
         fitted_density <- dgamma(
           x_grid,
           shape = K_fit,
-          scale = lambda_fit
+          scale = 1/lambda_fit
         )
 
 
@@ -4370,7 +4393,7 @@ server <- function(input, output, session) {
           smallest_density <- dgamma(
             x_grid,
             shape = K_small,
-            scale = lambda_small
+            scale = 1/lambda_small
           )
 
 
@@ -4427,9 +4450,9 @@ server <- function(input, output, session) {
           Model = paste0(
             "Erlang-Exp: K = ",
             K_ErExp,
-            ", λE = ",
+            ", λEr = ",
             round(erlang_lambda_ErExp, 3),
-            ", λX = ",
+            ", λExp = ",
             round(exp_lambda_ErExp, 3)
           )
         )
