@@ -45,12 +45,21 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
 
       if (isTRUE(user_args$SmallestK)) {
         Erlang_Results <- Erlang_Fit_v2(empiricaldata, SmallestK = TRUE, ...)
+
+        # Convert Lambda_star from scale to rate (1/scale)
+        Erlang_Results$Best$Lambda_star <- 1 / Erlang_Results$Best$Lambda_star
+        Erlang_Results$Smallest$Lambda_star <- 1 / Erlang_Results$Smallest$Lambda_star
+
         ModelNames <- c("Erlang", "Erlang Smallest K")
         K_vals <- c(Erlang_Results$Best$K_star, Erlang_Results$Smallest$K_star)
         Lambda <- c(Erlang_Results$Best$Lambda_star, Erlang_Results$Smallest$Lambda_star)
         LogL <- c(Erlang_Results$Best$Loglikelihood, Erlang_Results$Smallest$Loglikelihood)
       } else {
         Erlang_Results <- Erlang_Fit_v2(empiricaldata, ...)
+
+        # Convert Lambda_star from scale to rate (1/scale)
+        Erlang_Results$Best$Lambda_star <- 1 / Erlang_Results$Best$Lambda_star
+
         ModelNames <- "Erlang"
         K_vals <- Erlang_Results$Best$K_star
         Lambda <- Erlang_Results$Best$Lambda_star
@@ -117,6 +126,9 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
         pvaloption = "nil"
       )
 
+      # Convert Lambda_star from scale to rate (1/scale)
+      Erlang_Results$Best$Lambda_star <- 1 / Erlang_Results$Best$Lambda_star
+
       # Quick Erlang-Exp fit using best Erlang K
       ErlangExp_K_start <- max(1, min(Erlang_Results$Best$K_star - 1, 40))
       ErlangExp_Results <- ErlangExp_Fit_v2(
@@ -124,6 +136,8 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
         ErlangExp_K_start,
         pvaloption = "nil"
       )
+
+
 
       # Store results
       GenErlang_Results <- list(
@@ -183,6 +197,11 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
 
     # Run both Erlang and Erlang–Exp fits
     Erlang_Results <- Erlang_Fit_v2(data, SmallestK = TRUE)
+
+    # Convert Lambda_star from scale to rate (1/scale)
+    Erlang_Results$Best$Lambda_star <- 1 / Erlang_Results$Best$Lambda_star
+    Erlang_Results$Smallest$Lambda_star <- 1 / Erlang_Results$Smallest$Lambda_star
+
     ErlangExp_Results <- ErlangExp_Fit_v2(
       data,
       Erlang_Results$Best$K_star - 1,
