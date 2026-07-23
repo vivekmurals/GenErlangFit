@@ -4266,6 +4266,21 @@ server <- function(input, output, session) {
 
     req(data())
 
+
+    # Prevent error when checkbox is checked but fit hasn't been re-run
+    if (input$run_fit > 0) {
+      if (isTRUE(input$find_smallest_erlang) && is.null(fit_results()$Smallest)) {
+        plot.new()
+        text(0.5, 0.5, "Click 'Run Fit' to compute Smallest K", cex = 1.5)
+        return()
+      }
+      if (isTRUE(input$find_smallest_erlang_exp) && is.null(fit_results()$Smallest)) {
+        plot.new()
+        text(0.5, 0.5, "Click 'Run Fit' to compute Smallest K", cex = 1.5)
+        return()
+      }
+    }
+
     empiricaldata <- data()[[1]]
 
 
