@@ -8,6 +8,19 @@ library(DT)
 library(GenErlangFit)
 
 
+
+# Example data: Generated from COVID-19 latent period Distribution (Xin et al.)
+# Time from exposure to detectable viral shedding, n=177
+example_data <- c(4, 3, 11, 4, 4, 7, 5, 5, 11, 6, 4, 11, 4, 4, 5, 5, 5, 10, 1, 5,
+                  10, 4, 8, 9, 6, 8, 2, 2, 12, 5, 7, 6, 3, 4, 8, 5, 4, 3, 3, 4,
+                  2, 4, 7, 9, 4, 4, 6, 5, 4, 5, 7, 3, 3, 4, 7, 3, 6, 4, 6, 8,
+                  7, 8, 6, 4, 2, 7, 7, 5, 7, 3, 4, 9, 5, 5, 2, 5, 3, 8, 6, 5,
+                  3, 4, 3, 11, 3, 8, 13, 7, 4, 11, 3, 9, 5, 7, 5, 8, 7, 5, 2, 1,
+                  6, 2, 6, 3, 6, 3, 9, 3, 2, 6, 2, 9, 5, 3, 6, 5, 6, 5, 5, 7,
+                  5, 9, 6, 2, 7, 8, 2, 6, 6, 6, 6, 4, 9, 9, 8, 8, 6, 3, 6, 11,
+                  3, 6, 6, 2, 7, 1, 11, 3, 8, 6, 5, 8, 8, 2, 6, 7, 5, 7, 4, 5,
+                  5, 8, 1, 10, 4, 6, 7, 7, 8, 4, 1, 6, 8, 2, 7, 3, 4)
+
 #------------------------
 # UI
 #------------------------
@@ -192,6 +205,12 @@ Example CSV / Manual Entry:<br>
         textOutput("manual_error"),
 
         br(), br(),
+
+        tags$hr(),
+        h5("Load Example Data"),
+        checkboxInput("load_covid", "COVID-19 latent period (synthetic, n=177)", value = FALSE),
+
+        br(),
 
         actionButton(
           "clear",
@@ -639,6 +658,20 @@ server <- function(input, output, session) {
 
     data(NULL)
 
+  })
+
+  # =========================================================
+  # LOAD EXAMPLE DATA
+  # =========================================================
+
+  observeEvent(input$load_covid, {
+    if (input$load_covid) {
+      data(data.frame(Value = example_data))
+      showNotification("Example data loaded",
+                       type = "message", duration = 3)
+    } else {
+      data(NULL)
+    }
   })
 
 
