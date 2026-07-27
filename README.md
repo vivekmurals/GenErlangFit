@@ -59,3 +59,11 @@ print(result_erlang)
 result_erlangexp <- GenErlang_Fit('ErlangExp', empiricaldata, K = 3)
 print(result_erlangexp)
 ```
+
+## Web Application
+
+A Shiny web application is also available for users who prefer an
+interactive interface:
+
+**[Launch GenErlangFit Web
+App](https://vivek-murals.shinyapps.io/GenErlangFitApp/)**
