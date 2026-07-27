@@ -3,7 +3,8 @@
 GenErlangFit is an R package and web application for fitting Erlang and
 Erlang-Exponential distributions to empirical waiting time data, helping
 modelers incorporate realistic non-exponential waiting time
-distributions in compartmental models via the Linear Chain Trick.
+distributions in compartmental models via the [Linear Chain
+Trick](https://vivekmurals.github.io/GenErlangFit/articles/LinearChainTrick.html).
 
 The web application is available at
 <https://vivek-murals.shinyapps.io/GenErlangFitApp/> for users who

@@ -80,32 +80,12 @@ body {
 
 </style>
 <div class="section level2">
-<h2 id="context-and-package-overview">Context and Package Overview<a class="anchor" aria-label="anchor" href="#context-and-package-overview"></a>
+<h2 id="getting-started">Getting Started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>The GenErlangFit package aims to identify the optimal generalized
-Erlang or Erlang–Exponential model consistent with observed
-time-to-event data.</p>
-<p>Standard compartmental models of infectious diseases often assume
-constant transition rates between states, which implies an exponential
-distribution of “waiting times” in each state. (e.g., the latent period,
-the infectious period). However, this assumption does not align with
-empirical data for many diseases. The Linear Chain Trick (LCT) offers a
-computationally tractable alternative by modeling each state as a series
-of multiple identical substates, producing Erlang-distributed waiting
-times (Gamma distribution with an integer shape parameter).</p>
-<p>Our approach combines maximum likelihood parameter estimation with
-non-parametric significance testing to prioritize the simplest model
-structures that produce waiting times consistent with observed data. To
-improve flexibility, we incorporate the Erlang-Exponential model—an
-extension of the standard Erlang distribution that adds a final
-exponential stage— allowing better approximation of empirical
-distributions with varying skewness and tail behavior.</p>
-<p>This user-friendly package enables modelers to fit empirical data and
-build parsimonious, data-driven compartmental models across diverse
-domains. A thorough walk through of the fitting algorithms and
-assumptions can be found in the <a href="TechnicalDetails.html"><strong>Technical Details vignette linked
-here</strong></a>. This vignette serves as simple tutorial on how users
-can get started with this package.</p>
+<p>This vignette serves as a simple tutorial on how users can get
+started with the GenErlangFit package. For background on the Linear
+Chain Trick and why these distributions matter, see <a href="LinearChainTrick.html">What is the Linear Chain Trick?</a>. For
+details on fitting algorithms and assumptions, see <a href="TechnicalDetails.html">Technical Details</a>.</p>
 <hr>
 </div>
 <div class="section level2">

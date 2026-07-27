@@ -1,34 +1,13 @@
 # Introduction to GenErlang Fit
 
-## Context and Package Overview
+## Getting Started
 
-The GenErlangFit package aims to identify the optimal generalized Erlang
-or Erlang–Exponential model consistent with observed time-to-event data.
-
-Standard compartmental models of infectious diseases often assume
-constant transition rates between states, which implies an exponential
-distribution of “waiting times” in each state. (e.g., the latent period,
-the infectious period). However, this assumption does not align with
-empirical data for many diseases. The Linear Chain Trick (LCT) offers a
-computationally tractable alternative by modeling each state as a series
-of multiple identical substates, producing Erlang-distributed waiting
-times (Gamma distribution with an integer shape parameter).
-
-Our approach combines maximum likelihood parameter estimation with
-non-parametric significance testing to prioritize the simplest model
-structures that produce waiting times consistent with observed data. To
-improve flexibility, we incorporate the Erlang-Exponential model—an
-extension of the standard Erlang distribution that adds a final
-exponential stage— allowing better approximation of empirical
-distributions with varying skewness and tail behavior.
-
-This user-friendly package enables modelers to fit empirical data and
-build parsimonious, data-driven compartmental models across diverse
-domains. A thorough walk through of the fitting algorithms and
-assumptions can be found in the [**Technical Details vignette linked
-here**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.md).
-This vignette serves as simple tutorial on how users can get started
-with this package.
+This vignette serves as a simple tutorial on how users can get started
+with the GenErlangFit package. For background on the Linear Chain Trick
+and why these distributions matter, see [What is the Linear Chain
+Trick?](https://vivekmurals.github.io/GenErlangFit/articles/LinearChainTrick.md).
+For details on fitting algorithms and assumptions, see [Technical
+Details](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.md).
 
 ------------------------------------------------------------------------
 

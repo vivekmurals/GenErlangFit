@@ -73,80 +73,88 @@
 <div class="section level2">
 <h2 id="the-problem-with-exponential-waiting-times">The Problem with Exponential Waiting Times<a class="anchor" aria-label="anchor" href="#the-problem-with-exponential-waiting-times"></a>
 </h2>
-<p>In compartmental epidemic models, the time an individual spends in a
-given state (the <strong>waiting time</strong>) is often assumed to be
-exponentially distributed for mathematical convenience. However, this
-implies that many individuals have extremely short waiting times while
-others have extremely long durations, with relatively few near the mean.
-This is often inconsistent with empirical data for many diseases, where
-waiting times tend to cluster around a characteristic duration.</p>
+<p>Compartmental models are widely used in epidemiology to describe how
+individuals move through disease states—such as Susceptible (S), Exposed
+(E), Infectious (I), and Recovered (R). These models are typically
+formulated as systems of ordinary differential equations (ODEs) with
+constant transition rates between compartments.</p>
+<p>Despite their widespread use, a fundamental limitation of these
+models is the assumption of constant transition rates between
+compartments, which <strong>implicitly imposes exponentially distributed
+waiting times</strong> within each state. The exponential distribution
+has a unique “memoryless” property: the probability of leaving a
+compartment is the same whether an individual just arrived or has been
+there for a long time. This results in a distribution where many
+individuals have very short waiting times, others have extremely long
+durations, and relatively few are near the mean.</p>
+<p>For many biological processes, this is unrealistic. Incubation
+periods, infectious durations, and recovery times often cluster around a
+characteristic value rather than exhibiting the high variance of an
+exponential distribution.</p>
 </div>
 <div class="section level2">
 <h2 id="the-linear-chain-trick">The Linear Chain Trick<a class="anchor" aria-label="anchor" href="#the-linear-chain-trick"></a>
 </h2>
 <p>The <strong>Linear Chain Trick (LCT)</strong> is a technique for
 constructing compartmental ODE models with more realistic waiting time
-distributions. It exploits the fact that an Erlang(K, λ_Er) distributed
-waiting time is mathematically equivalent to the sum of K independent
-exponential waiting times, each with rate λ_Er.</p>
-<p>This allows a single compartment to be partitioned into <strong>K
-sub-compartments</strong>, where each sub-compartment has exponentially
-distributed waiting times—resulting in linear ODEs that remain
-straightforward to solve. As K increases, the distribution becomes more
-peaked around the mean, better capturing the characteristic duration
-observed in real disease processes.</p>
+distributions while preserving the linear ODE structure. It exploits the
+fact that an Erlang(K, λ<sub>Er</sub>) distributed waiting time is
+mathematically equivalent to the sum of K independent exponential
+waiting times, each with rate λ<sub>Er</sub>.</p>
+<p>This allows a single compartment to be partitioned into K
+sub-compartments, where each sub-compartment retains exponentially
+distributed waiting times, keeping the ODEs linear and straightforward
+to solve. With only two parameters (i.e., the number of sub-compartments
+(K) and the transition rate (λ<sub>Er</sub>)), Erlang distributions can
+approximate a wide range of shapes. As K increases, the distribution
+becomes more peaked around the mean, better capturing the characteristic
+durations observed in real disease processes and enabling close fits to
+many empirical distributions.</p>
 </div>
 <div class="section level2">
 <h2 id="visual-comparison">Visual Comparison<a class="anchor" aria-label="anchor" href="#visual-comparison"></a>
 </h2>
-<p>The figure below illustrates how different waiting time distributions
-arise from different compartmental structures:</p>
+<p>The figure below illustrates how the Linear Chain Trick can be
+incorporated into compartmental models. Using the canonical SEIR model
+from epidemiology as an example, we compare the standard constant-rate
+formulation with two alternatives that incorporate non-exponential
+waiting time distributions in E (the latent period):</p>
 <div class="float">
-<img src="figures/lct_diagram_v2.png" style="width:100.0%" alt="Comparison of waiting time distributions in the exposed compartment (E) of an SEIR model. Left: compartment structure. Middle: resulting waiting time distribution. Right: corresponding ODEs describing transitions out of E."><div class="figcaption">Comparison of waiting time distributions in the
-exposed compartment (E) of an SEIR model. Left: compartment structure.
-Middle: resulting waiting time distribution. Right: corresponding ODEs
-describing transitions out of E.</div>
+<img src="figures/lct_diagram.png" style="width:100.0%" alt="Figure 1: Waiting time distributions in compartmental models (S → E → I → R). Top: Exponential with rate λ. Middle: Erlang with K sub-compartments and rate λEr. Bottom: Erlang-Exponential with K sub-compartments at rate λEr plus one additional compartment at rate λExp."><div class="figcaption"><em>Figure 1: Waiting time distributions in
+compartmental models (S → E → I → R). Top: Exponential with rate λ.
+Middle: Erlang with K sub-compartments and rate λ<sub>Er</sub>. Bottom:
+Erlang-Exponential with K sub-compartments at rate λ<sub>Er</sub> plus
+one additional compartment at rate λ<sub>Exp</sub>.</em></div>
 </div>
-<p><strong>Top row (Exponential):</strong> A single compartment produces
-an exponential distribution—many short waiting times, few long ones.</p>
-<p><strong>Middle row (Erlang):</strong> Partitioning into K
-sub-compartments produces an Erlang distribution—waiting times cluster
-around the mean.</p>
-<p><strong>Bottom row (Erlang-Exponential):</strong> Adding one final
-compartment with a different rate (λ_Exp) produces a more flexible,
-right-skewed distribution.</p>
+<p>The third row shows an Erlang-Exponential distribution, which is one
+example of extending beyond standard Erlang distributions, as discussed
+below.</p>
 </div>
 <div class="section level2">
 <h2 id="beyond-erlang-phase-type-distributions">Beyond Erlang: Phase-Type Distributions<a class="anchor" aria-label="anchor" href="#beyond-erlang-phase-type-distributions"></a>
 </h2>
-<p>The Erlang distribution is one of many <strong>phase-type
-distributions</strong> that can be implemented via the Linear Chain
-Trick, including hypoexponential, hyper-Erlang, and Coxian distributions
-(see <a href="https://doi.org/10.1007/s00285-019-01412-w" class="external-link">Hurtado &amp;
+<p>While the standard Linear Chain Trick assumes equal transition rates
+between all sub-compartments, there is no mathematical requirement for
+this restriction. Allowing different rates between compartments, or
+entirely different compartmental structures, opens up a larger family of
+<strong>phase-type distributions</strong>, including hypoexponential,
+hyper-Erlang, and Coxian distributions (see <a href="https://doi.org/10.1007/s00285-019-01412-w" class="external-link">Hurtado &amp;
 Kirosingh 2019</a> for details).</p>
-<p>This tool also supports <strong>Erlang-Exponential
+<p>This tool supports one such extension: <strong>Erlang-Exponential
 distributions</strong>, which add one additional compartment with a
-different rate (λ_Exp) after the K Erlang sub-compartments. This
-three-parameter distribution can reproduce more right-skewed empirical
-distributions compared to standard Erlang distributions, providing
-additional flexibility when fitting to real-world data.</p>
+different rate (λ<sub>Exp</sub>) after the K Erlang sub-compartments.
+This three-parameter distribution can reproduce more right-skewed
+empirical distributions compared to standard Erlang distributions,
+providing additional flexibility when fitting to real-world data.</p>
 </div>
 <div class="section level2">
-<h2 id="why-fit-these-distributions">Why Fit These Distributions?<a class="anchor" aria-label="anchor" href="#why-fit-these-distributions"></a>
+<h2 id="generlangfit-package">GenErlangFit Package<a class="anchor" aria-label="anchor" href="#generlangfit-package"></a>
 </h2>
-<p>When you have empirical waiting time data (e.g., observed incubation
-periods, infectious durations), you need to determine:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>What value of K</strong> (number of sub-compartments) best
-represents your data?</li>
-<li>
-<strong>What rate parameter(s)</strong> should you use in your ODE
-model?</li>
-</ol>
-<p><code>GenErlangFit</code> answers both questions by fitting Erlang
-and Erlang-Exponential distributions to your data and using AIC-based
-model selection to identify the optimal K.</p>
+<p>Given empirical waiting time data, <code>GenErlangFit</code> fits
+Erlang and Erlang-Exponential distributions across a range of K values
+using maximum likelihood estimation, identifying the optimal number of
+sub-compartments and corresponding rate parameter(s) for use in ODE
+models.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
