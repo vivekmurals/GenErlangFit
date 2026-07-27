@@ -1,9 +1,11 @@
 # GenErlangFit
 
-GenErlangFit is an R package for fitting Erlang and Erlang-Exponential
-models.
+GenErlangFit is an R package and web application for fitting Erlang and
+Erlang-Exponential distributions to empirical waiting time data, helping
+modelers incorporate realistic non-exponential waiting time
+distributions in compartmental models via the Linear Chain Trick.
 
-An instance of the web application is also available at
+The web application is available at
 <https://vivek-murals.shinyapps.io/GenErlangFitApp/> for users who
 prefer an interactive interface.
 
@@ -19,16 +21,18 @@ devtools::install_github("vivekmurals/GenErlangFit", build_vignettes = TRUE)
 
 ## Documentation
 
-The package documentation is available online at
-<https://vivekmurals.github.io/GenErlangFit/>.
-
-The package documentation is also available after installation. For a
-quick introduction, see the Get started page. This can also be accessed
-from an R session with:
+For detailed instructions on using the package, see the [Getting
+Started](https://vivekmurals.github.io/GenErlangFit/articles/GettingStarted.md)
+guide, which walks through the main function and its various arguments.
+This can also be accessed from an R session with:
 
 ``` R
 vignette("GettingStarted", package = "GenErlangFit")
 ```
+
+Technical details regarding the fitting algorithms and assumptions can
+be found in the
+[FAQ](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
 
 ## Data Format and Quick Start
 

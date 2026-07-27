@@ -67,22 +67,22 @@
 </div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>GenErlangFit is an R package for fitting Erlang and Erlang-Exponential models.</p>
-<p>An instance of the web application is also available at <a href="https://vivek-murals.shinyapps.io/GenErlangFitApp/" class="external-link uri">https://vivek-murals.shinyapps.io/GenErlangFitApp/</a> for users who prefer an interactive interface.</p>
+<p>GenErlangFit is an R package and web application for fitting Erlang and Erlang-Exponential distributions to empirical waiting time data, helping modelers incorporate realistic non-exponential waiting time distributions in compartmental models via the Linear Chain Trick.</p>
+<p>The web application is available at <a href="https://vivek-murals.shinyapps.io/GenErlangFitApp/" class="external-link uri">https://vivek-murals.shinyapps.io/GenErlangFitApp/</a> for users who prefer an interactive interface.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of GenErlangFit from <a href="https://github.com/vivekmurals/GenErlangFit" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> <span class="co"># If not already installed.</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"vivekmurals/GenErlangFit"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"vivekmurals/GenErlangFit"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>The package documentation is available online at <a href="https://vivekmurals.github.io/GenErlangFit/" class="uri">https://vivekmurals.github.io/GenErlangFit/</a>.</p>
-<p>The package documentation is also available after installation. For a quick introduction, see the Get started page. This can also be accessed from an R session with:</p>
+<p>For detailed instructions on using the package, see the <a href="articles/GettingStarted.html">Getting Started</a> guide, which walks through the main function and its various arguments. This can also be accessed from an R session with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">"GettingStarted"</span>, <span class="at">package =</span> <span class="st">"GenErlangFit"</span>)</span></code></pre></div>
+<p>Technical details regarding the fitting algorithms and assumptions can be found in the <a href="articles/FAQ.html">FAQ</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="data-format-and-quick-start">Data Format and Quick Start<a class="anchor" aria-label="anchor" href="#data-format-and-quick-start"></a>
