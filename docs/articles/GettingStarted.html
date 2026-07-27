@@ -39,7 +39,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/FAQ.html">FAQ</a></li>
+<li><a class="dropdown-item" href="../articles/TechnicalDetails.html">Technical Details</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -102,9 +102,9 @@ distributions with varying skewness and tail behavior.</p>
 <p>This user-friendly package enables modelers to fit empirical data and
 build parsimonious, data-driven compartmental models across diverse
 domains. A thorough walk through of the fitting algorithms and
-assumptions can be found in the <a href="FAQ.html"><strong>FAQ vignette
-linked here</strong></a>. This vignette serves as simple tutorial on how
-users can get started with this package.</p>
+assumptions can be found in the <a href="TechnicalDetails.html"><strong>Technical Details vignette linked
+here</strong></a>. This vignette serves as simple tutorial on how users
+can get started with this package.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -146,8 +146,8 @@ argument,</p>
 <p>the function will run both the Erlang and Erlang-Exp fit, run
 goodness of fit evaluations for both and in addition, search for the
 smallest statistically acceptable K for both models. More on what the
-smallest K model means can be found in <a href="FAQ.html#smallest-k"><strong>FAQ: Smallest K
-Model</strong></a>.</p>
+smallest K model means can be found in <a href="TechnicalDetails.html#smallest-k"><strong>Technical Details:
+Smallest K Model</strong></a>.</p>
 <p>Users also have the ability to choose the specific model they would
 like to fit the data to via specifying the following input
 arguments:</p>
@@ -158,7 +158,7 @@ arguments:</p>
 name must always be provided as the first argument. For the
 Erlang-Exponential model, an additional input argument K must always be
 provided since the search for the optimal K is handled differently from
-that of the Erlang. See <a href="FAQ.html#erlangexp-k"><strong>FAQ:
+that of the Erlang. See <a href="TechnicalDetails.html#erlangexp-k"><strong>Technical Details:
 Erlang-Exp Fit</strong></a>.</p>
 <p>While these default modes are designed to be comprehensive and is
 generally the best starting point for first-time users, those who prefer
@@ -243,8 +243,8 @@ both Erlang and Erlang–Exp models and include:</p>
 <li>Number of bootstrap samples (<code>NumBootStraps</code>)</li>
 </ul>
 <p>A detailed description on how the goodness of fit of a model is
-evaluated can be found here: <a href="FAQ.html#gof"><strong>FAQ:
-Goodness of Fit Evaluation</strong></a>.</p>
+evaluated can be found here: <a href="TechnicalDetails.html#gof"><strong>Technical Details: Goodness of
+Fit Evaluation</strong></a>.</p>
 <div class="section level4">
 <h4 id="overriding-choice-of-test-statistic">Overriding choice of Test Statistic<a class="anchor" aria-label="anchor" href="#overriding-choice-of-test-statistic"></a>
 </h4>
@@ -294,8 +294,8 @@ that remains statistically consistent with the observed data. Starting
 from the best-fitting K, the procedure iteratively tests decreasing
 values of K to identify the smallest value of K that still meets the
 user’s goodness-of-fit criteria (i.e., p &gt; α). A detailed description
-of this section can be found here: <a href="FAQ.html#smallest-k"><strong>FAQ: Smallest K
-Model</strong></a>.</p>
+of this section can be found here: <a href="TechnicalDetails.html#smallest-k"><strong>Technical Details:
+Smallest K Model</strong></a>.</p>
 <p>Users can enable the smallest-K search by specifying the
 <code>SmallestK</code> argument as follows:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -324,8 +324,8 @@ capture the underlying biological or process dynamics.</p>
 goodness-of-fit evaluations, and the smallest-K search to tailor the
 analysis to their specific datasets and research questions. For a deeper
 dive into the theoretical foundations, algorithmic details, and
-troubleshooting tips, please consult the <a href="FAQ.html"><strong>FAQ
-vignette linked here</strong></a>.</p>
+troubleshooting tips, please consult the <a href="TechnicalDetails.html"><strong>Technical Details vignette linked
+here</strong></a>.</p>
 <p>If you encounter any issues or have suggestions for new features,
 feel free to open an issue on the <a href="https://github.com/vivekmurals/GenErlangFit/issues" class="external-link"><strong>GitHub
 repository</strong></a>.</p>

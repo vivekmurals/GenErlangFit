@@ -18,5 +18,5 @@ navbar:
     articles:
       text: "Articles"
       menu:
-        - text: "FAQ"
-          href: articles/FAQ.html
+        - text: "Technical Details"
+          href: articles/TechnicalDetails.html

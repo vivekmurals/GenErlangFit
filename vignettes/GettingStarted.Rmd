@@ -35,7 +35,7 @@ Standard compartmental models of infectious diseases often assume constant trans
 
 Our approach combines maximum likelihood parameter estimation with non-parametric significance testing to prioritize the simplest model structures that produce waiting times consistent with observed data. To improve flexibility, we incorporate the Erlang-Exponential model—an extension of the standard Erlang distribution that adds a final exponential stage— allowing better approximation of empirical distributions with varying skewness and tail behavior. 
 
-This user-friendly package enables modelers to fit empirical data and build parsimonious, data-driven compartmental models across diverse domains. A thorough walk through of the fitting algorithms and assumptions can be found in the [**FAQ vignette linked here**](FAQ.html). This vignette serves as simple tutorial on how users can get started with this package. 
+This user-friendly package enables modelers to fit empirical data and build parsimonious, data-driven compartmental models across diverse domains. A thorough walk through of the fitting algorithms and assumptions can be found in the [**Technical Details vignette linked here**](TechnicalDetails.html). This vignette serves as simple tutorial on how users can get started with this package. 
 
 ---
 
@@ -74,7 +74,7 @@ In general, the user only needs to be familiar using one single function `GenErl
 GenErlang_Fit(empiricaldata)
 
 ```
-the function will run both the Erlang and Erlang-Exp fit, run goodness of fit evaluations for both and in addition, search for the smallest statistically acceptable K for both models. More on what the smallest K model means can be found in [**FAQ: Smallest K Model**](FAQ.html#smallest-k). 
+the function will run both the Erlang and Erlang-Exp fit, run goodness of fit evaluations for both and in addition, search for the smallest statistically acceptable K for both models. More on what the smallest K model means can be found in [**Technical Details: Smallest K Model**](TechnicalDetails.html#smallest-k). 
 
 Users also have the ability to choose the specific model they would like to fit the data to via specifying the following input arguments:
 
@@ -83,7 +83,7 @@ GenErlang_Fit('Erlang', empiricaldata)
 GenErlang_Fit('ErlangExp', empiricaldata, K)
 
 ```
-**Quick Note:** When running specific models, the model name must always be provided as the first argument. For the Erlang-Exponential model, an additional input argument K must always be provided since the search for the optimal K is handled differently from that of the Erlang. See [**FAQ: Erlang-Exp Fit**](FAQ.html#erlangexp-k).
+**Quick Note:** When running specific models, the model name must always be provided as the first argument. For the Erlang-Exponential model, an additional input argument K must always be provided since the search for the optimal K is handled differently from that of the Erlang. See [**Technical Details: Erlang-Exp Fit**](TechnicalDetails.html#erlangexp-k).
 
 While these default modes are designed to be comprehensive and is generally the best starting point for first-time users, those who prefer a quicker initial exploration may first run the Erlang model alone to get a broad sense of the empirical data’s structure.
 
@@ -132,7 +132,7 @@ GenErlang_Fit provides built-in tools for assessing how well each fitted model m
 - Significance level (`Alpha`)
 - Number of bootstrap samples (`NumBootStraps`)
 
-A detailed description on how the goodness of fit of a model is evaluated can be found here: [**FAQ: Goodness of Fit Evaluation**](FAQ.html#gof).
+A detailed description on how the goodness of fit of a model is evaluated can be found here: [**Technical Details: Goodness of Fit Evaluation**](TechnicalDetails.html#gof).
 
 ### Overriding choice of Test Statistic 
 
@@ -173,7 +173,7 @@ GenErlang_Fit('ErlangExp', empiricaldata, K, NumBootStraps = 2000)
 
 
 ## Smallest K Option
-The “Smallest-K” routines automatically search for the simplest model that remains statistically consistent with the observed data. Starting from the best-fitting K, the procedure iteratively tests decreasing values of K to identify the smallest value of K that still meets the user's goodness-of-fit criteria (i.e., p > α). A detailed description of this section can be found here: [**FAQ: Smallest K Model**](FAQ.html#smallest-k).
+The “Smallest-K” routines automatically search for the simplest model that remains statistically consistent with the observed data. Starting from the best-fitting K, the procedure iteratively tests decreasing values of K to identify the smallest value of K that still meets the user's goodness-of-fit criteria (i.e., p > α). A detailed description of this section can be found here: [**Technical Details: Smallest K Model**](TechnicalDetails.html#smallest-k).
 
 Users can enable the smallest-K search by specifying the `SmallestK` argument as follows:
 
@@ -194,7 +194,7 @@ For Erlang–Exponential models specifically, the optional `SmallestKvalue` sets
 
 The GenErlangFit package offers a flexible and user-friendly toolkit for fitting generalized Erlang and Erlang–Exponential models to empirical time-to-event data. By identifying the appropriate number of substates (shape parameters) and transition rates, the package helps users build parsimonious compartmental models that more accurately capture the underlying biological or process dynamics.
 
-We encourage users to explore the different fitting options, goodness-of-fit evaluations, and the smallest-K search to tailor the analysis to their specific datasets and research questions. For a deeper dive into the theoretical foundations, algorithmic details, and troubleshooting tips, please consult the [**FAQ vignette linked here**](FAQ.html). 
+We encourage users to explore the different fitting options, goodness-of-fit evaluations, and the smallest-K search to tailor the analysis to their specific datasets and research questions. For a deeper dive into the theoretical foundations, algorithmic details, and troubleshooting tips, please consult the [**Technical Details vignette linked here**](TechnicalDetails.html). 
 
 If you encounter any issues or have suggestions for new features, feel free to open an issue on the [**GitHub repository**](https://github.com/vivekmurals/GenErlangFit/issues).
 

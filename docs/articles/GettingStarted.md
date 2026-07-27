@@ -25,8 +25,8 @@ distributions with varying skewness and tail behavior.
 This user-friendly package enables modelers to fit empirical data and
 build parsimonious, data-driven compartmental models across diverse
 domains. A thorough walk through of the fitting algorithms and
-assumptions can be found in the [**FAQ vignette linked
-here**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
+assumptions can be found in the [**Technical Details vignette linked
+here**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.md).
 This vignette serves as simple tutorial on how users can get started
 with this package.
 
@@ -74,8 +74,8 @@ GenErlang_Fit(empiricaldata)
 the function will run both the Erlang and Erlang-Exp fit, run goodness
 of fit evaluations for both and in addition, search for the smallest
 statistically acceptable K for both models. More on what the smallest K
-model means can be found in [**FAQ: Smallest K
-Model**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#smallest-k).
+model means can be found in [**Technical Details: Smallest K
+Model**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.html#smallest-k).
 
 Users also have the ability to choose the specific model they would like
 to fit the data to via specifying the following input arguments:
@@ -89,8 +89,8 @@ GenErlang_Fit('ErlangExp', empiricaldata, K)
 be provided as the first argument. For the Erlang-Exponential model, an
 additional input argument K must always be provided since the search for
 the optimal K is handled differently from that of the Erlang. See
-[**FAQ: Erlang-Exp
-Fit**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#erlangexp-k).
+[**Technical Details: Erlang-Exp
+Fit**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.html#erlangexp-k).
 
 While these default modes are designed to be comprehensive and is
 generally the best starting point for first-time users, those who prefer
@@ -178,8 +178,8 @@ Erlang and Erlang–Exp models and include:
 - Number of bootstrap samples (`NumBootStraps`)
 
 A detailed description on how the goodness of fit of a model is
-evaluated can be found here: [**FAQ: Goodness of Fit
-Evaluation**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#gof).
+evaluated can be found here: [**Technical Details: Goodness of Fit
+Evaluation**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.html#gof).
 
 #### Overriding choice of Test Statistic
 
@@ -229,8 +229,8 @@ that remains statistically consistent with the observed data. Starting
 from the best-fitting K, the procedure iteratively tests decreasing
 values of K to identify the smallest value of K that still meets the
 user’s goodness-of-fit criteria (i.e., p \> α). A detailed description
-of this section can be found here: [**FAQ: Smallest K
-Model**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.html#smallest-k).
+of this section can be found here: [**Technical Details: Smallest K
+Model**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.html#smallest-k).
 
 Users can enable the smallest-K search by specifying the `SmallestK`
 argument as follows:
@@ -262,8 +262,9 @@ We encourage users to explore the different fitting options,
 goodness-of-fit evaluations, and the smallest-K search to tailor the
 analysis to their specific datasets and research questions. For a deeper
 dive into the theoretical foundations, algorithmic details, and
-troubleshooting tips, please consult the [**FAQ vignette linked
-here**](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
+troubleshooting tips, please consult the [**Technical Details vignette
+linked
+here**](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.md).
 
 If you encounter any issues or have suggestions for new features, feel
 free to open an issue on the [**GitHub

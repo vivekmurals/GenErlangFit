@@ -22,7 +22,7 @@ devtools::install_github("vivekmurals/GenErlangFit", build_vignettes = TRUE)
 ## Documentation
 
 For detailed instructions on using the package, see the [Getting
-Started](https://vivekmurals.github.io/GenErlangFit/articles/GettingStarted.md)
+Started](https://vivekmurals.github.io/GenErlangFit/articles/GettingStarted.html)
 guide, which walks through the main function and its various arguments.
 This can also be accessed from an R session with:
 
@@ -31,8 +31,8 @@ vignette("GettingStarted", package = "GenErlangFit")
 ```
 
 Technical details regarding the fitting algorithms and assumptions can
-be found in the
-[FAQ](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md).
+be found in [Technical
+Details](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.html).
 
 ## Data Format and Quick Start
 
@@ -74,6 +74,7 @@ print(result_erlangexp)
 
 ### All vignettes
 
-- [FAQ](https://vivekmurals.github.io/GenErlangFit/articles/FAQ.md):
 - [Introduction to GenErlang
   Fit](https://vivekmurals.github.io/GenErlangFit/articles/GettingStarted.md):
+- [Technical
+  Details](https://vivekmurals.github.io/GenErlangFit/articles/TechnicalDetails.md):

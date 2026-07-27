@@ -1,5 +1,5 @@
 ---
-title: "FAQ"
+title: "Technical Details"
 author: "Vivek Murali"
 output: 
   rmarkdown::html_vignette:
