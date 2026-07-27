@@ -88,11 +88,11 @@ ui <- navbarPage(
       h2("About GenErlangFit"),
       br(),
       p("GenErlangFit is an R package and web application for fitting Erlang and
-      Erlang-Exponential distributions to waiting time data (e.g., latent periods,
-      infectious periods). It builds on the 'Linear Chain Trick', a well-established
-      technique that allows modelers to incorporate realistic delays and dwell times
-      in ordinary differential equations (ODE) based compartmental models. Given empirical data, this tool identifies the best-fit
-      distribution and corresponding model structure. To learn more about the R package, visit the ",
+    Erlang-Exponential distributions to waiting time data (e.g., latent periods,
+    infectious periods). It builds on the 'Linear Chain Trick', a well-established
+    technique that allows modelers to incorporate realistic waiting time distributions
+    in ordinary differential equations (ODE) based compartmental models. Given empirical data, this tool identifies the best-fit
+    distribution and corresponding model structure. To learn more about the R package, visit the ",
         tags$a(href = "https://vivekmurals.github.io/GenErlangFit/", target = "_blank",
                "online documentation"),
         " or ",
@@ -101,26 +101,26 @@ ui <- navbarPage(
         "."),
       br(),
       h3("What is the Linear Chain Trick?"),
-      p("In compartmental epidemic models, the time an individual spends in a given
-      state (the dwell time) is often assumed to be exponentially distributed for
-      mathematical convenience. However, this implies that many individuals have
-      extremely short dwell times while others have extremely long durations, with
-      relatively few near the mean, which is often inconsistent with empirical data for many diseases.
-      The Linear Chain Trick is a technique for constructing compartmental ODE models
-      with more realistic dwell time distributions. It exploits the fact that an Erlang(K, λ_Er) distributed waiting
-      time is equivalent to the sum of K independent exponential waiting times,
-      each with rate λ_Er. This allows a single compartment to be partitioned into K
-      sub-compartments, where each sub-compartment has exponentially distributed
-      dwell times—resulting in linear ODEs that are straightforward to solve."),
-      p("The Erlang distribution is one of many phase-type distributions that can be
-      implemented via the Linear Chain Trick, including hypoexponential, hyper-Erlang,
-      and Coxian distributions (see ",
+      p(HTML("In compartmental epidemic models, the time an individual spends in a given
+    state is often assumed to be exponentially distributed for
+    mathematical convenience. However, this implies that many individuals have
+    very short waiting times while others have extremely long durations, with
+    relatively few near the mean, which is often inconsistent with empirical data for many diseases.
+    The Linear Chain Trick is a technique for constructing compartmental ODE models
+    with more realistic waiting time distributions. It exploits the fact that an Erlang(K, λ<sub>Er</sub>) distributed waiting
+    time is equivalent to the sum of K independent exponential waiting times,
+    each with rate λ<sub>Er</sub>. This allows a single compartment to be partitioned into K
+    sub-compartments, where each sub-compartment has exponentially distributed
+    waiting times—resulting in linear ODEs that are straightforward to solve.")),
+      p(HTML("The Erlang distribution is one of many phase-type distributions that can be
+    implemented via the Linear Chain Trick, including hypoexponential, hyper-Erlang,
+    and Coxian distributions (see "),
         tags$a(href = "https://doi.org/10.1007/s00285-019-01412-w", target = "_blank",
                "Hurtado & Kirosingh (2019)"),
-        " for details). This tool also supports Erlang-Exponential distributions, which
-      add one additional compartment with a different rate (λ_Exp) after the K Erlang
-      sub-compartments. This three-parameter distribution can reproduce more right-skewed
-      empirical distributions compared to standard Erlang distributions."),
+        HTML(" for details). This tool also supports Erlang-Exponential distributions, which
+    add one additional compartment with a different rate (λ<sub>Exp</sub>) after the K Erlang
+    sub-compartments. This three-parameter distribution can reproduce more right-skewed
+    empirical distributions compared to standard Erlang distributions.")),
       br(),
       tags$figure(
         style = "text-align: center; margin: 20px auto;",
@@ -131,14 +131,13 @@ ui <- navbarPage(
         ),
         tags$figcaption(
           style = "margin-top: 10px; font-style: italic; color: #666;",
-          "Figure 1: Waiting time distributions in compartmental models (S → E → I → R).
-         Top: Exponential with rate λ. Middle: Erlang with K sub-compartments and
-         rate λ_Er. Bottom: Erlang-Exponential with K sub-compartments at rate λ_Er
-         plus one additional compartment at rate λ_Exp."
+          HTML("Figure 1: Waiting time distributions in compartmental models (S → E → I → R).
+       Top: Exponential with rate λ. Middle: Erlang with K sub-compartments and
+       rate λ<sub>Er</sub>. Bottom: Erlang-Exponential with K sub-compartments at rate λ<sub>Er</sub>
+       plus one additional compartment at rate λ<sub>Exp</sub>.")
         )
       ),
-      br(),
-
+      br()
     )
   ),
   # =========================================================
