@@ -15,3 +15,8 @@ navbar:
     getting_started:
       text: "Getting Started"
       href: articles/GettingStarted.html
+    articles:
+      text: "Articles"
+      menu:
+        - text: "FAQ"
+          href: articles/FAQ.html
