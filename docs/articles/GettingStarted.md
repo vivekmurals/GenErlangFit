@@ -143,7 +143,7 @@ When FixedK = TRUE, the function performs a pure MLE fit for the given
 K, using any supplied initial conditions. When FixedK = FALSE, the
 function expands the search to include K ± a user-defined window
 (KwindowSize), rendering initial guess overrides less relevant because
-the optimization is repeated across multiple candidate structures.THis
+the optimization is repeated across multiple candidate structures. This
 is the default option when FixedK argument is not provided.
 
 ### Goodness of Fit Options

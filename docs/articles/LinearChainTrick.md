@@ -66,7 +66,7 @@ The third row shows an Erlang-Exponential distribution, which is one
 example of extending beyond standard Erlang distributions, as discussed
 below.
 
-## Beyond Erlang: Phase-Type Distributions
+## Erlang-Exponential Distributions
 
 While the standard Linear Chain Trick assumes equal transition rates
 between all sub-compartments, there is no mathematical requirement for

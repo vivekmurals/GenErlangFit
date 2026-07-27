@@ -41,7 +41,7 @@ mean of the observed data:
 \frac{K}{\lambda} = \mu
 ```
 
-This relationship exists at the MLE of a Gamma distribution (and by
+This relationship exists for the MLE of a Gamma distribution (and by
 extension an Erlang). Specifically, this relationship arises from the
 Gamma MLE conditions: differentiating the log-likelihood with respect to
 λ and setting that to 0 yields λ = K / μ. We leverage this relationship
@@ -56,7 +56,7 @@ computed. The pair of integer K\* and λ\* that gives the higher
 log-likelihood is selected as the MLE for the Erlang Distribution.
 
 In the special case where ⌈K⌉ = 0, the candidate K = 0 is not admissible
-in an Erlang Distribution. Therefore, K = 1 and λ = 1 / μ will be the
+in an Erlang distribution. Therefore, K = 1 and λ = 1 / μ will be the
 MLE for the distribution. This also corresponds to an exponential
 distribution with mean and variance λ.
 
@@ -216,6 +216,14 @@ overhead.
 ------------------------------------------------------------------------
 
 ## Smallest statistically acceptable K Model (Smallest K)
+
+The argument essentially identifies the Erlang or Erlang–Exponential
+distribution with the small K value that still passes the
+goodness-of-fit assessment at the chosen significance level, meaning
+that it could have reasonably generated the observed data. This
+identifies the fewest substates needed to produce a distribution
+statistically indistinguishable from the observed data, allowing users
+to reduce model complexity without sacrificing fit.
 
 ### Erlang Smallest K
 

@@ -32,7 +32,7 @@ The figure below illustrates how the Linear Chain Trick can be incorporated into
 The third row shows an Erlang-Exponential distribution, which is one example of extending beyond standard Erlang distributions, as discussed below.
 
 
-## Beyond Erlang: Phase-Type Distributions
+## Erlang-Exponential Distributions
 
 While the standard Linear Chain Trick assumes equal transition rates between all sub-compartments, there is no mathematical requirement for this restriction. Allowing different rates between compartments, or entirely different compartmental structures, opens up a larger family of **phase-type distributions**, including hypoexponential, hyper-Erlang, and Coxian distributions (see [Hurtado & Kirosingh 2019](https://doi.org/10.1007/s00285-019-01412-w) for details).
 
