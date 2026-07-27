@@ -10,6 +10,10 @@
 GenErlangFit is an R package for fitting Erlang and Erlang-Exponential
 models.
 
+An instance of the web application is also available at
+<https://vivek-murals.shinyapps.io/GenErlangFitApp/> for users who
+prefer an interactive interface.
+
 ## Installation
 
 You can install the development version of GenErlangFit from
@@ -59,11 +63,3 @@ print(result_erlang)
 result_erlangexp <- GenErlang_Fit('ErlangExp', empiricaldata, K = 3)
 print(result_erlangexp)
 ```
-
-## Web Application
-
-A Shiny web application is also available for users who prefer an
-interactive interface:
-
-**[Launch GenErlangFit Web
-App](https://vivek-murals.shinyapps.io/GenErlangFitApp/)**
