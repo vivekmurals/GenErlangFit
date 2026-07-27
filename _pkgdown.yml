@@ -18,5 +18,7 @@ navbar:
     articles:
       text: "Articles"
       menu:
+        - text: "Linear Chain Trick"
+          href: articles/LinearChainTrick.html
         - text: "Technical Details"
           href: articles/TechnicalDetails.html
