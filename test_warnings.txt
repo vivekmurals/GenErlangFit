@@ -1,0 +1,536 @@
+✔ | F W  S  OK | Context
+⠏ |          0 | goodness-of-fit                                                                                                                                          $Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessK
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 5.176307 
+MLE scale (lambda): 1.143935 
+Erlang MLE K*: 5 
+Erlang MLE Lambda*: 1.184272 
+Log-likelihood at MLE: -461.6403 
+⠋ |   1      0 | goodness-of-fit                                                                                                                                            Model K ErlangLambda LogLikelihood
+ Erlang 5    0.8444004     -461.6403
+⠙ |   1      1 | goodness-of-fit                                                                                                                                          $Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessK
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 5.176307 
+MLE scale (lambda): 1.143935 
+Erlang MLE K*: 5 
+Erlang MLE Lambda*: 1.184272 
+Log-likelihood at MLE: -461.6403 
+⠹ |   2      1 | goodness-of-fit                                                                                                                                            Model K ErlangLambda LogLikelihood
+ Erlang 5    0.8444004     -461.6403
+⠸ |   2      2 | goodness-of-fit                                                                                                                                          $Alpha
+[1] 0.05
+
+$pvaloption
+[1] "CVM"
+
+$InitialguessK
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 5.176307 
+MLE scale (lambda): 1.143935 
+Erlang MLE K*: 5 
+Erlang MLE Lambda*: 1.184272 
+Log-likelihood at MLE: -461.6403 
+⠼ |   3      2 | goodness-of-fit                                                                                                                                            Model K ErlangLambda LogLikelihood
+ Erlang 5    0.8444004     -461.6403
+⠴ |   3      3 | goodness-of-fit                                                                                                                                          $Alpha
+[1] 0.05
+
+$pvaloption
+[1] "AD"
+
+$InitialguessK
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 5.176307 
+MLE scale (lambda): 1.143935 
+Erlang MLE K*: 5 
+Erlang MLE Lambda*: 1.184272 
+Log-likelihood at MLE: -461.6403 
+⠦ |   4      3 | goodness-of-fit                                                                                                                                            Model K ErlangLambda LogLikelihood
+ Erlang 5    0.8444004     -461.6403
+⠧ |   4      4 | goodness-of-fit                                                                                                                                          Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+Sub-Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErlam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 3 
+MLE scale (Erlang lambda): 0.6755204 
+MLE scale (Exp lambda): 0.6755204 
+MLE Log-Likelihood: -464.8453 
+      Model K ErlangLambda ExpLambda LogLikelihood
+ Erlang–Exp 3    0.6755204 0.6755204     -464.8453
+⠏ |   4      6 | goodness-of-fit                                                                                                                                          Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+Sub-Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "KS"
+
+$InitialguessErlam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 3 
+MLE scale (Erlang lambda): 0.6755204 
+MLE scale (Exp lambda): 0.6755204 
+MLE Log-Likelihood: -464.8453 
+      Model K ErlangLambda ExpLambda LogLikelihood
+ Erlang–Exp 3    0.6755204 0.6755204     -464.8453
+⠋ |   4      7 | goodness-of-fit                                                                                                                                          Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "CVM"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+Sub-Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "CVM"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "CVM"
+
+$InitialguessErlam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 3 
+MLE scale (Erlang lambda): 0.6755204 
+MLE scale (Exp lambda): 0.6755204 
+MLE Log-Likelihood: -464.8453 
+      Model K ErlangLambda ExpLambda LogLikelihood
+ Erlang–Exp 3    0.6755204 0.6755204     -464.8453
+⠙ |   4      8 | goodness-of-fit                                                                                                                                          Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "AD"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+Sub-Options:
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "AD"
+
+$InitialguessErLam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$SmallestKValue
+[1] -1
+
+$ShowFigures
+[1] TRUE
+
+$FixedK
+[1] TRUE
+
+$KWindowSize
+[1] 1
+
+$NumBootstraps
+[1] 2000
+
+$Alpha
+[1] 0.05
+
+$pvaloption
+[1] "AD"
+
+$InitialguessErlam
+[1] 3
+
+$SmallestK
+[1] FALSE
+
+$ShowFigures
+[1] TRUE
+
+$NumBootstraps
+[1] 2000
+
+MLE shape (k): 3 
+MLE scale (Erlang lambda): 0.6755204 
+MLE scale (Exp lambda): 0.6755204 
+MLE Log-Likelihood: -464.8453 
+      Model K ErlangLambda ExpLambda LogLikelihood
+ Erlang–Exp 3    0.6755204 0.6755204     -464.8453
+⠹ |   4      9 | goodness-of-fit                                                                                                                                          ✔ |   4      9 | goodness-of-fit [242.2s]
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Warning ('test-goodness-of-fit.R:19:3'): [Erlang] Log-likelihood matches manual dgamma computation
+The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+Backtrace:
+     ▆
+  1. └─GenErlangFit::GenErlang_Fit("Erlang", ref_data, pvaloption = "KS") at test-goodness-of-fit.R:19:3
+  2.   └─GenErlangFit:::Erlang_Fit_v2(empiricaldata, ...) at GenErlangFit/R/MainDriver.R:58:9
+  3.     ├─base::print(P1) at GenErlangFit/R/ErlangFuncs.R:392:5
+  4.     └─ggplot2:::print.ggplot(P1)
+  5.       ├─ggplot2::ggplot_build(x)
+  6.       └─ggplot2:::ggplot_build.ggplot(x)
+  7.         └─ggplot2:::by_layer(...)
+  8.           ├─rlang::try_fetch(...)
+  9.           │ ├─base::tryCatch(...)
+ 10.           │ │ └─base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 11.           │ │   └─base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.           │ │     └─base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 13.           │ └─base::withCallingHandlers(...)
+ 14.           └─ggplot2 (local) f(l = layers[[i]], d = data[[i]])
+ 15.             └─l$compute_aesthetics(d, plot)
+ 16.               └─ggplot2 (local) compute_aesthetics(..., self = self)
+ 17.                 └─ggplot2:::is_calculated_aes(aesthetics, warn = TRUE)
+ 18.                   └─base::vapply(...)
+ 19.                     └─ggplot2 (local) FUN(X[[i]], ...)
+ 20.                       └─ggplot2:::is_calculated(quo_get_expr(x), warn = warn)
+ 21.                         └─ggplot2:::deprecate_warn0("3.4.0", what, with, id = "ggplot-warn-aes-dot-dot")
+
+Warning ('test-goodness-of-fit.R:28:3'): [Erlang] KS statistic matches base R
+The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+Backtrace:
+     ▆
+  1. └─GenErlangFit::GenErlang_Fit("Erlang", ref_data, pvaloption = "KS") at test-goodness-of-fit.R:28:3
+  2.   └─GenErlangFit:::Erlang_Fit_v2(empiricaldata, ...) at GenErlangFit/R/MainDriver.R:58:9
+  3.     ├─base::print(P1) at GenErlangFit/R/ErlangFuncs.R:392:5
+  4.     └─ggplot2:::print.ggplot(P1)
+  5.       ├─ggplot2::ggplot_build(x)
+  6.       └─ggplot2:::ggplot_build.ggplot(x)
+  7.         └─ggplot2:::by_layer(...)
+  8.           ├─rlang::try_fetch(...)
+  9.           │ ├─base::tryCatch(...)
+ 10.           │ │ └─base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 11.           │ │   └─base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.           │ │     └─base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 13.           │ └─base::withCallingHandlers(...)
+ 14.           └─ggplot2 (local) f(l = layers[[i]], d = data[[i]])
+ 15.             └─l$compute_aesthetics(d, plot)
+ 16.               └─ggplot2 (local) compute_aesthetics(..., self = self)
+ 17.                 └─ggplot2:::is_calculated_aes(aesthetics, warn = TRUE)
+ 18.                   └─base::vapply(...)
+ 19.                     └─ggplot2 (local) FUN(X[[i]], ...)
+ 20.                       └─ggplot2:::is_calculated(quo_get_expr(x), warn = warn)
+ 21.                         └─ggplot2:::deprecate_warn0("3.4.0", what, with, id = "ggplot-warn-aes-dot-dot")
+
+Warning ('test-goodness-of-fit.R:37:3'): [Erlang] CvM statistic matches goftest implementation
+The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+Backtrace:
+     ▆
+  1. └─GenErlangFit::GenErlang_Fit("Erlang", ref_data, pvaloption = "CVM") at test-goodness-of-fit.R:37:3
+  2.   └─GenErlangFit:::Erlang_Fit_v2(empiricaldata, ...) at GenErlangFit/R/MainDriver.R:58:9
+  3.     ├─base::print(P1) at GenErlangFit/R/ErlangFuncs.R:392:5
+  4.     └─ggplot2:::print.ggplot(P1)
+  5.       ├─ggplot2::ggplot_build(x)
+  6.       └─ggplot2:::ggplot_build.ggplot(x)
+  7.         └─ggplot2:::by_layer(...)
+  8.           ├─rlang::try_fetch(...)
+  9.           │ ├─base::tryCatch(...)
+ 10.           │ │ └─base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 11.           │ │   └─base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.           │ │     └─base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 13.           │ └─base::withCallingHandlers(...)
+ 14.           └─ggplot2 (local) f(l = layers[[i]], d = data[[i]])
+ 15.             └─l$compute_aesthetics(d, plot)
+ 16.               └─ggplot2 (local) compute_aesthetics(..., self = self)
+ 17.                 └─ggplot2:::is_calculated_aes(aesthetics, warn = TRUE)
+ 18.                   └─base::vapply(...)
+ 19.                     └─ggplot2 (local) FUN(X[[i]], ...)
+ 20.                       └─ggplot2:::is_calculated(quo_get_expr(x), warn = warn)
+ 21.                         └─ggplot2:::deprecate_warn0("3.4.0", what, with, id = "ggplot-warn-aes-dot-dot")
+
+Warning ('test-goodness-of-fit.R:46:3'): [Erlang] AD statistic matches goftest implementation
+The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+Backtrace:
+     ▆
+  1. └─GenErlangFit::GenErlang_Fit("Erlang", ref_data, pvaloption = "AD") at test-goodness-of-fit.R:46:3
+  2.   └─GenErlangFit:::Erlang_Fit_v2(empiricaldata, ...) at GenErlangFit/R/MainDriver.R:58:9
+  3.     ├─base::print(P1) at GenErlangFit/R/ErlangFuncs.R:392:5
+  4.     └─ggplot2:::print.ggplot(P1)
+  5.       ├─ggplot2::ggplot_build(x)
+  6.       └─ggplot2:::ggplot_build.ggplot(x)
+  7.         └─ggplot2:::by_layer(...)
+  8.           ├─rlang::try_fetch(...)
+  9.           │ ├─base::tryCatch(...)
+ 10.           │ │ └─base (local) tryCatchList(expr, classes, parentenv, handlers)
+ 11.           │ │   └─base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.           │ │     └─base (local) doTryCatch(return(expr), name, parentenv, handler)
+ 13.           │ └─base::withCallingHandlers(...)
+ 14.           └─ggplot2 (local) f(l = layers[[i]], d = data[[i]])
+ 15.             └─l$compute_aesthetics(d, plot)
+ 16.               └─ggplot2 (local) compute_aesthetics(..., self = self)
+ 17.                 └─ggplot2:::is_calculated_aes(aesthetics, warn = TRUE)
+ 18.                   └─base::vapply(...)
+ 19.                     └─ggplot2 (local) FUN(X[[i]], ...)
+ 20.                       └─ggplot2:::is_calculated(quo_get_expr(x), warn = warn)
+ 21.                         └─ggplot2:::deprecate_warn0("3.4.0", what, with, id = "ggplot-warn-aes-dot-dot")
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+══ Results ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+Duration: 242.4 s
+
+[ FAIL 0 | WARN 4 | SKIP 0 | PASS 9 ]
