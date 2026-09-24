@@ -518,24 +518,29 @@ Erlang_Fit_v2_Pvalue <- function(empiricaldata, k_star, lambda_star,
   data_vec <- empiricaldata
   pvaloption_upper <- toupper(pvaloption)
 
-  # 1. Empirical CDF
-  ecdf_data <- ecdf(data_vec)
+  # 1. Sort data (order statistics needed for all three formulas)
   x_vals <- sort(data_vec)
-  datY <- ecdf_data(x_vals)
-  n_points <- length(datY) # for AD
+  n_obs  <- length(x_vals)
 
-  # 2. Erlang CDF (theoretical)
-  gammaY <- pgamma(x_vals, shape = k_star, scale = lambda_star)
+  # 2. Theoretical CDF at each sorted data point: F_i = F(x_(i))
+  Fi <- pgamma(x_vals, shape = k_star, scale = lambda_star)
 
-  # 3. Observed test statistic
+  # 3. Observed test statistic (D'Agostino & Stephens computational formulas)
   if (pvaloption_upper == "KS") {
-    metric_star <- max((datY - gammaY)^2)
+    D_plus  <- max((1:n_obs) / n_obs - Fi)
+    D_minus <- max(Fi - (0:(n_obs - 1)) / n_obs)
+    metric_star <- max(D_plus, D_minus)
+
   } else if (pvaloption_upper == "CVM") {
-    metric_star <- sum((datY - gammaY)^2)
+    i_seq <- 1:n_obs
+    metric_star <- 1 / (12 * n_obs) + sum((Fi - (2 * i_seq - 1) / (2 * n_obs))^2)
+
   } else if (pvaloption_upper == "AD") {
-    weights <- ((2 * (1:n_points) - 1) / n_points)
-    gammaY <- pmin(pmax(gammaY, 1e-10), 1 - 1e-10)
-    metric_star <- -n_points - sum(weights * (log(gammaY) + log(1 - rev(gammaY))))
+    Fi_adj <- pmin(pmax(Fi, 1e-10), 1 - 1e-10)   # guard against log(0)
+    i_seq  <- 1:n_obs
+    metric_star <- -n_obs - (1 / n_obs) * sum((2 * i_seq - 1) *
+                                                (log(Fi_adj) + log(1 - rev(Fi_adj))))
+
   } else {
     stop("Invalid p-value option. Choose 'KS', 'CvM', or 'AD'.")
   }
@@ -544,22 +549,27 @@ Erlang_Fit_v2_Pvalue <- function(empiricaldata, k_star, lambda_star,
   sampleStats <- numeric(n)
   for (i in 1:n) {
     sample_data <- rgamma(s, shape = k_star, scale = lambda_star)
-    ecdf_sample <- ecdf(sample_data)
     x_sample <- sort(sample_data)
-    sampleY <- ecdf_sample(x_sample)
-    gammaY_sample <- pgamma(x_sample, shape = k_star, scale = lambda_star)
-
+    n_samp    <- length(x_sample)
+    Fi_sample <- pgamma(x_sample, shape = k_star, scale = lambda_star)
 
     if (pvaloption_upper == "KS") {
-      sampleStats[i] <- max((sampleY - gammaY_sample)^2)
+      D_plus_s  <- max((1:n_samp) / n_samp - Fi_sample)
+      D_minus_s <- max(Fi_sample - (0:(n_samp - 1)) / n_samp)
+      sampleStats[i] <- max(D_plus_s, D_minus_s)
+
     } else if (pvaloption_upper == "CVM") {
-      sampleStats[i] <- sum((sampleY - gammaY_sample)^2)
+      i_seq_s <- 1:n_samp
+      sampleStats[i] <- 1 / (12 * n_samp) + sum((Fi_sample - (2 * i_seq_s - 1) / (2 * n_samp))^2)
+
     } else if (pvaloption_upper == "AD") {
-      weights_sample <- ((2 * (1:length(sampleY)) - 1) / length(sampleY))
-      gammaY_sample <- pmin(pmax(gammaY_sample, 1e-10), 1 - 1e-10)
-      sampleStats[i] <- -length(sampleY) - sum(weights_sample * (log(gammaY_sample) + log(1 - rev(gammaY_sample))))
+      Fi_sample_adj <- pmin(pmax(Fi_sample, 1e-10), 1 - 1e-10)
+      i_seq_s <- 1:n_samp
+      sampleStats[i] <- -n_samp - (1 / n_samp) * sum((2 * i_seq_s - 1) *
+                                                       (log(Fi_sample_adj) + log(1 - rev(Fi_sample_adj))))
     }
   }
+
 
   # 5. Compute p-value
   p_star <- mean(sampleStats >= metric_star)
