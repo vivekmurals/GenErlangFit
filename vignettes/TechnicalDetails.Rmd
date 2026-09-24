@@ -96,10 +96,38 @@ The hypotheses are:
 
 In assessing this, a test statistic, (T\*) is first computed between the observed data and the best-fit model under the null hypothesis. Next, n (default n = 10,000) synthetic datasets are generated from the best-fit model, each being the same size as the empirical dataset. The same statistics are then computed for each synthetic dataset against the best-fit model (without refitting) which yields an empirical null distribution of the statistic under the fitted model. The observed statistic (T\*) is then compared to this null distribution to obtain a bootstrap p-value (p\*), defined as the proportion of bootstrap statistics at least as extreme as the observed one. This p* is further mapped to a binary decision variable q* where q* = 0 indicates rejection of the null hypothesis at a significance level α (specified by ‘Alpha’), and q* = 1 indicates otherwise. 
 
-The specific choice of the test statistic is determined by the user-specified `pvaloption` (where `pvaloption` = `KS`, `AD`, `CvM` correspond to distance based test statistics such as the Kolmogorov–Smirnov (KS), Anderson–Darling (AD), and the Cramér–von Mises (CvM) statistic, respectively). 
+The specific choice of the test statistic is determined by the user-specified `pvaloption` (where `pvaloption` = `KS`, `AD`, `CvM` correspond to distance based test statistics such as the Kolmogorov–Smirnov (KS), Anderson–Darling (AD), and the Cramér–von Mises (CvM) statistic, respectively). Formulations for each test statistic are provided in the following sub-section for reference. 
 
 As an example to illustrate this, when the default `pvaloption` = `KS` is specified, the Kolmogorov–Smirnov (KS) test statistic is used, which calculates the maximum distance between empirical data CDF and the best-fit model CDF. This statistic (T\*) is first computed for the observed data CDF against the best-fit model CDF. This same statistic is then computed for each of the n synthetic datasets against best-fit model CDF, producing an empirical null distribution under the assumption that the null hypothesis is true. The p-value (p\*)  is calculated as the proportion of bootstrap statistics greater than or equal to the observed statistic (T\*), i.e., quantifies the probability of observing a statistic at least as extreme as the empirical one under the null (H0). At a chosen significance level α, the null is rejected if p* < α and retained otherwise. In implementation, this decision is encoded using a binary indicator q where q = 0 denotes rejection of the null (model fails) while  q = 1 denotes non-rejection of the null (model passes)
 
+### Test Statistic Definitions
+
+Let $x_{(1)} \le x_{(2)} \le \dots \le x_{(n)}$ denote the sorted observed data, and let $F(x)$ denote the CDF of the fitted (Erlang or Erlang-Exponential) model evaluated at $x$. The three supported test statistics are computed as follows, following the standard formulations given in D'Agostino & Stephens (1986):
+
+**Kolmogorov–Smirnov (KS):**
+
+$$
+D = \max\left( \max_{i} \left[ \frac{i}{n} - F(x_{(i)}) \right],\ 
+\max_{i} \left[ F(x_{(i)}) - \frac{i-1}{n} \right] \right)
+$$
+
+**Cramér–von Mises (CvM):**
+
+$$
+W^2 = \frac{1}{12n} + \sum_{i=1}^{n} \left[ F(x_{(i)}) - \frac{2i - 1}{2n} \right]^2
+$$
+
+**Anderson–Darling (AD):**
+
+$$
+A^2 = -n - \frac{1}{n} \sum_{i=1}^{n} (2i - 1) \left[ \ln F(x_{(i)}) + \ln\left(1 - F(x_{(n+1-i)})\right) \right]
+$$
+
+Each statistic quantifies the discrepancy between the empirical CDF of the
+observed data and the fitted model's CDF, differing in how that
+discrepancy is weighted: KS uses the maximum (sup-norm) deviation, while
+CvM and AD use integrated squared deviations, with AD placing additional
+weight on discrepancies in the distribution's tails.
 
 ### Additional note for the Erlang-Exponential Fit 
 
@@ -121,3 +149,8 @@ When the `SmallestK` option is passed as an input, the algorithm performs a sear
 
 ## Erlang-Exp Smallest K
 This works the same way as above when the `SmallestK` option is passed as an input but internally, it requires a starting value of K. If an additional input `SmallestKValue` is provided, this is used directly and sets the starting value of K for the iterative search. This can help reduce computational time if users suspect that the smallest acceptable K is much lower than the best-fitting K. Otherwise the algorithm runs the Erlang-Fit function to identify the smallest admissible K and uses this as the starting value for the Erlang–Exponential model. 
+
+
+## References
+
+D'Agostino RB, Stephens MA (1986). Goodness-of-Fit Techniques. 1st edition. Dekker
