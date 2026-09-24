@@ -256,7 +256,8 @@ user-specified <code>pvaloption</code> (where <code>pvaloption</code> =
 <code>KS</code>, <code>AD</code>, <code>CvM</code> correspond to
 distance based test statistics such as the Kolmogorov–Smirnov (KS),
 Anderson–Darling (AD), and the Cramér–von Mises (CvM) statistic,
-respectively).</p>
+respectively). Formulations for each test statistic are provided in the
+following sub-section for reference.</p>
 <p>As an example to illustrate this, when the default
 <code>pvaloption</code> = <code>KS</code> is specified, the
 Kolmogorov–Smirnov (KS) test statistic is used, which calculates the
@@ -273,6 +274,37 @@ significance level α, the null is rejected if p* &lt; α and retained
 otherwise. In implementation, this decision is encoded using a binary
 indicator q where q = 0 denotes rejection of the null (model fails)
 while q = 1 denotes non-rejection of the null (model passes)</p>
+<div class="section level4">
+<h4 id="test-statistic-definitions">Test Statistic Definitions<a class="anchor" aria-label="anchor" href="#test-statistic-definitions"></a>
+</h4>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo>≤</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo>≤</mo><mi>…</mi><mo>≤</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">x_{(1)} \le x_{(2)} \le \dots \le x_{(n)}</annotation></semantics></math>
+denote the sorted observed data, and let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">F(x)</annotation></semantics></math>
+denote the CDF of the fitted (Erlang or Erlang-Exponential) model
+evaluated at
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>.
+The three supported test statistics are computed as follows, following
+the standard formulations given in D’Agostino &amp; Stephens (1986):</p>
+<p><strong>Kolmogorov–Smirnov (KS):</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mo>max</mo><mrow><mo stretchy="true" form="prefix">(</mo><munder><mo>max</mo><mi>i</mi></munder><mrow><mo stretchy="true" form="prefix">[</mo><mfrac><mi>i</mi><mi>n</mi></mfrac><mo>−</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>,</mo><mspace width="0.222em"></mspace><munder><mo>max</mo><mi>i</mi></munder><mrow><mo stretchy="true" form="prefix">[</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mfrac><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac><mo stretchy="true" form="postfix">]</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+D = \max\left( \max_{i} \left[ \frac{i}{n} - F(x_{(i)}) \right],\ 
+\max_{i} \left[ F(x_{(i)}) - \frac{i-1}{n} \right] \right)
+</annotation></semantics></math></p>
+<p><strong>Cramér–von Mises (CvM):</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mrow><mn>12</mn><mi>n</mi></mrow></mfrac><mo>+</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo stretchy="true" form="prefix">[</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mfrac><mrow><mn>2</mn><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mo stretchy="true" form="postfix">]</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">
+W^2 = \frac{1}{12n} + \sum_{i=1}^{n} \left[ F(x_{(i)}) - \frac{2i - 1}{2n} \right]^2
+</annotation></semantics></math></p>
+<p><strong>Anderson–Darling (AD):</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mn>2</mn></msup><mo>=</mo><mi>−</mi><mi>n</mi><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">[</mo><mo>ln</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>−</mo><mi>i</mi><mo stretchy="true" form="postfix">)</mo></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+A^2 = -n - \frac{1}{n} \sum_{i=1}^{n} (2i - 1) \left[ \ln F(x_{(i)}) + \ln\left(1 - F(x_{(n+1-i)})\right) \right]
+</annotation></semantics></math></p>
+<p>Each statistic quantifies the discrepancy between the empirical CDF
+of the observed data and the fitted model’s CDF, differing in how that
+discrepancy is weighted: KS uses the maximum (sup-norm) deviation, while
+CvM and AD use integrated squared deviations, with AD placing additional
+weight on discrepancies in the distribution’s tails.</p>
+</div>
 <div class="section level4">
 <h4 id="additional-note-for-the-erlang-exponential-fit">Additional note for the Erlang-Exponential Fit<a class="anchor" aria-label="anchor" href="#additional-note-for-the-erlang-exponential-fit"></a>
 </h4>
@@ -335,6 +367,12 @@ suspect that the smallest acceptable K is much lower than the
 best-fitting K. Otherwise the algorithm runs the Erlang-Fit function to
 identify the smallest admissible K and uses this as the starting value
 for the Erlang–Exponential model.</p>
+</div>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
+<p>D’Agostino RB, Stephens MA (1986). Goodness-of-Fit Techniques. 1st
+edition. Dekker</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

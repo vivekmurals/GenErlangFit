@@ -172,7 +172,8 @@ The specific choice of the test statistic is determined by the
 user-specified `pvaloption` (where `pvaloption` = `KS`, `AD`, `CvM`
 correspond to distance based test statistics such as the
 Kolmogorov–Smirnov (KS), Anderson–Darling (AD), and the Cramér–von Mises
-(CvM) statistic, respectively).
+(CvM) statistic, respectively). Formulations for each test statistic are
+provided in the following sub-section for reference.
 
 As an example to illustrate this, when the default `pvaloption` = `KS`
 is specified, the Kolmogorov–Smirnov (KS) test statistic is used, which
@@ -189,6 +190,42 @@ At a chosen significance level α, the null is rejected if p\* \< α and
 retained otherwise. In implementation, this decision is encoded using a
 binary indicator q where q = 0 denotes rejection of the null (model
 fails) while q = 1 denotes non-rejection of the null (model passes)
+
+#### Test Statistic Definitions
+
+Let $`x_{(1)} \le x_{(2)} \le \dots \le x_{(n)}`$ denote the sorted
+observed data, and let $`F(x)`$ denote the CDF of the fitted (Erlang or
+Erlang-Exponential) model evaluated at $`x`$. The three supported test
+statistics are computed as follows, following the standard formulations
+given in D’Agostino & Stephens (1986):
+
+**Kolmogorov–Smirnov (KS):**
+
+``` math
+
+D = \max\left( \max_{i} \left[ \frac{i}{n} - F(x_{(i)}) \right],\ 
+\max_{i} \left[ F(x_{(i)}) - \frac{i-1}{n} \right] \right)
+```
+
+**Cramér–von Mises (CvM):**
+
+``` math
+
+W^2 = \frac{1}{12n} + \sum_{i=1}^{n} \left[ F(x_{(i)}) - \frac{2i - 1}{2n} \right]^2
+```
+
+**Anderson–Darling (AD):**
+
+``` math
+
+A^2 = -n - \frac{1}{n} \sum_{i=1}^{n} (2i - 1) \left[ \ln F(x_{(i)}) + \ln\left(1 - F(x_{(n+1-i)})\right) \right]
+```
+
+Each statistic quantifies the discrepancy between the empirical CDF of
+the observed data and the fitted model’s CDF, differing in how that
+discrepancy is weighted: KS uses the maximum (sup-norm) deviation, while
+CvM and AD use integrated squared deviations, with AD placing additional
+weight on discrepancies in the distribution’s tails.
 
 #### Additional note for the Erlang-Exponential Fit
 
@@ -248,3 +285,8 @@ reduce computational time if users suspect that the smallest acceptable
 K is much lower than the best-fitting K. Otherwise the algorithm runs
 the Erlang-Fit function to identify the smallest admissible K and uses
 this as the starting value for the Erlang–Exponential model.
+
+### References
+
+D’Agostino RB, Stephens MA (1986). Goodness-of-Fit Techniques. 1st
+edition. Dekker
