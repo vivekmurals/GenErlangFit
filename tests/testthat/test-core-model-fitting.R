@@ -1,4 +1,3 @@
-library(ggplot2)
 library(goftest)
 
 # ---- Fixed reference dataset ----
@@ -16,7 +15,7 @@ pErlangExp <- function(q, ErlangK, ErlangLam, ExpLam) {
 # ===========================================================
 
 test_that("[Erlang] Log-likelihood matches manual dgamma computation", {
-  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'KS')
+  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'KS', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star; lam_hat <- fit$Best$Lambda_star
 
   manual_ll <- sum(dgamma(ref_data, shape = k_hat, rate = lam_hat, log = TRUE))
@@ -25,7 +24,7 @@ test_that("[Erlang] Log-likelihood matches manual dgamma computation", {
 })
 
 test_that("[Erlang] KS statistic matches base R", {
-  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'KS')
+  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'KS', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star; lam_hat <- fit$Best$Lambda_star
 
   baseR_ks <- suppressWarnings(ks.test(ref_data, "pgamma", shape = k_hat, rate = lam_hat))
@@ -34,7 +33,7 @@ test_that("[Erlang] KS statistic matches base R", {
 })
 
 test_that("[Erlang] CvM statistic matches goftest implementation", {
-  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'CVM')
+  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'CVM', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star; lam_hat <- fit$Best$Lambda_star
 
   baseR_cvm <- goftest::cvm.test(ref_data, "pgamma", shape = k_hat, rate = lam_hat)
@@ -43,7 +42,7 @@ test_that("[Erlang] CvM statistic matches goftest implementation", {
 })
 
 test_that("[Erlang] AD statistic matches goftest implementation", {
-  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'AD')
+  fit <- GenErlang_Fit('Erlang', ref_data, pvaloption = 'AD', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star; lam_hat <- fit$Best$Lambda_star
 
   baseR_ad <- goftest::ad.test(ref_data, "pgamma", shape = k_hat, rate = lam_hat)
@@ -85,7 +84,7 @@ test_that("[ErlangExp] Helper CDF function matches independent Monte Carlo simul
 # ===========================================================
 
 test_that("[ErlangExp] Log-likelihood matches manual density computation", {
-  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'KS')
+  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'KS', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star
   erlam <- fit$Best$ErlangLambda_star
   explam <- fit$Best$ExpLambda_star
@@ -103,7 +102,7 @@ test_that("[ErlangExp] Log-likelihood matches manual density computation", {
 })
 
 test_that("[ErlangExp] KS statistic matches base R via custom CDF wrapper", {
-  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'KS')
+  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'KS', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star
   erlam <- fit$Best$ErlangLambda_star
   explam <- fit$Best$ExpLambda_star
@@ -116,7 +115,7 @@ test_that("[ErlangExp] KS statistic matches base R via custom CDF wrapper", {
 })
 
 test_that("[ErlangExp] CvM statistic matches goftest implementation", {
-  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'CVM')
+  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'CVM', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star
   erlam <- fit$Best$ErlangLambda_star
   explam <- fit$Best$ExpLambda_star
@@ -128,7 +127,7 @@ test_that("[ErlangExp] CvM statistic matches goftest implementation", {
 })
 
 test_that("[ErlangExp] AD statistic matches goftest implementation", {
-  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'AD')
+  fit <- GenErlang_Fit('ErlangExp', ref_data, 3, FixedK = TRUE, pvaloption = 'AD', ShowFigures = FALSE)
   k_hat <- fit$Best$K_star
   erlam <- fit$Best$ErlangLambda_star
   explam <- fit$Best$ExpLambda_star
