@@ -294,7 +294,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
     erlang_label <- df_erlang$Type[1]
 
     P1 <- ggplot() +
-      geom_histogram(aes(x = data_vec, y = ..density.., fill = "Observed Data"),
+      geom_histogram(aes(x = data_vec, y = after_stat(density), fill = "Observed Data"),
                      binwidth = bin_width, color = "black", alpha = 0.8) +
       geom_line(data = df_erlang, aes(x = x, y = y, color = erlang_label),
                 linewidth = 1.2, linetype = "solid") +
