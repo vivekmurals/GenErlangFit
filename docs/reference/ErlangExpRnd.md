@@ -32,7 +32,7 @@ ErlangExpRnd(params, rows, cols = 1)
 
 ## Value
 
-Numeric matrix of random samples with dimensions `rows` × `cols`.
+Numeric matrix of random samples with dimensions `rows` x `cols`.
 
 ## Details
 

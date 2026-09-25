@@ -18,7 +18,7 @@
 #' @details
 #' This function estimates the Erlang parameters (shape `K` and scale `lambda`)
 #' by maximizing the log-likelihood function, and tests whether the data are
-#' consistent with the fitted model via bootstrap-based Kolmogorov–Smirnov
+#' consistent with the fitted model via bootstrap-based Kolmogorov-Smirnov
 #' (or other) tests.
 #' Optionally, it can also search for the smallest integer `K` that still passes
 #' the chosen significance threshold (`SmallestK = TRUE`).
@@ -287,7 +287,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
       x = x,
       y = dgamma(x, shape = k_star, scale = lambda_star),
       Type = paste0("Erlang PDF: K* = ", k_star,
-                    ", λ* = ", round(lambda_star, 2))
+                    ", lambda* = ", round(lambda_star, 2))
     )
 
 
@@ -318,7 +318,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
         x = x,
         y = y_small,
         Type = paste0("Smallest K PDF: K = ", k_smallest,
-                      ", λ = ", round(lambda_smallest, 2))
+                      ", lambda = ", round(lambda_smallest, 2))
       )
 
       # Add as a new geom_line with fixed color
@@ -346,7 +346,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
       x = x_vals,
       y = gammaY,
       Type = paste0("Erlang CDF: K* = ", k_star,
-                    ", λ* = ", round(lambda_star, 2))
+                    ", lambda* = ", round(lambda_star, 2))
     )
 
     erlang_label_CDF <- df_erlang_cdf$Type[1]
@@ -376,7 +376,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
         x = x_vals,
         y = y_small,
         Type = paste0("Smallest K CDF: K = ", k_smallest,
-                      ", λ = ", round(lambda_smallest, 2))
+                      ", lambda = ", round(lambda_smallest, 2))
       )
 
       P2 <- P2 +
@@ -473,7 +473,7 @@ Erlang_Fit_v2 <- function(empiricaldata, ...) {
 #' Bootstrap-Based Goodness-of-Fit for Erlang Distribution
 #'
 #' Computes a bootstrap-based p-value for the Erlang model fit
-#' using Kolmogorov–Smirnov, Cramér–von Mises, or Anderson–Darling statistics.
+#' using Kolmogorov-Smirnov, Cramer-von Mises, or Anderson-Darling statistics.
 #'
 #' @param empiricaldata Numeric vector of observed data.
 #' @param k_star Numeric, fitted Erlang shape parameter.

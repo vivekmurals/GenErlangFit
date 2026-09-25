@@ -2,7 +2,7 @@
 
 Performs a bootstrap hypothesis test to assess goodness-of-fit of
 empirical data to an Erlang + Exponential mixture model, using the
-specified test statistic (Kolmogorov-Smirnov, Cramér-von Mises, or
+specified test statistic (Kolmogorov-Smirnov, Cramer-von Mises, or
 Anderson-Darling).
 
 ## Usage
@@ -55,7 +55,7 @@ ErlangExp_Fit_v2_Pvalue(
 - pvaloption:
 
   Character specifying goodness-of-fit metric to use: `"KS"`
-  (Kolmogorov-Smirnov), `"CvM"` (Cramér-von Mises), or `"AD"`
+  (Kolmogorov-Smirnov), `"CvM"` (Cramer-von Mises), or `"AD"`
   (Anderson-Darling). Default is `"KS"`.
 
 - ShowFigures:
@@ -103,7 +103,8 @@ on the significance level `alpha`.
 if (FALSE) { # \dontrun{
 data <- rexp(200, rate = 0.5)
 fit <- ErlangExp_Fit_v2(data)
-pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star, fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
+pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star,
+  fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
 print(pval_res$p_value)
 } # }
 ```

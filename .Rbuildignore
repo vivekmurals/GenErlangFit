@@ -1,4 +1,4 @@
-^GenErlangFitEx\.Rproj$
+^GenErlangFit\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^doc$
@@ -8,3 +8,4 @@
 ^pkgdown$
 ^LICENSE\.md$
 ^simulation$
+^test_warnings\.txt$

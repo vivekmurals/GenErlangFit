@@ -1,7 +1,7 @@
 # Bootstrap-Based Goodness-of-Fit for Erlang Distribution
 
 Computes a bootstrap-based p-value for the Erlang model fit using
-Kolmogorov–Smirnov, Cramér–von Mises, or Anderson–Darling statistics.
+Kolmogorov-Smirnov, Cramer-von Mises, or Anderson-Darling statistics.
 
 ## Usage
 

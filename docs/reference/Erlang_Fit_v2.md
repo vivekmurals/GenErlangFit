@@ -64,7 +64,7 @@ A list containing:
 This function estimates the Erlang parameters (shape `K` and scale
 `lambda`) by maximizing the log-likelihood function, and tests whether
 the data are consistent with the fitted model via bootstrap-based
-Kolmogorov–Smirnov (or other) tests. Optionally, it can also search for
+Kolmogorov-Smirnov (or other) tests. Optionally, it can also search for
 the smallest integer `K` that still passes the chosen significance
 threshold (`SmallestK = TRUE`).
 

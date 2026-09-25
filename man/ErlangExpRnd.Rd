@@ -19,7 +19,7 @@ ErlangExpRnd(params, rows, cols = 1)
 \item{cols}{Integer, number of columns for the output sample matrix (default 1).}
 }
 \value{
-Numeric matrix of random samples with dimensions \code{rows} × \code{cols}.
+Numeric matrix of random samples with dimensions \code{rows} x \code{cols}.
 }
 \description{
 Simulates random variates from a distribution defined as the sum of

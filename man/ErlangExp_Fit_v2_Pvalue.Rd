@@ -31,7 +31,7 @@ ErlangExp_Fit_v2_Pvalue(
 
 \item{alpha}{Significance level for hypothesis testing. Default is 0.05.}
 
-\item{pvaloption}{Character specifying goodness-of-fit metric to use: \code{"KS"} (Kolmogorov-Smirnov), \code{"CvM"} (Cramér-von Mises), or \code{"AD"} (Anderson-Darling). Default is \code{"KS"}.}
+\item{pvaloption}{Character specifying goodness-of-fit metric to use: \code{"KS"} (Kolmogorov-Smirnov), \code{"CvM"} (Cramer-von Mises), or \code{"AD"} (Anderson-Darling). Default is \code{"KS"}.}
 
 \item{ShowFigures}{Logical indicating whether to generate diagnostic plots. Default is TRUE (currently commented out in code).}
 }
@@ -47,7 +47,7 @@ A list containing:
 \description{
 Performs a bootstrap hypothesis test to assess goodness-of-fit of empirical data
 to an Erlang + Exponential mixture model, using the specified test statistic
-(Kolmogorov-Smirnov, Cramér-von Mises, or Anderson-Darling).
+(Kolmogorov-Smirnov, Cramer-von Mises, or Anderson-Darling).
 }
 \details{
 This function computes the empirical CDF and theoretical Erlang+Exponential CDF,
@@ -59,7 +59,8 @@ hypothesis test decision based on the significance level \code{alpha}.
 \dontrun{
 data <- rexp(200, rate = 0.5)
 fit <- ErlangExp_Fit_v2(data)
-pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star, fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
+pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star,
+  fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
 print(pval_res$p_value)
 }
 

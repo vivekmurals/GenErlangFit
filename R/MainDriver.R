@@ -84,7 +84,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
       if (isTRUE(user_args$SmallestK)) {
         ErlangExp_Results <- ErlangExp_Fit_v2(empiricaldata, K, SmallestK = TRUE, ...)
 
-        ModelNames <- c("Erlang–Exp", "Erlang–Exp (Smallest K)")
+        ModelNames <- c("Erlang-Exp", "Erlang-Exp (Smallest K)")
         K_vals <- c(ErlangExp_Results$Best$K_star, ErlangExp_Results$Smallest$K_star)
         ErlangLambda <- c(ErlangExp_Results$Best$ErlangLambda_star, ErlangExp_Results$Smallest$ErlangLambda_star)
         ExpLambda <- c(ErlangExp_Results$Best$ExpLambda_star, ErlangExp_Results$Smallest$ExpLambda_star)
@@ -93,7 +93,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
       } else {
         ErlangExp_Results <- ErlangExp_Fit_v2(empiricaldata, K, ...)
 
-        ModelNames <- "Erlang–Exp"
+        ModelNames <- "Erlang-Exp"
         K_vals <- ErlangExp_Results$Best$K_star
         ErlangLambda <- ErlangExp_Results$Best$ErlangLambda_star
         ExpLambda <- ErlangExp_Results$Best$ExpLambda_star
@@ -148,7 +148,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
       # Build summary table
       Model <- c(
         "Erlang",
-        "Erlang–Exp"
+        "Erlang-Exp"
       )
 
       K <- c(
@@ -195,7 +195,7 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
 
     data <- mode  # `mode` actually holds empiricaldata
 
-    # Run both Erlang and Erlang–Exp fits
+    # Run both Erlang and Erlang-Exp fits
     Erlang_Results <- Erlang_Fit_v2(data, SmallestK = TRUE)
 
     # Convert Lambda_star from scale to rate (1/scale)
@@ -219,8 +219,8 @@ GenErlang_Fit <- function(mode, empiricaldata = NULL, K = NULL, ...) {
     Model <- c(
       "Erlang",
       "Erlang Smallest K",
-      "Erlang–Exp (Local Best)",
-      "Erlang–Exp Smallest K"
+      "Erlang-Exp (Local Best)",
+      "Erlang-Exp Smallest K"
     )
 
     K <- c(

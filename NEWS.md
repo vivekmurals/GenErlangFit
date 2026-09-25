@@ -41,7 +41,3 @@
 * Internal diagnostic plotting code uses the deprecated `ggplot2`
   `..density..` syntax. Functional but produces deprecation warnings;
   does not affect core fit or goodness-of-fit functionality.
-
-# GenErlangFit (development version)
-
-* Initial development version.

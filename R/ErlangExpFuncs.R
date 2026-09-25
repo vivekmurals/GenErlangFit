@@ -64,7 +64,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
   )
 
   # -----------------------------
-  # 2. Parse name–value arguments (case-insensitive) - i.e., override default parameter values when provided as input options
+  # 2. Parse name value arguments (case insensitive) i.e., override default parameter values when provided as input options
   # -----------------------------
   user_args <- list(...)
   if (length(user_args) > 0) {
@@ -96,7 +96,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
   pvaloption <- options$pvaloption
   cat("Options:\n"); print(options)
 
-  # Completely Remove options that ErlangExp_Fit doesn’t use
+  # Completely Remove options that ErlangExp_Fit does not use
   suboptions <- options
   suboptions$FixedK <- NULL
   suboptions$KWindowSize <- NULL
@@ -232,7 +232,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
 
 
       cat(sprintf(
-        "Best K = %d | Erlang λ = %.4f | Exp λ = %.4f | Log-Likelihood = %.4f\n",
+        "Best K = %d | Erlang Lambda = %.4f | Exp Lambda = %.4f | Log-Likelihood = %.4f\n",
         bestK, bestERLambda, bestEXPLambda, maxLL
       ))
 
@@ -267,7 +267,7 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
       names(best_row) <- c("K_star", "ErlangLambda_star", "ExpLambda_star", "LogLikelihood", "P_Value", "Q_Value")
 
       cat(sprintf(
-        "Best K = %d | Erlang λ = %.4f | Exp λ = %.4f | P = %.4f | Q = %.4f | Log-Likelihood = %.4f\n",
+        "Best K = %d | Erlang Lambda = %.4f | Exp Lambda = %.4f | P = %.4f | Q = %.4f | Log-Likelihood = %.4f\n",
         best_row[1], best_row[2], best_row[3], best_row[5], best_row[6], best_row[4]
       ))
 
@@ -422,8 +422,8 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
     df_main <- data.frame(
       x = xax,
       y = resplot$Probability,
-      Type = paste0("ErlangExp PDF: K* = ", K, ", λ* = ", round(ErlangLambda, 2),
-                    ", λ_exp = ", round(ExpLambda, 2))
+      Type = paste0("ErlangExp PDF: K* = ", K, ", lambda* = ", round(ErlangLambda, 2),
+                    ", lambda_exp = ", round(ExpLambda, 2))
     )
 
     main_label <- df_main$Type[1]
@@ -458,8 +458,8 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
         x = xax,
         y = res_small$Probability,
         Type = paste0("Smallest K PDF: K = ", k_smallest,
-                      ", λ = ", round(lambda_smallest, 2),
-                      ", λ_exp = ", round(ExpLambda_small, 2))
+                      ", lambda = ", round(lambda_smallest, 2),
+                      ", lambda_exp = ", round(ExpLambda_small, 2))
       )
 
       P1 <- P1 +
@@ -489,8 +489,8 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
       x = x_vals,
       y = gammaY,
       Type = paste0("ErlangExp CDF: K* = ", K,
-                    ", λ* = ", round(ErlangLambda, 2),
-                    ", λ_exp = ", round(ExpLambda, 2))
+                    ", lambda* = ", round(ErlangLambda, 2),
+                    ", lambda_exp = ", round(ExpLambda, 2))
     )
 
     main_label_CDF <- df_main_cdf$Type[1]
@@ -521,8 +521,8 @@ ErlangExp_Fit_v2 <- function(empiricaldata, K, ...) {
         x = x_vals,
         y = gammaY_small,
         Type = paste0("Smallest K CDF: K = ", k_smallest,
-                      ", λ = ", round(lambda_smallest, 2),
-                      ", λ_exp = ", round(ExpLambda_small, 2))
+                      ", lambda = ", round(lambda_smallest, 2),
+                      ", lambda_exp = ", round(ExpLambda_small, 2))
       )
 
       P2 <- P2 +
@@ -839,7 +839,7 @@ ErlangExp_Fit_v2_FixedK <- function(empiricaldata, FixedKValue, ...) {
 #'
 #' Performs a bootstrap hypothesis test to assess goodness-of-fit of empirical data
 #' to an Erlang + Exponential mixture model, using the specified test statistic
-#' (Kolmogorov-Smirnov, Cramér-von Mises, or Anderson-Darling).
+#' (Kolmogorov-Smirnov, Cramer-von Mises, or Anderson-Darling).
 #'
 #' @param empiricaldata Numeric vector of observed data.
 #' @param k_star Integer Erlang shape parameter (fixed).
@@ -848,7 +848,7 @@ ErlangExp_Fit_v2_FixedK <- function(empiricaldata, FixedKValue, ...) {
 #' @param s Integer sample size for bootstrap samples. Default is length of empiricaldata.
 #' @param n Integer number of bootstrap samples to generate. Default is 1000.
 #' @param alpha Significance level for hypothesis testing. Default is 0.05.
-#' @param pvaloption Character specifying goodness-of-fit metric to use: `"KS"` (Kolmogorov-Smirnov), `"CvM"` (Cramér-von Mises), or `"AD"` (Anderson-Darling). Default is `"KS"`.
+#' @param pvaloption Character specifying goodness-of-fit metric to use: `"KS"` (Kolmogorov-Smirnov), `"CvM"` (Cramer-von Mises), or `"AD"` (Anderson-Darling). Default is `"KS"`.
 #' @param ShowFigures Logical indicating whether to generate diagnostic plots. Default is TRUE (currently commented out in code).
 #'
 #' @details
@@ -871,7 +871,8 @@ ErlangExp_Fit_v2_FixedK <- function(empiricaldata, FixedKValue, ...) {
 #' \dontrun{
 #' data <- rexp(200, rate = 0.5)
 #' fit <- ErlangExp_Fit_v2(data)
-#' pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star, fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
+#' pval_res <- ErlangExp_Fit_v2_Pvalue(data, fit$Best$K_star,
+#'   fit$Best$ErlangLambda_star, fit$Best$ExpLambda_star)
 #' print(pval_res$p_value)
 #' }
 #'
@@ -1177,7 +1178,7 @@ ErlangExpCDF_Func <- function(params, DatX, interval = 0.01) {
 #' Random samples are generated by independently sampling from the Erlang and
 #' Exponential components and summing them. The output is reshaped as a matrix.
 #'
-#' @return Numeric matrix of random samples with dimensions `rows` × `cols`.
+#' @return Numeric matrix of random samples with dimensions `rows` x `cols`.
 #'
 #' @seealso [ErlangExp_Func()], [ErlangExp_Fit_v2_Pvalue()]
 #'
@@ -1204,6 +1205,6 @@ ErlangExpRnd <- function(params, rows, cols = 1) {
   # Sum component-wise
   rndarray <- ErlangRnd + ExpRnd
 
-  # Reshape into matrix form (rows × cols)
+  # Reshape into matrix form (rows x cols)
   matrix(rndarray, nrow = rows, ncol = cols)
 }

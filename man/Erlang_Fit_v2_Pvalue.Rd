@@ -43,7 +43,7 @@ A list containing:
 }
 \description{
 Computes a bootstrap-based p-value for the Erlang model fit
-using Kolmogorov–Smirnov, Cramér–von Mises, or Anderson–Darling statistics.
+using Kolmogorov-Smirnov, Cramer-von Mises, or Anderson-Darling statistics.
 }
 \details{
 The function compares the empirical CDF of the observed data to the
