@@ -22,3 +22,5 @@ navbar:
           href: articles/LinearChainTrick.html
         - text: "Technical Details"
           href: articles/TechnicalDetails.html
+        - text: "Example Application of GenErlangFit"
+          href: articles/ExampleApplication.html

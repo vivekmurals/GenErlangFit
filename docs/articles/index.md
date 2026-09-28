@@ -2,6 +2,8 @@
 
 ### All vignettes
 
+- [An Application of GenErlangFit to Epidemic
+  Modeling](https://vivekmurals.github.io/GenErlangFit/articles/ExampleApplication.md):
 - [Introduction to GenErlang
   Fit](https://vivekmurals.github.io/GenErlangFit/articles/GettingStarted.md):
 - [What is the Linear Chain
