@@ -16,7 +16,7 @@ navbar:
       text: "Getting Started"
       href: articles/GettingStarted.html
     articles:
-      text: "Articles"
+      text: "Documentation"
       menu:
         - text: "Linear Chain Trick"
           href: articles/LinearChainTrick.html

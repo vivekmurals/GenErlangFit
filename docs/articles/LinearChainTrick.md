@@ -30,7 +30,12 @@ compartmental ODE models with more realistic waiting time distributions
 while preserving the linear ODE structure. It exploits the fact that an
 Erlang(K, λ_(Er)) distributed waiting time is mathematically equivalent
 to the sum of K independent exponential waiting times, each with rate
-λ_(Er).
+λ_(Er).The Erlang probability density function is given as follows:
+
+``` math
+
+f(x; K, \lambda) = \frac{\lambda^K x^{K-1} e^{-\lambda x}}{(K-1)!}, \qquad x \ge 0,
+```
 
 This allows a single compartment to be partitioned into K
 sub-compartments, where each sub-compartment retains exponentially
@@ -40,7 +45,11 @@ to solve. With only two parameters (i.e., the number of sub-compartments
 approximate a wide range of shapes. As K increases, the distribution
 becomes more peaked around the mean, better capturing the characteristic
 durations observed in real disease processes and enabling close fits to
-many empirical distributions.
+many empirical distributions. The principal advantage of the Erlang
+distribution is its ability to modulate the variability of waiting times
+while holding the mean fixed, making it particularly suitable for
+processes that exhibit less variance than the exponential distribution
+allows.
 
 ## Visual Comparison
 
